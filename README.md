@@ -6,7 +6,7 @@
 
 ## Technologies Used
 
-- **Frontend:**
+- **Frontend:** เข้า cilent > src  พอจะมีตัวอย่างให้ใน code แต่ถ้าตัวไหนไม่มีลองเองเลย 
   - [Ant Design](https://ant.design/): A design system for enterprise-level products.
   - [Axios](https://axios-http.com/): A promise-based HTTP client for the browser and Node.js.
   - [Flowbite](https://flowbite.com/): A library of UI components built on Tailwind CSS.
@@ -22,9 +22,8 @@
   - [SweetAlert2](https://sweetalert2.github.io/): A beautiful, responsive, customizable replacement for JavaScript's popup boxes.
   - [Swiper](https://swiperjs.com/): A modern touch slider for mobile and web.
  
-  - พอจะมีตัวอย่างให้ใน code แต่ถ้าตัวไหนไม่มีลองเองเลย
 
-- **Backend:**
+- **Backend:** เข้า sever > main backend ลองให้ดูน่าจะยากอ่ะ ลองดูเองก่อนนะ เดี๋ยวมาช่วย ไม่ก็ลองถาม ลูกพี่ Gpt ก่อนเลย ไม่ก็ลองไปเล่น frontend	ดูก่อนจะได้เห็นภาพ
   - [Bcrypt.js](https://github.com/dcodeIO/bcrypt.js): A library for hashing passwords.
   - [Body-Parser](https://www.npmjs.com/package/body-parser): Middleware for parsing incoming request bodies.
   - [CORS](https://www.npmjs.com/package/cors): Middleware for enabling CORS.
@@ -35,8 +34,6 @@
   - [MySQL2](https://www.npmjs.com/package/mysql2): A MySQL client for Node.js with promise support.
   - [Mongoose](https://mongoosejs.com/): An ODM (Object Data Modeling) library for MongoDB and Node.js.
  
-  - backend ลองให้ดูน่าจะยากอ่ะ ลองดูเองก่อนนะ เดี๋ยวมาช่วย ไม่ก็ลองถาม ลูกพี่ Gpt ก่อนเลย ไม่ก็ลองไปเล่น frontend	ดูก่อนจะได้เห็นภาพ
-
 ## Installation
 
 To set up the project, follow these steps:
