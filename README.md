@@ -48,7 +48,7 @@ To set up the project, follow these steps:
 For Frontend and Backend
 ```bash
 npm install antd axios flowbite flowbite-react framer-motion gsap moment react-router-dom react-scroll react-scroll-to-top react-spinners react-transition-group sweetalert2 swiper bcryptjs body-parser cors cross-env express jsonwebtoken multer mysql2 mongoose
-
+cd
 
 3. Start App
 ```bash
