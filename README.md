@@ -1,8 +1,8 @@
-# Your Project Name
+# Project-Koo-Kin
 
 ## Description
 
-This project is a web application built with React and Express, featuring a range of libraries for UI components, state management, animations, and API handling. It utilizes MySQL and MongoDB for data storage, providing a robust backend for user authentication, file uploads, and more.
+
 
 ## Technologies Used
 
@@ -21,6 +21,8 @@ This project is a web application built with React and Express, featuring a rang
   - [React Transition Group](https://reactcommunity.org/react-transition-group/): A library for animations when elements enter or leave the DOM.
   - [SweetAlert2](https://sweetalert2.github.io/): A beautiful, responsive, customizable replacement for JavaScript's popup boxes.
   - [Swiper](https://swiperjs.com/): A modern touch slider for mobile and web.
+ 
+  - พอจะมีตัวอย่างให้ใน code แต่ถ้าตัวไหนไม่มีลองเองเลย
 
 - **Backend:**
   - [Bcrypt.js](https://github.com/dcodeIO/bcrypt.js): A library for hashing passwords.
@@ -32,6 +34,8 @@ This project is a web application built with React and Express, featuring a rang
   - [Multer](https://www.npmjs.com/package/multer): Middleware for handling multipart/form-data, used for file uploads.
   - [MySQL2](https://www.npmjs.com/package/mysql2): A MySQL client for Node.js with promise support.
   - [Mongoose](https://mongoosejs.com/): An ODM (Object Data Modeling) library for MongoDB and Node.js.
+ 
+  - backend ลองให้ดูน่าจะยากอ่ะ ลองดูเองก่อนนะ เดี๋ยวมาช่วย ไม่ก็ลองถาม ลูกพี่ Gpt ก่อนเลย ไม่ก็ลองไปเล่น frontend	ดูก่อนจะได้เห็นภาพ
 
 ## Installation
 
@@ -40,45 +44,18 @@ To set up the project, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/yourproject.git
-   cd yourproject
+   git clone https://github.com/SOtwoX1/Project-SE.git
+   cd 
 2.Install dependencies for both frontend and backend.
 For Frontend and Backend
+```bash
+npm install antd axios flowbite flowbite-react framer-motion gsap moment react-router-dom react-scroll react-scroll-to-top react-spinners react-transition-group sweetalert2 swiper bcryptjs body-parser cors cross-env express jsonwebtoken multer mysql2 mongoose
 
+3. Start App
+```bash
+npm run dev
 
-bash
-Copy code
-cd ../backend
-npm install bcryptjs body-parser cors cross-env express jsonwebtoken multer mysql2 mongoose
-Usage
-Start the backend server:
-
-bash
-Copy code
-cd backend
-node server.js
-Start the frontend application:
-
-bash
-Copy code
-cd frontend
-npm start
-Open your browser and navigate to http://localhost:3000 to view the application.
-
-Contributing
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
-
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-markdown
-Copy code
-
-### Notes
-
-- **Customize the repository URL:** Make sure to replace `https://github.com/yourusername/yourproject.git` with the actual URL of your project repository.
-- **Adjust project name and description:** Update the project name and description to fit your specific project.
-- **Add usage examples:** Consider adding code snippets or examples for key features of your application to provide users with a better understanding of how to use it.
+This command will run all over front and back Open your browser and navigate to http://localhost:3000 to view the application.
 
 
 
