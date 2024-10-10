@@ -7,7 +7,7 @@ Project-Koo-Kin เติมให้หน่อย
 
 ### Frontend (React)
 
-The frontend  `client > src`,พอจะมีตัวอย่างอนู่ใน code แต่ถ้าตัวไหนไม่มีลองเองเลย
+The frontend  `src > client`,พอจะมีตัวอย่างอนู่ใน code แต่ถ้าตัวไหนไม่มีลองเองเลย
 - **[Ant Design](https://ant.design/):** A design system with an extensive set of UI components for React.
 - **[Axios](https://axios-http.com/):** A promise-based HTTP client for making API requests from the browser.
 - **[Flowbite](https://flowbite.com/):** A library of UI components built on Tailwind CSS.
@@ -25,7 +25,7 @@ The frontend  `client > src`,พอจะมีตัวอย่างอนู
 
 ### Backend (Express)
 
-The backend, located in `server > main`, backend ลองให้ดูน่าจะยากอ่ะ ลองดูเองก่อนนะ เดี๋ยวมาช่วย ไม่ก็ลองถาม ลูกพี่ Gpt ก่อนเลย ไม่ก็ลองไปเล่น frontend	ดูก่อนจะได้เห็นภาพ
+The backend, located in `src > server > main`, backend ลองให้ดูน่าจะยากอ่ะ ลองดูเองก่อนนะ เดี๋ยวมาช่วย ไม่ก็ลองถาม ลูกพี่ Gpt ก่อนเลย ไม่ก็ลองไปเล่น frontend	ดูก่อนจะได้เห็นภาพ
 - **[Bcrypt.js](https://github.com/dcodeIO/bcrypt.js):** A password-hashing library to enhance security.
 - **[Body-Parser](https://www.npmjs.com/package/body-parser):** Middleware for parsing incoming HTTP request bodies.
 - **[CORS](https://www.npmjs.com/package/cors):** Middleware that enables Cross-Origin Resource Sharing for the API.
