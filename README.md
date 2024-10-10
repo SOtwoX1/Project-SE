@@ -42,16 +42,9 @@ To set up the project, follow these steps:
    ```bash
    git clone https://github.com/yourusername/yourproject.git
    cd yourproject
-Install dependencies for both frontend and backend.
-For Frontend
-Navigate to the frontend directory and install the required packages:
+2.Install dependencies for both frontend and backend.
+For Frontend and Backend
 
-bash
-Copy code
-cd frontend
-npm install antd axios flowbite flowbite-react framer-motion gsap moment react-router-dom react-scroll react-scroll-to-top react-spinners react-transition-group sweetalert2 swiper
-For Backend
-Navigate to the backend directory and install the required packages:
 
 bash
 Copy code
