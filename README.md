@@ -45,7 +45,7 @@ Follow these steps to set up the project:
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/SOtwoX1/Project-SE.git
-   cd RobotQATest
+   cd project-se
 
 2. Install dependencies: Navigate to both the frontend and backend directories and install the required packages:
     ```bash
