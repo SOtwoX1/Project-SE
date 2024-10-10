@@ -44,15 +44,14 @@ To set up the project, follow these steps:
    git clone https://github.com/SOtwoX1/Project-SE.git
    cd
    
-2.Install dependencies for both frontend and backend.
+2. Install dependencies for both frontend and backend.
 For Frontend and Backend
-```bash
-npm install antd axios flowbite flowbite-react framer-motion gsap moment react-router-dom react-scroll react-scroll-to-top react-spinners react-transition-group sweetalert2 swiper bcryptjs body-parser cors cross-env express jsonwebtoken multer mysql2 mongoose
-cd
+  ```bash
+  npm install antd axios flowbite flowbite-react framer-motion gsap moment react-router-dom react-scroll react-scroll-to-top react-spinners react-transition-group sweetalert2 swiper bcryptjs body-parser cors cross-env express jsonwebtoken multer mysql2 mongoose
 
 3. Start App
-```bash
-npm run dev
+  ```bash
+  npm run dev
 
 This command will run all over front and back Open your browser and navigate to http://localhost:3000 to view the application.
 
