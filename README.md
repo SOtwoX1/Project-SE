@@ -4,7 +4,18 @@
 
 Project-Koo-Kin เติมให้หน่อย
 ## Technologies Used
-
+### การใช้ git ทำใน dev เเล้วค่อย pull request to main ** สำคัญ
+   git branch
+   
+   git status
+   
+   git add .
+   
+   git commit -m "xxx"
+   
+   git pull
+   
+   git push
 ### Frontend (React)
 
 The frontend  `src > client`,พอจะมีตัวอย่างอนู่ใน code แต่ถ้าตัวไหนไม่มีลองเองเลย
