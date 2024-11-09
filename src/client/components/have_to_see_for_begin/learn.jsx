@@ -4,7 +4,7 @@ import Axios from "axios"; // use axios to make http request
 import { DarkThemeToggle, Flowbite } from "flowbite-react";  // use flowbite for css
 import { motion } from "framer-motion"
 import Swal from 'sweetalert2';
-export default function Home() {
+export default function Learn() {
   // axios request example
   const handle1 = async () => {
     const res = await Axios.get("http://localhost:3000/hello");
