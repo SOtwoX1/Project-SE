@@ -7,7 +7,7 @@ Project-Koo-Kin เติมให้หน่อย
 ### การใช้ git ทำใน dev เเล้วค่อย pull request to main ** สำคัญ
    git init
 
-   git checkout 
+   git checkout (main/dev) ดึงไฟล์
 
    git branch (main/dev)
    
