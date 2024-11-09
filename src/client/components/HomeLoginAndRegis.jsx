@@ -12,7 +12,7 @@ export default function HomeLoginAndRegister() {
         window.location.href = "http://localhost:3000/regis";
       }
     return(
-            <div className="flex flex-col justify-center space-y-[122px]">
+            <div className=" fixed overflow-hidden flex flex-col justify-center space-y-[122px]">
                 <div>
                     <img className="w-[424px] h-[469px]"
                     src="src\client\img\homelogin.png"
