@@ -3,16 +3,14 @@ import Swal from 'sweetalert2';
 
 export default function HomeLoginAndRegister() {
     const go_to_Login = async() => {
-        await Swal.fire({ title: "Next Page", icon: "success", timer: 5000 }); //wait 5 seconds and go to next page
         window.location.href = "http://localhost:3000/Login";
       }
 
     const go_to_regis = async() => {
-        await Swal.fire({ title: "Next Page", icon: "success", timer: 5000 }); //wait 5 seconds and go to next page
         window.location.href = "http://localhost:3000/regis";
       }
     return(
-            <div className="flex flex-col justify-center space-y-[122px]">
+            <div className="fixed overflow-hidden flex flex-col justify-center space-y-[122px]">
                 <div>
                     <img className="w-[424px] h-[469px]"
                     src="src\client\img\homelogin.png"

@@ -1,15 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
-import Home from "./components/home";
-import Image from "./components/image";
 import HomeLoginAndRegister from './components/HomeLoginAndRegis';
 import Login from "./components/login";
 import Register from "./components/regis";
-=======
 import Learn from "./components/have_to_see_for_begin/learn";
 import Image from "./components/have_to_see_for_begin/learn2";
 import Welcome from "./components/welcome_page";
->>>>>>> bad6fc3847bb9488105557ae036b824f59a9ead9
+
 
 function App() {
   return (
