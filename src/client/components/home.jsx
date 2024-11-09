@@ -21,6 +21,21 @@ export default function Home() {
     window.location.href = "http://localhost:3000/nextpage"; // make a request to next page must wait 5 seconds
   }
 
+  const handle4 = async() => {
+    await Swal.fire({ title: "Next Page", icon: "success", timer: 5000 }); //wait 5 seconds and go to next page
+    window.location.href = "http://localhost:3000/Login";
+  }
+
+  const handle5 = async() => {
+    await Swal.fire({ title: "Next Page", icon: "success", timer: 5000 }); //wait 5 seconds and go to next page
+    window.location.href = "http://localhost:3000/home-login-register";
+  }
+
+  const handle6 = async() => {
+    await Swal.fire({ title: "Next Page", icon: "success", timer: 5000 }); //wait 5 seconds and go to next page
+    window.location.href = "http://localhost:3000/Regis";
+  }
+
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [rotate, setRotate] = useState(0);
@@ -34,7 +49,10 @@ export default function Home() {
       <Button onClick={handle1}> Example From axios see in console </Button>
       <Button onClick={handle2}> Example From axios + swal see in console </Button>
       <Button onClick={handle3}> Example NEXT Page </Button>
-      {/* show massage from axios */} 
+      {/* show massage from axios */}
+      <Button onClick = {handle5}> homeLoginregis </Button> 
+      <Button onClick = {handle4}> Login </Button> 
+      <Button onClick = {handle6}> regis </Button> 
       <Flowbite>
       <DarkThemeToggle />
       </Flowbite>
