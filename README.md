@@ -13,9 +13,9 @@ Project-Koo-Kin เติมให้หน่อย
    
    git commit -m "xxx"
    
-   git pull
+   git pull origin (main/dev)
    
-   git push
+   git push origin (main/dev)
 ### Frontend (React)
 
 The frontend  `src > client`,พอจะมีตัวอย่างอนู่ใน code แต่ถ้าตัวไหนไม่มีลองเองเลย
