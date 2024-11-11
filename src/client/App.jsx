@@ -5,7 +5,8 @@ import Register from "./components/regis";
 import Learn from "./components/have_to_see_for_begin/learn";
 import Image from "./components/have_to_see_for_begin/learn2";
 import Forgetpass from "./components/forget_pass"
-
+import OTP from "./components/otp"
+import Cnr from "./components/create_new_pass"
 function App() {
   return (
     <BrowserRouter>
@@ -15,7 +16,9 @@ function App() {
         <Route path="/home-login-register" element={<HomeLoginAndRegister />} /> 
         <Route path="/Login" element={<Login />} /> 
         <Route path="/Regis" element={<Register />} /> 
-        <Route path="/Forget-password" element={<Forgetpass />} /> 
+        <Route path="/Forgot-password" element={<Forgetpass />} /> 
+        <Route path="/OTP" element={<OTP />} /> 
+        <Route path="/Create-new-password" element={<Cnr />} />
       </Routes>
     </BrowserRouter>
   );

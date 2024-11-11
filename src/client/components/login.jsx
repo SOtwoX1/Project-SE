@@ -10,12 +10,12 @@ export default function Login() {
     const go_to_regis = async() => {
         window.location.href = "http://localhost:3000/Regis";
       }
-    const go_to_forget = async() => {
-        window.location.href = "http://localhost:3000/Forget-password";
+    const go_to_forgot = async() => {
+        window.location.href = "http://localhost:3000/Forgot-password";
       }
     return (
-        <div className="fixed overflow-hidden flex flex-col space-y-[285px]">
-                <div className="w-full h-full flex flex-col space-y-[28px]  mt-[56px] px-[21px]">
+        <div className="h-full fixed overflow-hidden flex flex-col pb-[26px]">
+                <div className="w-full h-full flex flex-col space-y-[28px] mt-[56px] px-[21px]">
                 
                     <Button onClick={go_to_homelog} className="w-[41px] h-[41px] border border-[#E8ECF4] rounded-lg">
                         <svg class="w-[19px] h-[19px] text-gray-800 dark:text-white m-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -31,22 +31,23 @@ export default function Login() {
                             <input type="email" className="w-[331px] h-[56px] bg-[#F7F8F9] placeholder-[#8391A1] border border-[#E8ECF4] rounded-lg" placeholder="Enetr your email"/>
                             <input type="password" className="w-[331px] h-[56px] bg-[#F7F8F9] placeholder-[#8391A1] border border-[#E8ECF4] rounded-lg" placeholder="Enter your password "/>
                             
-                            <Button onClick={go_to_forget} className="text-[#6A707C] ml-auto">Forget Password ?</Button>   
+                            <Button onClick={go_to_forgot} className="text-[#6A707C] ml-auto">Forget Password ?</Button>   
                         </div>
 
                     
                         <Button 
                         onSubmit={cheackid}
-                        className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg">
+                        className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg font-semibold">
                             Log in
                         </Button>    
                     </form>
 
                 </div>
 
-            <div className="text-center">
-                        Don't have an account? <Button onClick={go_to_regis} className="text-[#1b998b]">Register Now</Button> 
-            </div>
+                <div className="flex flex-row justify-center space-x-1">                        
+                    <p>Don’t have an account?</p>
+                    <Button onClick={go_to_regis} className="text-[#1b998b]">Register Now</Button>
+                </div>
 
         </div>
         

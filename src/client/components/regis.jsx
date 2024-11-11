@@ -11,8 +11,8 @@ export default function Register() {
         const id = {}
       } 
     return(
-        <div className="fixed overflow-hidden flex flex-col space-y-[184px]">
-            <div className="w-full h-full flex flex-col space-y-[28px]  mt-[56px] px-[21px]">
+        <div className="h-full fixed overflow-hidden flex flex-col pb-[26px]">
+            <div className="w-full h-full flex flex-col space-y-[28px] mt-[56px] px-[21px]">
                 
                 <Button onClick={go_to_homelog} className="w-[41px] h-[41px] border border-[#E8ECF4] rounded-lg">
                     <svg class="w-[19px] h-[19px] text-gray-800 dark:text-white m-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -32,15 +32,16 @@ export default function Register() {
                         </div>
                     <Button
                         onSubmit={check_regis}
-                        className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg">
+                        className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg font-semibold">
                             Register
                     </Button>
                             
                 </form>
             </div>
 
-            <div className="text-center">                        
-                Already have an account?<Button onClick={go_to_login} className="text-[#1b998b]">Login Now</Button>
+            <div className="flex flex-row justify-center space-x-1">                        
+                <p>Already have an account?</p>
+                <Button onClick={go_to_login} className="text-[#1b998b]">Login Now</Button>
             </div>
 
         </div>
