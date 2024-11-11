@@ -5,6 +5,10 @@ import Register from "./components/regis";
 import Learn from "./components/have_to_see_for_begin/learn";
 import Image from "./components/have_to_see_for_begin/learn2";
 import Forgetpass from "./components/forget_pass"
+import Menu from "./components/Menu"
+import Profile from "./components/Profile"
+
+
 
 function App() {
   return (
@@ -16,6 +20,9 @@ function App() {
         <Route path="/Login" element={<Login />} /> 
         <Route path="/Regis" element={<Register />} /> 
         <Route path="/Forget-password" element={<Forgetpass />} /> 
+        <Route path="/Menu" element={<Menu />} /> 
+        <Route path="/Profile" element={<Profile />} /> 
+        
       </Routes>
     </BrowserRouter>
   );
