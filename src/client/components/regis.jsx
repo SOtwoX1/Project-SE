@@ -1,15 +1,18 @@
 import {Button} from "react-scroll"
 
 export default function Register() {
-    const go_to_homelog = async() => {
+    const go_to_homelog = () => {
         window.location.href = "http://localhost:3000/home-login-register";
       }
-    const go_to_login = async() => {
+    const go_to_login = () => {
         window.location.href = "http://localhost:3000/Login";
       }
-      const check_regis = async() => {
+      const check_regis = () => {
         const id = {}
-      } 
+      }
+      const go_sucess =  () => {
+        window.location.href = "http://localhost:3000/Register-Sucessfull";
+      }
     return(
         <div className="h-full fixed overflow-hidden flex flex-col pb-[26px]">
             <div className="w-full h-full flex flex-col space-y-[28px] mt-[56px] px-[21px]">
@@ -32,6 +35,7 @@ export default function Register() {
                         </div>
                     <Button
                         onSubmit={check_regis}
+                        onClick={go_sucess}
                         className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg font-semibold">
                             Register
                     </Button>

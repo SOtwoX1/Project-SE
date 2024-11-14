@@ -5,7 +5,7 @@ export default function Cnr() {
         window.location.href = "http://localhost:3000/OTP";
     }
     const Reset_pass = () => {
-        //
+        window.location.href = "/Password-Change"
     }
 
     return (
