@@ -8,6 +8,8 @@ import multer from "multer";
 import mysql from "mysql2";
 import mongoose from "mongoose";
 
+
+
 const app = express();
 // Middleware
 app.use(cors());
@@ -17,80 +19,50 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-// // MySQL Database Connection
-// const mysqlConnection = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'your_mysql_user',
-//     password: 'your_mysql_password',
-//     database: 'your_mysql_database'
-// });
 
-// mysqlConnection.connect(err => {
-//     if (err) {
-//         console.error('MySQL connection error:', err);
-//         return;
-//     }
-//     console.log('Connected to MySQL database.');
-// });
+// MongoDB Connection
+const mongoURI = 'mongodb+srv://Otwo:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
+mongoose
+  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected successfully to DatingApp!'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-// // MongoDB Connection
-// mongoose.connect('mongodb://localhost:27017/your_mongo_database', { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => console.log('Connected to MongoDB database.'))
-//     .catch(err => console.error('MongoDB connection error:', err));
-
-// // User model for MongoDB
-// const UserSchema = new mongoose.Schema({
-//     username: String,
-//     password: String,
-// });
-
-// const User = mongoose.model('User', UserSchema);
-
-// // Multer setup for file uploads
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads/');
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, Date.now() + '-' + file.originalname);
-//     }
-// });
-// const upload = multer({ storage });
-
-// // Registration Route
-// app.post('/register', async (req, res) => {
-//     const { username, password } = req.body;
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const user = new User({ username, password: hashedPassword });
-//     await user.save();
-
-//     res.status(201).json({ message: 'User registered successfully.' });
-// });
-
-// // Login Route
-// app.post('/login', async (req, res) => {
-//     const { username, password } = req.body;
-
-//     const user = await User.findOne({ username });
-//     if (!user) return res.status(404).send('User not found.');
-
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) return res.status(401).send('Invalid password.');
-
-//     const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-//     res.json({ token });
-// });
-
-// // File Upload Route
-// app.post('/upload', upload.single('file'), (req, res) => {
-//     res.json({ message: 'File uploaded successfully.', file: req.file });
-// });
-
-
-app.get("/hello", (req, res) => {
-  res.send("Hello Vite + React!");
+// Define a Mongoose Schema and Model for the `Users` Collection
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }, // Optional: Track user registration time
 });
+
+const User = mongoose.model('Users', userSchema); // Target the `Users` collection
+// POST Route for User Registration
+app.post('/api/register', async (req, res) => {
+  const { username, email, password } = req.body;
+
+  // Validate request data
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email is already registered.' });
+    }
+
+    // Create and save new user
+    const newUser = new User({ username, email, password });
+    await newUser.save();
+
+    return res.status(201).json({ message: 'User registered successfully!' });
+  } catch (error) {
+    console.error('Error during registration:', error);
+    return res.status(500).json({ message: 'Internal Server Error.' });
+  }
+});
+
 
 ViteExpress.listen(app, 3000, () =>
   console.log("Server is listening on port 3000..."),
