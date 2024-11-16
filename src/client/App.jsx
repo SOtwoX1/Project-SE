@@ -11,6 +11,7 @@ import Regis_sucess from "./components/regis_sucess"
 import Pass_change from "./components/pass_change";
 import Menu from "./components/Menu";
 import Profile from "./components/Profile";
+import Restaurant from "./components/restaurant";
 
 
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/Password-Change" element={<Pass_change />} />
         <Route path="/Menu" element={<Menu />} /> 
         <Route path="/Profile" element={<Profile />} /> 
+        <Route path="/restaurant" element={<Restaurant />} />
       </Routes>
     </BrowserRouter>
   );
