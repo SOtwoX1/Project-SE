@@ -5,7 +5,7 @@ import Register from "./components/regis";
 import Learn from "./components/have_to_see_for_begin/learn";
 import Image from "./components/have_to_see_for_begin/learn2";
 import Forgetpass from "./components/forget_pass"
-import OTP from "./components/otp"
+import VerifyLetter from "./components/otp"
 import Cnr from "./components/create_new_pass"
 import Regis_sucess from "./components/regis_sucess"
 import Pass_change from "./components/pass_change";
@@ -24,7 +24,7 @@ function App() {
         <Route path="/Login" element={<Login />} /> 
         <Route path="/Regis" element={<Register />} /> 
         <Route path="/Forgot-password" element={<Forgetpass />} /> 
-        <Route path="/OTP" element={<OTP />} /> 
+        <Route path="/OTP" element={<VerifyLetter />} /> 
         <Route path="/Create-new-password" element={<Cnr />} /> 
         <Route path="/Register-Sucessfull" element={<Regis_sucess />} />
         <Route path="/Password-Change" element={<Pass_change />} />
