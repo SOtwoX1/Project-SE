@@ -17,8 +17,6 @@ import Restaurant from "./components/restaurant";
 import Match from "./components/Match";
 import Massage from "./components/massage";
 import Show_me from "./components/show_me";
-import Password from "./components/password";
-import Change_password from "./components/change_password";
 
 
 
@@ -44,8 +42,9 @@ function App() {
         <Route path="/Match" element={<Match />} />
         <Route path="/Massage" element={<Massage />} />
         <Route path="/Show-Me" element={<Show_me />} />
-        <Route path="/Password" element={<Password />} />
-        <Route path="/Change-Password" element={<Change_password />} />
+        
+
+
       </Routes>
     </BrowserRouter>
   );
