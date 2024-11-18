@@ -45,6 +45,7 @@ function App() {
         <Route path="/Massage" element={<Massage />} />
         <Route path="/Password" element={<Password />} />
         <Route path="/Change-Password" element={<Change_password/>} />
+        <Route path="/Detail-Match" element={<DetailMatch/>} />
 
       </Routes>
     </BrowserRouter>
