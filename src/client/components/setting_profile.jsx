@@ -11,7 +11,7 @@ export default function Setting_pro() {
         window.location.href = "/profile";
     }
     const go_to_MPA = () => {
-        window.location.href = "/profile";
+        window.location.href = "/Manage-Payment-Account";
     }
     const go_to_package = () => {
         window.location.href = "/profile";
@@ -50,7 +50,7 @@ export default function Setting_pro() {
     return(
         
         <div 
-          className="w-[375px] h-[812px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex flex-col p-3 pt-[8px] " 
+          className="fixed overflow-hidden w-[375px] h-[812px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex flex-col p-3 pt-[8px] " 
           style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
             <div className="flex flex-row items-center justify-center">
                 <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
