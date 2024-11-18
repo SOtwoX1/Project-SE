@@ -20,6 +20,8 @@ import Show_me from "./components/show_me";
 import Password from "./components/password";
 import Change_password from "./components/change_password";
 import DetailMatch from "./components/detailmatch";
+import Manage_Payment_Account from "./components/manage_payment_acc";
+import Success_MPA from "./components/sucess_MPA";
 
 
 function App() {
@@ -47,7 +49,8 @@ function App() {
         <Route path="/Password" element={<Password />} />
         <Route path="/Change-Password" element={<Change_password/>} />
         <Route path="/Detail-Match" element={<DetailMatch/>} />
-
+        <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account/>} />
+        <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
       </Routes>
     </BrowserRouter>
   );
