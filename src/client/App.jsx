@@ -17,8 +17,12 @@ import Restaurant from "./components/restaurant";
 import Match from "./components/Match";
 import Massage from "./components/massage";
 import Show_me from "./components/show_me";
+import Password from "./components/password";
+import Change_password from "./components/change_password";
 import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
+import DetailMatch from "./components/detailmatch";
+
 
 
 function App() {
@@ -43,8 +47,10 @@ function App() {
         <Route path="/Match" element={<Match />} />
         <Route path="/Massage" element={<Massage />} />
         <Route path="/Show-Me" element={<Show_me />} />
-        <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account />} />
-        <Route path="/Success-Manage-Payment-Account" element={<Success_MPA />} />
+=======
+        <Route path="/DetailMatch" element={<DetailMatch />} />
+>>>>>>> Stashed changes
+        
 
 
       </Routes>
