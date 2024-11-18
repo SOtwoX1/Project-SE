@@ -47,9 +47,11 @@ function App() {
         <Route path="/Match" element={<Match />} />
         <Route path="/Massage" element={<Massage />} />
         <Route path="/Show-Me" element={<Show_me />} />
-=======
+        <Route path="/Password" element={<Password />} />
         <Route path="/DetailMatch" element={<DetailMatch />} />
->>>>>>> Stashed changes
+        <Route path="/Change-Password" element={<Change_password />} />
+        <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account />} />
+        <Route path="/Success-Manage-Payment-Account" element={<Success_MPA />} />
         
 
 
