@@ -19,10 +19,7 @@ import Massage from "./components/massage";
 import Show_me from "./components/show_me";
 import Password from "./components/password";
 import Change_password from "./components/change_password";
-import Manage_Payment_Account from "./components/manage_payment_acc";
-import Success_MPA from "./components/sucess_MPA";
 import DetailMatch from "./components/detailmatch";
-
 
 
 function App() {
