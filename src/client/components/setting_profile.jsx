@@ -4,8 +4,8 @@ export default function Setting_pro() {
     const go_to_profile = () => {
         window.location.href = "/profile";
     }
-    const go_to_showMe = () => {
-        window.location.href = "/profile";
+    const go_to_show_me = () => {
+        window.location.href = "/Show-Me";
     }
     const go_to_Password = () => {
         window.location.href = "/profile";
@@ -61,12 +61,12 @@ export default function Setting_pro() {
             </div>
             <div className="flex flex-col  divide-y divide-blue">
                 <div className="flex items-center h-[65px]">
-                    <button onClick={go_to_profile} >
-                        <svg class="w-[47px] h-[47px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <button onClick={go_to_profile} className="ml-2" >
+                        <svg class="w-[42px] h-[42px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m15 19-7-7 7-7"/>
                         </svg>
                     </button>
-                    <p className="text-2xl text-black">PROFILE</p>
+                    <p className="text-xl text-black">PROFILE</p>
                 </div>
                 <div className="flex justify-between text-xl  items-center h-[65px]">
                     <p className="text-black p-12">Email</p>
@@ -74,7 +74,7 @@ export default function Setting_pro() {
                 </div>
                 <div className="flex justify-between text-xl  items-center h-[65px]">
                     <p className="text-black p-12">Show Me</p>
-                    <button onClick={go_to_showMe}>
+                    <button onClick={go_to_show_me}>
                         <svg class="w-[29px] h-[29px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m9 5 7 7-7 7"/>
                         </svg>
