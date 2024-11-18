@@ -45,12 +45,8 @@ function App() {
         <Route path="/Massage" element={<Massage />} />
         <Route path="/Show-Me" element={<Show_me />} />
         <Route path="/Password" element={<Password />} />
-        <Route path="/DetailMatch" element={<DetailMatch />} />
-        <Route path="/Change-Password" element={<Change_password />} />
-        <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account />} />
-        <Route path="/Success-Manage-Payment-Account" element={<Success_MPA />} />
-        
-
+        <Route path="/Change-Password" element={<Change_password/>} />
+        <Route path="/Detail-Match" element={<DetailMatch/>} />
 
       </Routes>
     </BrowserRouter>
