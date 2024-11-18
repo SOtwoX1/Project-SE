@@ -65,7 +65,7 @@ Follow these steps to set up the project:
 2. Install dependencies: Navigate to both the frontend and backend directories and install the required packages:
     ```bash
     # For the backend frontend
-      npm install antd axios flowbite flowbite-react framer-motion gsap moment react-router-dom react-scroll react-scroll-to-top react-spinners react-transition-group sweetalert2 swiper bcryptjs body-parser cors cross-env express jsonwebtoken multer mysql2 mongoose
+      npm install antd axios flowbite flowbite-react framer-motion gsap moment react-router-dom react-scroll react-scroll-to-top react-spinners react-transition-group sweetalert2 swiper bcryptjs body-parser cors cross-env express jsonwebtoken multer mysql2 mongoose react-slick @mui/material @emotion/react @emotion/styled slick-carousel
 
 3. Start dev server:
 
