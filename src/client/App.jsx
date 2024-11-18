@@ -9,7 +9,8 @@ import OTP from "./components/otp"
 import Cnr from "./components/create_new_pass"
 import Menu from "./components/Menu";
 import Profile from "./components/Profile";
-
+import Menuss from "./components/menudefault";
+import Match from "./components/match";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
         <Route path="/Create-new-password" element={<Cnr />} /> 
         <Route path="/Menu" element={<Menu />} /> 
         <Route path="/Profile" element={<Profile />} /> 
+        <Route path="/Menuss" element={<Menuss />} /> 
+        <Route path="/match" element={<Match />} /> 
       </Routes>
     </BrowserRouter>
   );
