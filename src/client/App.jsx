@@ -16,8 +16,12 @@ import Setting_pro from "./components/setting_profile";
 import Restaurant from "./components/restaurant";
 import Match from "./components/Match";
 import Massage from "./components/massage";
+<<<<<<< Updated upstream
 import Show_me from "./components/show_me";
 
+=======
+import DetailMatch from "./components/detailmatch";
+>>>>>>> Stashed changes
 
 
 function App() {
@@ -41,7 +45,11 @@ function App() {
         <Route path="/restaurant" element={<Restaurant />} />
         <Route path="/Match" element={<Match />} />
         <Route path="/Massage" element={<Massage />} />
+<<<<<<< Updated upstream
         <Route path="/Show-Me" element={<Show_me />} />
+=======
+        <Route path="/DetailMatch" element={<DetailMatch />} />
+>>>>>>> Stashed changes
         
 
 
