@@ -21,13 +21,19 @@ export default function Setting_pro() {
     }
     const Delete_Account = () => {
         Swal.fire({
-            title: "<u>Delete My Account </u>",
+            title: "Delete My Account ",
             text: "All data within the account will be deleted.",
             showCancelButton: true,
             confirmButtonColor: "#E76F51",
             cancelButtonColor: "#F4A261",
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText : "Don’t Delete My Account"
+            confirmButtonText: "Delete My Account",
+            cancelButtonText : "Don’t Delete My Account",
+            customClass: {
+                popup: "w-[350px] h-[250px] bg-[#E9C46A] text-white text-[15px] rounded-lg space-y-px", // ใช้ Tailwind CSS
+                title: "text-white text-xl font-bold underline",
+                confirmButton: "text-white text-sm text-center rounded-lg w-[192px] h-10 border border-gray-800 m-auto",
+                cancelButton: "text-white text-sm text-center rounded-lg w-[192px] h-10 border border-gray-800",
+              }
           }).then((result) => {
             if (result.isConfirmed) {
               Swal.fire({
