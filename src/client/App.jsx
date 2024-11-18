@@ -8,7 +8,7 @@ import Forgetpass from "./components/forget_pass"
 import VerifyLetter from "./components/otp"
 import Cnr from "./components/create_new_pass"
 import Regis_sucess from "./components/regis_sucess"
-import Pass_change from "./components/pass_change";
+import Pass_change from "./components/pass_change_forgot";
 import Menu from "./components/Menu";
 import Profile from "./components/Profile";
 import Edit_pro from "./components/edit_profile";
@@ -18,7 +18,7 @@ import Match from "./components/Match";
 import Massage from "./components/massage";
 import Show_me from "./components/show_me";
 import Manage_Payment_Account from "./components/manage_payment_acc";
-
+import Success_MPA from "./components/sucess_MPA";
 
 function App() {
   return (
@@ -43,7 +43,7 @@ function App() {
         <Route path="/Massage" element={<Massage />} />
         <Route path="/Show-Me" element={<Show_me />} />
         <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account />} />
-
+        <Route path="/Success-Manage-Payment-Account" element={<Success_MPA />} />
 
       </Routes>
     </BrowserRouter>
