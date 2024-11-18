@@ -35,11 +35,9 @@ function App() {
         <Route path="/Password-Change" element={<Pass_change />} />
         <Route path="/Menu" element={<Menu />} /> 
         <Route path="/Profile" element={<Profile />} />
-
         <Route path="/Edit-Profile" element={<Edit_pro />} />
         <Route path="/Setting-Profile" element={<Setting_pro />} />
         <Route path="/restaurant" element={<Restaurant />} />
-
         <Route path="/Match" element={<Match />} />
         <Route path="/Massage" element={<Massage />} />
         

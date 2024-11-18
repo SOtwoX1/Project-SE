@@ -18,10 +18,10 @@ export default function Profile() {
       window.location.href = "http://localhost:3000/profile";
     };
     const go_to_setting = async () => {
-      window.location.href = "http://localhost:3000/setting";
+      window.location.href = "/Setting-Profile";
     };
     const go_to_Edit_pro = async () => {
-      window.location.href = "http://localhost:3000/editProfile";
+      window.location.href = "/Edit-Profile";
     };
 
     return (
