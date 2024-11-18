@@ -14,6 +14,8 @@ import Profile from "./components/Profile";
 import Edit_pro from "./components/edit_profile";
 import Setting_pro from "./components/setting_profile";
 import Restaurant from "./components/restaurant";
+import Match from "./components/Match";
+import Massage from "./components/massage";
 
 
 
@@ -33,9 +35,16 @@ function App() {
         <Route path="/Password-Change" element={<Pass_change />} />
         <Route path="/Menu" element={<Menu />} /> 
         <Route path="/Profile" element={<Profile />} />
+
         <Route path="/Edit-Profile" element={<Edit_pro />} />
         <Route path="/Setting-Profile" element={<Setting_pro />} />
         <Route path="/restaurant" element={<Restaurant />} />
+
+        <Route path="/Match" element={<Match />} />
+        <Route path="/Massage" element={<Massage />} />
+        
+
+
       </Routes>
     </BrowserRouter>
   );
