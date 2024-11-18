@@ -11,6 +11,8 @@ import Regis_sucess from "./components/regis_sucess"
 import Pass_change from "./components/pass_change";
 import Menu from "./components/Menu";
 import Profile from "./components/Profile";
+import Edit_pro from "./components/edit_profile";
+import Setting_pro from "./components/setting_profile";
 import Restaurant from "./components/restaurant";
 
 
@@ -30,7 +32,9 @@ function App() {
         <Route path="/Register-Sucessfull" element={<Regis_sucess />} />
         <Route path="/Password-Change" element={<Pass_change />} />
         <Route path="/Menu" element={<Menu />} /> 
-        <Route path="/Profile" element={<Profile />} /> 
+        <Route path="/Profile" element={<Profile />} />
+        <Route path="/Edit-Profile" element={<Edit_pro />} />
+        <Route path="/Setting-Profile" element={<Setting_pro />} />
         <Route path="/restaurant" element={<Restaurant />} />
       </Routes>
     </BrowserRouter>

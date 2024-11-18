@@ -17,6 +17,12 @@ export default function Profile() {
     const go_to_profile = async () => {
       window.location.href = "http://localhost:3000/profile";
     };
+    const go_to_setting = async () => {
+      window.location.href = "http://localhost:3000/setting";
+    };
+    const go_to_Edit_pro = async () => {
+      window.location.href = "http://localhost:3000/editProfile";
+    };
 
     return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
@@ -37,10 +43,14 @@ export default function Profile() {
             ชื่อ USER
           </div>
           <div className="flex flex-row justify-center mt-6 space-x-4">
-            <button className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium">
+            <button 
+            onClick={go_to_Edit_pro}
+            className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium">
               Edit Profile
             </button>
-            <button className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium">
+            <button 
+            onClick={go_to_setting}
+            className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium">
               Setting
             </button>
           </div>
