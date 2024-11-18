@@ -46,7 +46,7 @@ function App() {
         <Route path="/Password" element={<Password />} />
         <Route path="/Change-Password" element={<Change_password/>} />
         <Route path="/Detail-Match" element={<DetailMatch/>} />
-
+        <Route path="/Show-Me" element={<Show_me/>} />
       </Routes>
     </BrowserRouter>
   );
