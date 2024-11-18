@@ -8,6 +8,8 @@ import multer from "multer";
 import mysql from "mysql2";
 import mongoose from "mongoose";
 
+
+
 const app = express();
 // Middleware
 app.use(cors());
@@ -17,79 +19,156 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-// // MySQL Database Connection
-// const mysqlConnection = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'your_mysql_user',
-//     password: 'your_mysql_password',
-//     database: 'your_mysql_database'
-// });
+// jwt-----------------------------------------------------------------------------------------
+function authenticateToken(req, res, next) {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(401).json({ message: 'Access denied' });
 
-// mysqlConnection.connect(err => {
-//     if (err) {
-//         console.error('MySQL connection error:', err);
-//         return;
-//     }
-//     console.log('Connected to MySQL database.');
-// });
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
+    req.user = verified;
+    next();
+  } catch (err) {
+    res.status(400).json({ message: 'Invalid token' });
+  }
+}
 
-// // MongoDB Connection
-// mongoose.connect('mongodb://localhost:27017/your_mongo_database', { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => console.log('Connected to MongoDB database.'))
-//     .catch(err => console.error('MongoDB connection error:', err));
+app.get('/api/protected-route', authenticateToken, (req, res) => {
+  res.json({ message: 'This is a protected route.' });
+});
+//-----------------------------------------------------------------------------------------------
 
-// // User model for MongoDB
-// const UserSchema = new mongoose.Schema({
-//     username: String,
-//     password: String,
-// });
+// MongoDB Connection
+const mongoURI = 'mongodb+srv://Otwo:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
+mongoose
+  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected successfully to DatingApp!'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-// const User = mongoose.model('User', UserSchema);
+// Define a Mongoose Schema and Model for the `Users` Collection
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }, // Optional: Track user registration time
+});
 
-// // Multer setup for file uploads
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads/');
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, Date.now() + '-' + file.originalname);
-//     }
-// });
-// const upload = multer({ storage });
+const User = mongoose.model('Users', userSchema); // Target the `Users` collection
+// POST Route for User Registration
 
-// // Registration Route
-// app.post('/register', async (req, res) => {
-//     const { username, password } = req.body;
-//     const hashedPassword = await bcrypt.hash(password, 10);
+// register ------------------------------------------------------------------------------------
+app.post('/api/register', async (req, res) => {
+  const { username, email, password } = req.body;
 
-//     const user = new User({ username, password: hashedPassword });
-//     await user.save();
+  // Validate request data
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
 
-//     res.status(201).json({ message: 'User registered successfully.' });
-// });
+  try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email is already registered.' });
+    }
 
-// // Login Route
-// app.post('/login', async (req, res) => {
-//     const { username, password } = req.body;
+    // Create and save new user
+    const newUser = new User({ username, email, password });
+    await newUser.save();
 
-//     const user = await User.findOne({ username });
-//     if (!user) return res.status(404).send('User not found.');
+    return res.status(201).json({ message: 'User registered successfully!' });
+  } catch (error) {
+    console.error('Error during registration:', error);
+    return res.status(500).json({ message: 'Internal Server Error.' });
+  }
+});
 
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) return res.status(401).send('Invalid password.');
+// login ------------------------------------------------------------------------------------
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
 
-//     const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-//     res.json({ token });
-// });
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required.' });
+  }
 
-// // File Upload Route
-// app.post('/upload', upload.single('file'), (req, res) => {
-//     res.json({ message: 'File uploaded successfully.', file: req.file });
-// });
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Compare the provided password with the stored password (no hashing)
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Invalid credentials.' });
+    }
+
+    // If credentials are correct
+    res.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
 
 
-app.get("/hello", (req, res) => {
-  res.send("Hello Vite + React!");
+// fotget password ------------------------------------------------------------------------------------
+app.post('/api/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  // Validate input
+  if (!email) {
+    return res.status(400).json({ message: 'Email are required.' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Compare the provided email with the stored email
+    if (user.email !== email) {
+      return res.status(401).json({ message: 'Invalid credentials.' });
+    }
+
+    // If credentials are correct
+    res.status(200).json({ message: 'Can reset password' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+
+// set password ------------------------------------------------------------------------------------
+app.put('/api/reset-password', async (req, res) => {
+  const { email , password } = req.body;
+
+  // Validate input
+  if (!email) {
+    return res.status(400).json({ message: 'Email are required.' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // set password
+    user.password = password;
+    await user.save();
+
+    // If credentials are correct
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
 });
 
 ViteExpress.listen(app, 3000, () =>
