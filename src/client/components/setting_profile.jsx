@@ -8,7 +8,7 @@ export default function Setting_pro() {
         window.location.href = "/Show-Me";
     }
     const go_to_Password = () => {
-        window.location.href = "/profile";
+        window.location.href = "/Password";
     }
     const go_to_MPA = () => {
         window.location.href = "/profile";
