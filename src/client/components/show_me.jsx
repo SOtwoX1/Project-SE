@@ -35,24 +35,21 @@ export default function Show_me() {
                     <div className="flex justify-between text-[20px] items-center h-[65px]">
                         <button
                             onClick={() => handleClick('Men')}
-                            className={`text-black p-12 ${selectedCategory === 'Men' ? 'text-[#E9C46A]' : ''}`}
-                        >
+                            className={"text-black p-12 hover:text-[#E9C46A]"}>
                             Men
                         </button>
                     </div>
                     <div className="flex justify-between text-[20px] items-center h-[65px]">
                          <button
                              onClick={() => handleClick('Women')}
-                             className={`text-black p-12 ${selectedCategory === 'Women' ? 'text-[#E9C46A]' : ''}`}
-                         >
+                             className={"text-black p-12 hover:text-[#E9C46A]"}>
                              Women
                          </button>
                     </div>
                     <div className="flex justify-between text-[20px] items-center h-[65px]">
                         <button
                             onClick={() => handleClick('Everyone')}
-                            className={`text-black p-12 ${selectedCategory === 'Everyone' ? 'text-[#E9C46A]' : ''}`}
-                        >
+                            className={"text-black p-12 hover:text-[#E9C46A]"}>
                             Everyone
                         </button>
                     </div>
@@ -64,3 +61,5 @@ export default function Show_me() {
         </div>
     );
 }
+
+
