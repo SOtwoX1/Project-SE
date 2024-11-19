@@ -39,7 +39,8 @@ app.get('/api/protected-route', authenticateToken, (req, res) => {
 //-----------------------------------------------------------------------------------------------
 
 // MongoDB Connection
-const mongoURI = 'mongodb+srv://get:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
+const mongoURI = 'mongodb+srv://Otwo:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
+
 mongoose
   .connect(mongoURI)
   .then(() => console.log('MongoDB connected successfully to DatingApp!'))
@@ -105,7 +106,7 @@ app.post('/api/login', async (req, res) => {
     }
 
     // If credentials are correct
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful' , username: user.username});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error.' });

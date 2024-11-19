@@ -15,14 +15,15 @@ import Edit_pro from "./components/edit_profile";
 import Setting_pro from "./components/setting_profile";
 import Restaurant from "./components/restaurant";
 import Match from "./components/Match";
-import Massage from "./components/massage";
+import Message from "./components/message";
 import Show_me from "./components/show_me";
 import Password from "./components/password";
 import Change_password from "./components/change_password";
 import DetailMatch from "./components/detailmatch";
 import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
-
+import Preview from "./components/preview";
+import Messages from "./components/messages";
 
 function App() {
   return (
@@ -44,16 +45,20 @@ function App() {
         <Route path="/Setting-Profile" element={<Setting_pro />} />
         <Route path="/restaurant" element={<Restaurant />} />
         <Route path="/Match" element={<Match />} />
-        <Route path="/Massage" element={<Massage />} />
+        <Route path="/Message" element={<Message />} />
+        <Route path="/Messages" element={<Messages />} />
         <Route path="/Show-Me" element={<Show_me />} />
         <Route path="/Password" element={<Password />} />
         <Route path="/Change-Password" element={<Change_password/>} />
         <Route path="/Detail-Match" element={<DetailMatch/>} />
         <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account/>} />
         <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
+        <Route path="/preview" element={<Preview/>} />
+
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
