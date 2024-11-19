@@ -23,7 +23,7 @@ const Match = () => {
   };
 
   const handleImageClick = () => {
-    navigate('/detailmatch'); // ไปยังหน้า /profile-details
+    navigate('/Detail-Match'); // ไปยังหน้า /profile-details
   };
 
   const profile = {

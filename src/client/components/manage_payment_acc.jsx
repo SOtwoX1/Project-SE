@@ -12,7 +12,7 @@ export default function Manage_Payment_Account () {
             <div className="flex flex-row items-center justify-center">
                 <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
                 <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="src/client/img/heart.png" alt="Heart" />
-                <span className="text-[#E76F51] text-[45px] font-extrabold">SETTINGS</span>
+                <span className="text-[#E76F51] text-[45px] font-extrabold ">SETTINGS</span>
                 <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
                 <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
             </div>
