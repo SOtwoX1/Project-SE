@@ -2,6 +2,7 @@ import { Button } from "react-scroll";
 import React from "react";
 import vite from "./../../../public/vite.svg";
 
+
 function Massage() {
     const chat = [
         {id:0, name:"ชื่อแอค", massages:[{name:"ชื่อแอค", massage:"hi"},{name:"realguy", massage:"ข้อความล่าสุด"}]},
