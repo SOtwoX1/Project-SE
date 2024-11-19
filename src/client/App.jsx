@@ -17,18 +17,13 @@ import Restaurant from "./components/restaurant";
 import Match from "./components/Match";
 import Message from "./components/message";
 import Show_me from "./components/show_me";
-<<<<<<< HEAD
 import Password from "./components/password";
 import Change_password from "./components/change_password";
 import DetailMatch from "./components/detailmatch";
 import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
 import Preview from "./components/preview";
-=======
 import Messages from "./components/messages";
-
->>>>>>> dev_tang
-
 
 function App() {
   return (
