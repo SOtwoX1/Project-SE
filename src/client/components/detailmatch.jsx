@@ -30,12 +30,14 @@ const DetailMatch = () => {
         className="bg-white w-[350px] h-[80px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]"
         style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
       >
-        <div className="flex flex-row items-center justify-center">
-          <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
-          <span className="text-[#E76F51] text-[35px] font-extrabold">KOO - KINN</span>
-          <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
-          
-        </div>
+        
+          <div className="flex flex-row items-center justify-center">
+            <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
+            <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="src/client/img/heart.png" alt="Heart" />
+            <span className="text-[#E76F51] text-[40px] font-extrabold">KOO - KINN</span>
+            <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
+            <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
+          </div>
         
       </div>
       <div style={{ }}>

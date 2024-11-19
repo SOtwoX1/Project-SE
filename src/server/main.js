@@ -106,7 +106,7 @@ app.post('/api/login', async (req, res) => {
     }
 
     // If credentials are correct
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful' , username: user.username});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error.' });
