@@ -24,7 +24,6 @@ import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
 import Edit from "./components/edit";
 import Preview from "./components/preview";
-import Messages from "./components/messages";
 
 function App() {
   return (
@@ -47,7 +46,6 @@ function App() {
         <Route path="/restaurant" element={<Restaurant />} />
         <Route path="/Match" element={<Match />} />
         <Route path="/massage" element={<Massage />} />
-        <Route path="/Message" element={<Message />} />
         <Route path="/Messages" element={<Messages />} />
         <Route path="/Show-Me" element={<Show_me />} />
         <Route path="/Password" element={<Password />} />
