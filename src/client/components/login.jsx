@@ -24,7 +24,6 @@ export default function Login() {
     const handleLogin = async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
         console.log(email, password);
-        localStorage.setItem("LoginToken", email);
 
         try {
           const response = await axios.post('http://localhost:3000/api/login', {
@@ -32,7 +31,11 @@ export default function Login() {
             password,
           });
 
-          console.log('Success', response.data);
+          console.log('Success', response.data.message);
+          localStorage.setItem("LoginToken", 
+            JSON.stringify({ email: email,
+                username: response.data.username
+            }));
 
           if (response.status === 200) {
             Swal.fire({
