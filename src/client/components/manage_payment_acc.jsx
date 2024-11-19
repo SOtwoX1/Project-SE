@@ -2,6 +2,9 @@ export default function Manage_Payment_Account () {
     const go_to_setting = () => {
         window.location.href = "/Setting-Profile";
     }
+    const go_to_sucess_MPA = () => {
+        window.location.href = "/Success-Manage-Payment-Account";
+    }
     return (
         <div 
           className="fixed overflow-hidden w-[375px] h-[812px] rounded-b-[50px] text-[45px] font-extrabold flex flex-col p-3 pt-[8px] " 
@@ -56,7 +59,9 @@ export default function Manage_Payment_Account () {
                                
                     </div>
                     <div className="text-center mt-[40px]">
-                        <button className="w-[331px] h-[39px] bg-[#E9C46A] text-white text-[16px] font-bold rounded-lg">
+                        <button 
+                        onClick={go_to_sucess_MPA}
+                        className="w-[331px] h-[39px] bg-[#E9C46A] text-white text-[16px] font-bold rounded-lg">
                             Save new card
                         </button>
                     </div>
