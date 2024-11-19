@@ -22,6 +22,7 @@ import Change_password from "./components/change_password";
 import DetailMatch from "./components/detailmatch";
 import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
+import Edit from "./components/edit";
 
 
 function App() {
@@ -44,13 +45,14 @@ function App() {
         <Route path="/Setting-Profile" element={<Setting_pro />} />
         <Route path="/restaurant" element={<Restaurant />} />
         <Route path="/Match" element={<Match />} />
-        <Route path="/Massage" element={<Massage />} />
+        <Route path="/massage" element={<Massage />} />
         <Route path="/Show-Me" element={<Show_me />} />
         <Route path="/Password" element={<Password />} />
         <Route path="/Change-Password" element={<Change_password/>} />
         <Route path="/Detail-Match" element={<DetailMatch/>} />
         <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account/>} />
         <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
+        <Route path="/Edit" element={<Edit/>} />
       </Routes>
     </BrowserRouter>
   );
