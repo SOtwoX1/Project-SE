@@ -16,14 +16,15 @@ import Setting_pro from "./components/setting_profile";
 import Restaurant from "./components/restaurant";
 import Match from "./components/Match";
 import Message from "./components/message";
+import Messages from "./components/messages";
 import Show_me from "./components/show_me";
 import Password from "./components/password";
 import Change_password from "./components/change_password";
 import DetailMatch from "./components/detailmatch";
 import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
+import Edit from "./components/edit";
 import Preview from "./components/preview";
-import Messages from "./components/messages";
 import Mypackage from "./components/mypackage";
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
         <Route path="/Detail-Match" element={<DetailMatch/>} />
         <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account/>} />
         <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
+        <Route path="/Edit" element={<Edit/>} />
         <Route path="/preview" element={<Preview/>} />
         <Route path="/Mypackage" element={<Mypackage/>} />
 

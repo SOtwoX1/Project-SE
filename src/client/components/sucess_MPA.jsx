@@ -1,7 +1,7 @@
 export default function Success_MPA(){
-    const go_to_login = () => {
-        window.location.href = "/login";
-    }
+    const go_to_setting = () => {
+        window.location.href = "/Setting-Profile";
+    };
     return(
         <div className="w-full h-screen flex flex-col justify-center items-center">
             <div className="flex flex-col justify-center items-center space-y-[35px]">
@@ -16,7 +16,7 @@ export default function Success_MPA(){
             </div>
             <div>
                 <button 
-                onClick={go_to_login}
+                onClick={go_to_setting}
                 className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg font-semibold mt-[60px] text-white">
                     Back to settings
                 </button>
