@@ -1,4 +1,8 @@
 import { Carousel, Sidebar } from "flowbite-react";
+import Slider from 'react-slick';
+import { Card, Typography, Button, Box } from '@mui/material';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import {useState} from "react";
 
 export default function Edit_pro() {
@@ -6,20 +10,49 @@ export default function Edit_pro() {
         window.location.href = "/profile";
     }
     const go_to_edit = () => {
-        window.location.href = "/profile";
+        window.location.href = "/Edit";
     }
     const go_to_preview = () => {
-        window.location.href = "/profile";
+        window.location.href = "/preview";
     }
-    const img_pro = [
-        { id: 1, src: "src\client\img\freepik__candid-image-photography-natural-textures-highly-r__97451.jpeg"},
-        
-    ]
+    //ide bar
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [startX, setStartX] = useState(0);
+
+    const images = [
+        'https://via.placeholder.com/300x250?text=Image+1', // เปลี่ยน URL เป็นรูปจริง
+        'https://via.placeholder.com/300x250?text=Image+2',
+        'https://via.placeholder.com/300x250?text=Image+3',
+      ];
+    //ัดรู
+    const handleTouchStart = (e) => {
+        setStartX(e.touches[0].clientX); // Store initial touch position
+    };
+    // Handle swipe end
+    const handleTouchEnd = (e) => {
+        const endX = e.changedTouches[0].clientX; // Store end touch position
+        const diff = endX - startX;
+
+        if (diff > 50) {
+            // Swipe Right
+            setCurrentIndex((prevIndex) => 
+                (prevIndex - 1 + images.length) % images.length
+            );
+        } else if (diff < -50) {
+            // Swipe Left
+            setCurrentIndex((prevIndex) => 
+                (prevIndex + 1) % images.length
+            );
+        }
+    };
+
+    //เลือกเพศ
     const handleClick = (category) => {
         setSelectedCategory(category);
         console.log(`Category selected: ${category}`);
     };
     
+    //เลือกอาหาร
     const [selectedCategories, setSelectedCategories] = useState([]);
       
     const handleButtonClick = (category) => {
@@ -59,83 +92,137 @@ export default function Edit_pro() {
                     <thead>
                         <tr className="flex justify-center">
                             <th class="w-[187.25px] bg-gray-300 border border-black  px-4 py-2">
-                                <button onClick={go_to_edit}>Edit</button>
+                                <button onClick={go_to_edit} className="w-[100.25px]">Edit</button>
                             </th>
                             <th class="w-[187.25px] bg-gray-300 border border-black px-4 py-2">
-                                <button onClick={go_to_preview}>Preview</button>
+                                <button onClick={go_to_preview} className="w-[100.25px]">Preview</button>
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <div className="relative m-auto w-full h-[405px] bg-gray-300 border border-black">
-                            {img_pro.map(img_pro => (
-                            <div id={img_pro.id} className="w-full h-[405px] ">
-                                <img src={img_pro.src} alt={"img"+img_pro.id} />
-                            </div>
-                        ))}
+                    
+                    <div className="relative w-full mx-auto ">
+                        <div 
+                            className="overflow-hidden w-full h-[405px] relative"
+                            onTouchStart={handleTouchStart}
+                            onTouchEnd={handleTouchEnd}
+                        >
+                                <div
+                                    className="flex transition-transform duration-500"
+                                    style={{
+                                        transform: `translateX(-${currentIndex * 100}%)`,
+                                    }}
+                                >
+                                    {images.map((img, index) => (
+                                        <div
+                                            key={index}
+                                            className="min-w-full h-[405px] flex-shrink-0"
+                                        >
+                                            <img
+                                                src={img}
+                                                alt={`Profile ${index + 1}`}
+                                                className="w-[375px] h-full object-cover border border-black"
+                                            />
+                                        </div>
+                                        
+                                    ))}
+                                </div>
                         </div>
-                        
-                    </tbody>
+                            
+                            <div className="absolute bottom-[96%] left-1/2 -translate-x-1/2 flex space-x-2">
+                                {images.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setCurrentIndex(index)}
+                                        className={`w-[60px] h-1 rounded-lg mt-3  ${
+                                            currentIndex === index ? 'bg-white' : 'bg-gray-300'
+                                        }`}
+                                    ></button>
+                                ))}
+                            </div>
+
+                    </div>
+
+                                
+                    
                     <div className="w-full h-[47px] bg-gray-300 flex">
-                        <p className="my-auto text-[20px]">ABOUT ME</p>
+                        <p className="pl-2 my-auto text-[20px]">ABOUT ME</p>
                     </div>
                     <div className="w-full h-auto flex">
-                        <p className="my-auto text-[20px]">**เอาไว้พิมพ์แนะนำตัว**</p>
+                        <p className="pl-2 my-auto text-[20px]">**เอาไว้พิมพ์แนะนำตัว**</p>
                     </div>                   
                     <div className="w-full h-[47px] bg-gray-300 flex">
-                        <p className="my-auto text-[20px]">Sexual Orentation</p>
+                        <p className="pl-2 my-auto text-[20px]">Sexual Orentation</p>
                     </div>
-                    <div className="flex flex-col justify-start divide-y divide-gray-300 p-3">
-                        <button
-                             onClick={() => handleClick('Straight')}
-                             className={"w-full h-[40px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
-                             Straight
-                         </button>
-                         <button
-                             onClick={() => handleClick('Gay')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
-                             Gay
-                         </button>
-                         <button
-                             onClick={() => handleClick('Lesbian')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
-                             Lesbian
-                         </button>
+                    <div className="flex flex-col justify-start divide-y divide-gray-300 p-3 ">
+                        <div>
+                            <button
+                                onClick={() => handleClick('Straight')}
+                                className={" h-[40px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                                Straight
+                            </button>
+                        </div>
+                        <div>
+                            <button
+                                onClick={() => handleClick('Gay')}
+                                className={" h-[45px]   my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                                Gay
+                            </button>
+                        </div>
+                         
+                         <div>
+                            <button
+                                onClick={() => handleClick('Lesbian')}
+                                className={" h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                                Lesbian
+                            </button>
+                         </div>
+                         <div>
                          <button
                              onClick={() => handleClick('Bisexual')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                             className={" h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
                              Bisexual
                          </button>
+                         </div>
+                         <div>
                          <button
                              onClick={() => handleClick('Asexual')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                             className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
                              Asexual
                          </button>
+                         </div>
+                         <div>
                          <button
                              onClick={() => handleClick('Demisexual')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                             className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
                              Demisexual
                          </button>
+                         </div>
+                         <div>
                          <button
                              onClick={() => handleClick('Pansexual')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                             className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
                              Pansexual
                          </button>
+                         </div>
+                         <div>
                          <button
                              onClick={() => handleClick('Queer')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                             className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
                              Queer
                          </button>
+                         </div>
+                         <div>
                          <button
                              onClick={() => handleClick('Questioning')}
-                             className={"w-full h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
+                             className={" h-[45px]   my-auto text-black hover:text-[#E9C46A] text-[20px]"}>
                              Questioning
                          </button>
+                         </div>
                     </div>
                     <div className="w-full h-[47px] bg-gray-300 flex">
-                        <p className="my-auto text-[20px]">Lifestyle</p>
+                        <p className="pl-2 my-auto text-[20px]">Lifestyle</p>
                     </div>
-                    <div className="flex flex-col space-y-4 mt-4">
+                    <div className="flex flex-col space-y-4 mt-4 h-[250px]">
                         <div className="flex flex-row gap-3 justify-center">
                             <button onClick={() => handleButtonClick('ร้านอาหารจานด่วน')} className={`w-[175px] h-[36px] border border-black rounded-3xl ${selectedCategories.includes('ร้านอาหารจานด่วน') ? 'bg-[#E9C46A]' : ''}`}>ร้านอาหารจานด่วน </button>
                             <button onClick={() => handleButtonClick('ร้านอาหารบุฟเฟต์')} className={`w-[175px] h-[36px] border border-black rounded-3xl ${selectedCategories.includes('ร้านอาหารบุฟเฟต์') ? 'bg-[#E9C46A]' : ''}`}>ร้านอาหารบุฟเฟต์  </button>
