@@ -63,7 +63,7 @@ const DetailMatch = () => {
       >
         <Box display="flex" flexDirection="column" alignItems="center" padding="16px">
           {/* Profile Image Slider */}
-          <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
+          <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px'  }}>
             {images.map((img, index) => (
               <Box key={index} display="flex" justifyContent="center">
                 <img
@@ -71,7 +71,7 @@ const DetailMatch = () => {
                   alt={`Profile ${index + 1}`}
                   style={{
                     width: '100%',
-                    maxWidth: '300px',
+                    maxWidth: '350px',
                     height: '250px',
                     objectFit: 'cover',
                     borderRadius: '16px',

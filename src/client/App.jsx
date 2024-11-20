@@ -22,7 +22,6 @@ import Change_password from "./components/change_password";
 import DetailMatch from "./components/detailmatch";
 import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
-import DetailMatch from "./components/detailmatch";
 import Mypackage from "./components/Mypackage";
 
 
