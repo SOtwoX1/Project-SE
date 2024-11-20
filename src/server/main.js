@@ -8,8 +8,6 @@ import multer from "multer";
 import mysql from "mysql2";
 import mongoose from "mongoose";
 
-
-
 const app = express();
 // Middleware
 app.use(cors());
