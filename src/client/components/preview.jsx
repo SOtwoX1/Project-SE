@@ -42,7 +42,7 @@ const Preview = () => {
       </div>
       <div style={{ }}>
         <button style={{ border: 'none', background: 'none' }}>
-            <a href='/Match'><img
+            <a href='/Edit'><img
             src="src/client/img/Back.png"
             alt="Button Image"
             style={{ width: '30px', height: '30px' }}
@@ -92,7 +92,7 @@ const Preview = () => {
         </Box>
 
         {/* Lifestyle Buttons */}
-        <Box display="flex" justifyContent="space-around" padding="16px">
+        <Box display="flex" justifyContent="space-around" padding="16px" >
           <Button
             variant="contained"
             style={{

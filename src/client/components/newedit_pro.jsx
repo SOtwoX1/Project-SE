@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import {useState} from "react";
 
-export default function Edit_pro() {
+export default function NewEdit_pro() {
     const go_to_profile = () => {
         window.location.href = "/profile";
     }
@@ -13,38 +13,23 @@ export default function Edit_pro() {
         window.location.href = "/Edit";
     }
     const go_to_preview = () => {
-        window.location.href = "/Previewnew";
+        window.location.href = "/preview";
     }
-    //ide bar
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [startX, setStartX] = useState(0);
 
     const images = [
         'https://via.placeholder.com/300x250?text=Image+1', // เปลี่ยน URL เป็นรูปจริง
         'https://via.placeholder.com/300x250?text=Image+2',
         'https://via.placeholder.com/300x250?text=Image+3',
       ];
-    //ัดรู
-    const handleTouchStart = (e) => {
-        setStartX(e.touches[0].clientX); // Store initial touch position
-    };
-    // Handle swipe end
-    const handleTouchEnd = (e) => {
-        const endX = e.changedTouches[0].clientX; // Store end touch position
-        const diff = endX - startX;
-
-        if (diff > 50) {
-            // Swipe Right
-            setCurrentIndex((prevIndex) => 
-                (prevIndex - 1 + images.length) % images.length
-            );
-        } else if (diff < -50) {
-            // Swipe Left
-            setCurrentIndex((prevIndex) => 
-                (prevIndex + 1) % images.length
-            );
-        }
-    };
+      const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+      };
+    
 
     //เลือกเพศ
     const handleClick = (category) => {
@@ -100,47 +85,26 @@ export default function Edit_pro() {
                         </tr>
                     </thead>
                     
-                    <div className="relative w-full mx-auto ">
-                        <div 
-                            className="overflow-hidden w-full h-[405px] relative"
-                            onTouchStart={handleTouchStart}
-                            onTouchEnd={handleTouchEnd}
-                        >
-                                <div
-                                    className="flex transition-transform duration-500"
-                                    style={{
-                                        transform: `translateX(-${currentIndex * 100}%)`,
-                                    }}
-                                >
-                                    {images.map((img, index) => (
-                                        <div
-                                            key={index}
-                                            className="min-w-full h-[405px] flex-shrink-0"
-                                        >
-                                            <img
-                                                src={img}
-                                                alt={`Profile ${index + 1}`}
-                                                className="w-[375px] h-full object-cover border border-black"
-                                            />
-                                        </div>
-                                        
-                                    ))}
-                                </div>
-                        </div>
-                            
-                            <div className="absolute bottom-[96%] left-1/2 -translate-x-1/2 flex space-x-2">
-                                {images.map((_, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setCurrentIndex(index)}
-                                        className={`w-[60px] h-1 rounded-lg mt-3  ${
-                                            currentIndex === index ? 'bg-white' : 'bg-gray-300'
-                                        }`}
-                                    ></button>
-                                ))}
-                            </div>
-
-                    </div>
+                <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+                {/* Profile Image Slider */}
+                    <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
+                        {images.map((img, index) => (
+                        <Box key={index} display="flex" justifyContent="center">
+                            <img
+                            src={img}
+                            alt={`Profile ${index + 1}`}
+                            style={{
+                                width: '100%',
+                                maxWidth: '300px',
+                                height: '250px',
+                                objectFit: 'cover',
+                                borderRadius: '16px',
+                            }}
+                            />
+                        </Box>
+                        ))}
+                    </Slider>
+                </Box>
 
                                 
                     

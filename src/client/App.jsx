@@ -14,7 +14,7 @@ import Profile from "./components/Profile";
 import Edit_pro from "./components/edit_profile";
 import Setting_pro from "./components/setting_profile";
 import Restaurant from "./components/restaurant";
-import Match from "./components/Match";
+import Match from "./components/match";
 import Message from "./components/message";
 import Messages from "./components/messages";
 import Show_me from "./components/show_me";
@@ -26,6 +26,7 @@ import Success_MPA from "./components/sucess_MPA";
 import Edit from "./components/edit";
 import Preview from "./components/preview";
 import Mypackage from "./components/mypackage";
+import NewEdit_pro from "./components/newedit_pro";
 
 
 function App() {
@@ -58,7 +59,10 @@ function App() {
         <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
         <Route path="/Edit" element={<Edit/>} />
         <Route path="/Preview" element={<Preview/>} />
+        <Route path="/preview" element={<Preview/>} />
         <Route path="/Mypackage" element={<Mypackage/>} />
+        <Route path="/NewEdit_pro" element={<NewEdit_pro/>} />
+        
 
       </Routes>
     </BrowserRouter>
