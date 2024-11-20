@@ -89,6 +89,10 @@ const Match = () => {
     }
   };
 
+  const handleImageClick = () => {
+    navigate('/detailmatch'); // ไปยังหน้า /profile-details
+  };
+
   return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
       <Menu />

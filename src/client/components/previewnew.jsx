@@ -20,6 +20,10 @@ const Preview = () => {
     arrows: true,
   };
 
+  const go_to_edit = () => {
+    window.location.href = "/Edit";
+  }
+
   return (
     <div 
           className="fixed overflow-hidden w-[375px] h-[812px] rounded-b-[50px] text-[45px] font-extrabold flex flex-col p-3 pt-[16px] " 
@@ -34,12 +38,12 @@ const Preview = () => {
 
             <div className="flex flex-col pt-[3px] divide-y divide-gray-300">
                 <div className="flex items-center h-[65px]">
-                    <button onClick={go_to_setting} className="ml-2" >
+                    <button onClick={go_to_edit} className="ml-2" >
                         <svg class="w-[42px] h-[42px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m15 19-7-7 7-7"/>
                         </svg>
                     </button>
-                    <p className="text-[20px] text-black">SETTINGS</p>
+                    <p className="text-[20px] text-black">Edit</p>
       </div>
       {/* Card Section */}
       <Card
