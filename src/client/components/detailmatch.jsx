@@ -55,13 +55,13 @@ const DetailMatch = () => {
       <Card
         style={{
           width: '100%',
-          maxWidth: '375px',
-          borderRadius: '16px',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+          maxWidth: '100%',
+         
+          
           justifyContent: 'center',
         }}
       >
-        <Box display="flex" flexDirection="column" alignItems="center" padding="16px">
+        <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
           {/* Profile Image Slider */}
           <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px'  }}>
             {images.map((img, index) => (
@@ -97,7 +97,7 @@ const DetailMatch = () => {
             variant="contained"
             style={{
               backgroundColor: '#A3BE8C',
-              borderRadius: '20px',
+              //borderRadius: '20px',
               color: 'white',
               width: '140px',
               height: '40px',
@@ -109,7 +109,7 @@ const DetailMatch = () => {
             variant="contained"
             style={{
               backgroundColor: '#A3BE8C',
-              borderRadius: '20px',
+              //borderRadius: '20px',
               color: 'white',
               width: '140px',
               height: '40px',

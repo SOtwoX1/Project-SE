@@ -8,8 +8,6 @@ import multer from "multer";
 import mysql from "mysql2";
 import mongoose from "mongoose";
 
-
-
 const app = express();
 // Middleware
 app.use(cors());
@@ -39,8 +37,7 @@ app.get('/api/protected-route', authenticateToken, (req, res) => {
 //-----------------------------------------------------------------------------------------------
 
 // MongoDB Connection
-
-const mongoURI = 'mongodb+srv://get:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
+const mongoURI = 'mongodb+srv://Otwo:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
 
 mongoose
   .connect(mongoURI)
@@ -48,7 +45,7 @@ mongoose
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Define a Mongoose Schema and Model for the `Users` Collection
-const userSchema = new mongoose.Schema({
+const userSchema =  mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -107,7 +104,7 @@ app.post('/api/login', async (req, res) => {
     }
 
     // If credentials are correct
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful' , username: user.username});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error.' });

@@ -7,7 +7,7 @@ export default function Password() {
     }
 
     return (
-        <div className="w-full h-full fixed top-0 flex bg-white items-center justify-center"
+        <div className="flex bg-white items-center justify-center"
             style={{ fontFamily: 'Abhaya Libre, sans-serif'}}>
             <div className="w-[375px] h-[812px] text-[45px] font-extrabold  flex flex-col p-3 pt-[8px]">
                 <div className="flex flex-row items-center justify-center ">
