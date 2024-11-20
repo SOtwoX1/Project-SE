@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ใช้สำหรับการนำทาง
+import React, { useState, useEffect } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { useNavigate } from "react-router-dom";
+import { Card, CardMedia, CardContent, Typography, Button, Collapse, Box } from '@mui/material';
 import Menu from './Menu';
-import { Card, CardMedia, CardContent, Typography, Button, Collapse } from '@mui/material';
-import { useEffect } from 'react';
 import axios from 'axios';
-
 
 const Match = () => {
   
@@ -16,13 +17,12 @@ const Match = () => {
       bio: ""
     }
   ]);
-  const [numberProfile, setNumberProfile] = useState(0);
-  const [numberPhoto, setNumberPhoto] = useState(0);
 
-  async function pollProfile() {
+  async function pollProfile(username) {
     try {
       const response = await axios.get(`/api/match-profile/${username}`);
-      console.log(response.data); // Logs the expected output
+      console.log("username: ", username);
+      console.log("response.data: ", response.data); // Logs the expected output
       setProfiles(response.data); // Update profiles state
       
     } catch (error) {
@@ -36,73 +36,125 @@ const Match = () => {
     setEmail(userData.email);
     setUsername(userData.username);
     //get profile that matching
-    pollProfile();
+    pollProfile(userData.username);
   }, []);
-  
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [matchText, setMatchText] = useState('');
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+  };
 
   const handleLike = () => {
-    console.log('Liked!');
-    //when not have profile that matching any more poll new profile
-    (profiles.length - 1 === numberProfile) ? (setNumberProfile(0), pollProfile()) : setNumberProfile(numberProfile + 1);
-    setNumberPhoto(0)
+    console.log('Like clicked');
+    setMatchText('Matched! 🎉');
+    console.log('matchText:', 'Matched! 🎉');
+    setTimeout(() => {
+      setMatchText('');
+      showNextProfile();
+    }, 2000);
   };
 
   const handleDislike = () => {
+    showNextProfile();
     console.log('Disliked!');
-    (profiles.length - 1 === numberProfile) ? (setNumberProfile(0), pollProfile()) : setNumberProfile(numberProfile + 1);
-    setNumberPhoto(0)
   };
 
   const handleSkip = () => {
+    showNextProfile();
     console.log('Skipped!');
-    (profiles.length - 1 === numberProfile) ? (setNumberProfile(0), pollProfile()) : setNumberProfile(numberProfile + 1);
-    setNumberPhoto(0)
   };
 
-  const handleImageClick = () => {
-    navigate('/detailmatch'); // ไปยังหน้า /profile-details
+  const showNextProfile = () => {
+    if (currentIndex < profiles.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      //when not have profile that matching any more poll new profile
+      setCurrentIndex(0);
+      pollProfile(username);
+    }
   };
-  const image = 'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg';
+
   return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
       <Menu />
       <div
         className="bg-white w-[375px] h-[717px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex items-center justify-center"
-        style={{ fontFamily: 'Abhaya Libre, sans-serif' ,marginTop:'40px'}}
+        style={{ fontFamily: 'Abhaya Libre, sans-serif', marginTop: '40px' }}
       >
         <Card
           style={{
-            width: '350px',
-            borderRadius: '16px',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-            zIndex: 2,
-            cursor: 'pointer',
+            width: '100%',
+            maxWidth: '100%',
+            justifyContent: 'center',
           }}
         >
-          <CardMedia
-            component="img"
-            height="200px"
-            image={image}//profiles[numberProfile].photo[numberPhoto]}
-            alt="Profile"
-            style={{ borderRadius: '16px 16px 0 0' }}
-            onClick={handleImageClick} // คลิกแล้วไปหน้าใหม่
-          />
-          <CardContent style={{ textAlign: 'center' }}>
-            <Typography variant="h6">{`${profiles[numberProfile].userID}`}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              {profiles[numberProfile].bio}
-            </Typography>
-          </CardContent>
+          <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+            {/* Profile Image Slider */}
+            <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>{
+              //{profiles[currentIndex].images.map((img, index) => (
+              //  <Box key={index} display="flex" justifyContent="center">
+              //    <img
+              //      src={img}
+              //      alt={`Profile ${index + 1}`}
+              //      style={{
+              //        width: '100%',
+              //        maxWidth: '313px',
+              //        height: '336px',
+              //        objectFit: 'cover',
+              //        borderRadius: '16px',
+              //      }}
+              //    />
+              //  </Box>
+              //))}
+              }
+            </Slider>
 
-          <div style={{ display: 'flex', justifyContent: 'space-around', padding: '10px 0' }}>
+            {/* Profile Details */}
+            <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
+              <Typography variant="h6">{`${profiles[currentIndex].userID}, ${profiles[currentIndex].age}`}</Typography>
+              <Typography variant="body2" color="textSecondary">
+                {profiles[currentIndex].bio}
+              </Typography>
+            </CardContent>
+          </Box>
+
+          {/* Match Text */}
+          {matchText && (
+            <Typography
+              variant="h5"
+              style={{
+                color: 'green',
+                textAlign: 'center',
+                marginTop: '10px',
+                fontWeight: 'bold',
+                zIndex:10,
+                fontSize:'20px',
+                
+                position: 'relative'
+                
+              }}
+            >
+              {matchText}
+            </Typography>
+          )}
+
+          {/* Buttons */}
+          <div style={{ display: 'flex', justifyContent: 'space-around', padding: '5px 0' }}>
             <Button onClick={handleLike} style={{ color: 'red' }} aria-label="Like">
-            <img src='src/client/img/Frame 13.png' alt="Like" style={{ width: '70px', height: '70px' }} />
+              <img src="src/client/img/Frame 13.png" alt="Like" style={{ width: '84px', height: '84px' }} />
             </Button>
             <Button onClick={handleDislike} style={{ color: 'gray' }} aria-label="Dislike">
-            <img src='src/client/img/Frame 14.png' alt="Dislike" style={{ width: '70px', height: '70px' }} />
+              <img src="src/client/img/Frame 14.png" alt="Dislike" style={{ width: '84px', height: '84px' }} />
             </Button>
             <Button onClick={handleSkip} style={{ color: 'green' }} aria-label="Free">
-            <img src='src/client/img/Component 1.png' alt="Free" style={{ width: '70px', height: '70px' }} />
+            <img src='src/client/img/Component 1.png' alt="Free" style={{ width: '84px', height: '84px' }} />
             </Button>
           </div>
         </Card>
