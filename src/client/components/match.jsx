@@ -14,7 +14,8 @@ const Match = () => {
   const [username, setUsername] = useState("");
   const [profiles, setProfiles] = useState([
     {userID: 'undefind',
-      bio: ""
+      bio: "",
+      photo: []
     }
   ]);
 
@@ -41,6 +42,7 @@ const Match = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matchText, setMatchText] = useState('');
+  const [currentProfile, setCurrentProfile] = useState(profiles[currentIndex]);
 
   const sliderSettings = {
     dots: true,
@@ -72,12 +74,18 @@ const Match = () => {
   };
 
   const showNextProfile = () => {
-    if (currentIndex < profiles.length - 1) {
+    console.log("profiles.length: ", profiles.length);
+    console.log("currentIndex: ", currentIndex);
+    if (currentIndex <= profiles.length - 1) {
       setCurrentIndex(currentIndex + 1);
+      setCurrentProfile(profiles[currentIndex])
+      console.log("profiles[currentIndex]: ", profiles[currentIndex]);
     } else {
       //when not have profile that matching any more poll new profile
-      setCurrentIndex(0);
+      console.log("relode profile");
       pollProfile(username);
+      setCurrentIndex(0);
+      setCurrentProfile(profiles[currentIndex])
     }
   };
 
@@ -97,30 +105,29 @@ const Match = () => {
         >
           <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
             {/* Profile Image Slider */}
-            <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>{
-              //{profiles[currentIndex].images.map((img, index) => (
-              //  <Box key={index} display="flex" justifyContent="center">
-              //    <img
-              //      src={img}
-              //      alt={`Profile ${index + 1}`}
-              //      style={{
-              //        width: '100%',
-              //        maxWidth: '313px',
-              //        height: '336px',
-              //        objectFit: 'cover',
-              //        borderRadius: '16px',
-              //      }}
-              //    />
-              //  </Box>
-              //))}
-              }
+            <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
+              {currentProfile.photo.map(img => (
+                <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center">
+                  <img
+                    src={img}
+                    alt={`Profile ${currentProfile.photo.findIndex(photo => photo === img)}`}
+                    style={{
+                      width: '100%',
+                      maxWidth: '313px',
+                      height: '336px',
+                      objectFit: 'cover',
+                      borderRadius: '16px',
+                    }}
+                  />
+                </Box>
+              ))}
             </Slider>
 
             {/* Profile Details */}
             <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
-              <Typography variant="h6">{`${profiles[currentIndex].userID}, ${profiles[currentIndex].age}`}</Typography>
+              <Typography variant="h6">{`${currentProfile.userID}, ${currentProfile.age}`}</Typography>
               <Typography variant="body2" color="textSecondary">
-                {profiles[currentIndex].bio}
+                {currentProfile.bio}
               </Typography>
             </CardContent>
           </Box>
