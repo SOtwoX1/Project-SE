@@ -22,7 +22,7 @@ const DetailMatch = () => {
 
   return (
     <div
-      className="fixed overflow-hidden  items-center justify-center"
+      className="  items-center justify-center"
       style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
     >
       {/* Header */}
@@ -40,7 +40,7 @@ const DetailMatch = () => {
           </div>
         
       </div>
-      <div style={{paddingTop:'' }}>
+      <div style={{ }}>
         <button style={{ border: 'none', background: 'none' }}>
             <a href='/Match'><img
             src="src/client/img/Back.png"
@@ -55,7 +55,7 @@ const DetailMatch = () => {
       <Card
         style={{
           width: '100%',
-          maxWidth: '375px',
+          maxWidth: '100%',
          
           
           justifyContent: 'center',
@@ -82,11 +82,11 @@ const DetailMatch = () => {
           </Slider>
 
           {/* Fields */}
-          <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
-            <Typography >อายุ..</Typography>
-            <Typography >มหาวิทยาลัย .....</Typography>
-            <Typography >แนวร้านอาหารที่ชอบ .....</Typography>
-            <Typography >เกี่ยวกับฉันจิงอะ.......</Typography>
+          <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px">
+            <Typography>อายุ..</Typography>
+            <Typography>มหาวิทยาลัย .....</Typography>
+            <Typography>แนวร้านอาหารที่ชอบ .....</Typography>
+            <Typography>เกี่ยวกับฉัน.......</Typography>
             <Typography>Lifestyle</Typography>
           </Box>
         </Box>
@@ -96,8 +96,8 @@ const DetailMatch = () => {
           <Button
             variant="contained"
             style={{
-              backgroundColor: '#B7D55A',
-              borderRadius: '20px',
+              backgroundColor: '#A3BE8C',
+              //borderRadius: '20px',
               color: 'white',
               width: '140px',
               height: '40px',
@@ -108,8 +108,8 @@ const DetailMatch = () => {
           <Button
             variant="contained"
             style={{
-              backgroundColor: '#B7D55A',
-              borderRadius: '20px',
+              backgroundColor: '#A3BE8C',
+              //borderRadius: '20px',
               color: 'white',
               width: '140px',
               height: '40px',

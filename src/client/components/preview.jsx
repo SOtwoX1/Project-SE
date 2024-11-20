@@ -22,7 +22,7 @@ const Preview = () => {
 
   return (
     <div
-      className="  items-center justify-center"
+      className="fixed overflow-hidden  items-center justify-center"
       style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
     >
       {/* Header */}
@@ -34,9 +34,9 @@ const Preview = () => {
           <div className="flex flex-row items-center justify-center">
             <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
             <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="src/client/img/heart.png" alt="Heart" />
-            <span className="text-[#E76F51] text-[40px] font-extrabold">Preview</span>
+            <span className="text-[#E76F51] text-[40px] ml-6 mr-6 font-extrabold">Preview </span>
             <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
-            <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
+            <img className="w-[55px] h-[55px] ml-4 " src="src/client/img/pizza.png" alt="Pizza" />
           </div>
         
       </div>
@@ -49,13 +49,13 @@ const Preview = () => {
           /> </a>
           
         </button>
-        <span style={{ color: '#E76F51', fontSize: '20px', marginTop: '8px' }}>edit</span>
+        <span style={{ color: 'BLACK', fontSize: '20px', marginTop: '8px' }}>EDIT</span>
       </div>
       {/* Card Section */}
       <Card
         style={{
           width: '100%',
-          maxWidth: '100%',
+          maxWidth: '375px',
          
           
           justifyContent: 'center',
@@ -82,11 +82,11 @@ const Preview = () => {
           </Slider>
 
           {/* Fields */}
-          <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px">
-            <Typography>อายุ..</Typography>
-            <Typography>มหาวิทยาลัย .....</Typography>
-            <Typography>แนวร้านอาหารที่ชอบ .....</Typography>
-            <Typography>เกี่ยวกับฉัน.......</Typography>
+          <Box fontStyle=" "display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
+            <Typography >อายุ..</Typography>
+            <Typography >มหาวิทยาลัย .....</Typography>
+            <Typography >แนวร้านอาหารที่ชอบ .....</Typography>
+            <Typography >เกี่ยวกับฉันจิงอะ.......</Typography>
             <Typography>Lifestyle</Typography>
           </Box>
         </Box>
@@ -96,26 +96,26 @@ const Preview = () => {
           <Button
             variant="contained"
             style={{
-              backgroundColor: '#A3BE8C',
-              //borderRadius: '20px',
+              backgroundColor: '#B7D55A',
+              borderRadius: '20px',
               color: 'white',
               width: '140px',
               height: '40px',
             }}
           >
-            ร้านอาหารบุฟเฟต์
+            xxxxxxxxx
           </Button>
           <Button
             variant="contained"
             style={{
-              backgroundColor: '#A3BE8C',
-              //borderRadius: '20px',
+              backgroundColor: '#B7D55A',
+              borderRadius: '20px',
               color: 'white',
               width: '140px',
               height: '40px',
             }}
           >
-            ร้านอาหารท้องถิ่น
+            xxxxxxxxx
           </Button>
         </Box>
       </Card>
