@@ -4,7 +4,7 @@ import { Card, Typography, Button, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const DetailMatch = () => {
+const Preview = () => {
   const images = [
     'https://via.placeholder.com/300x250?text=Image+1', // เปลี่ยน URL เป็นรูปจริง
     'https://via.placeholder.com/300x250?text=Image+2',
@@ -21,12 +21,7 @@ const DetailMatch = () => {
   };
 
   return (
-    <div
-      className="  items-center justify-center"
-      style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
-    >
-      {/* Header */}
-      <div 
+    <div 
           className="fixed overflow-hidden w-[375px] h-[812px] rounded-b-[50px] text-[45px] font-extrabold flex flex-col p-3 pt-[16px] " 
           style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
             <div className=" flex flex-row items-center justify-center ">
@@ -45,7 +40,7 @@ const DetailMatch = () => {
                         </svg>
                     </button>
                     <p className="text-[20px] text-black">SETTINGS</p>
-                </div></div></div>
+      </div>
       {/* Card Section */}
       <Card
         style={{
@@ -114,8 +109,8 @@ const DetailMatch = () => {
           </Button>
         </Box>
       </Card>
-    </div>
+    </div></div>
   );
 };
 
-export default DetailMatch;
+export default Preview;
