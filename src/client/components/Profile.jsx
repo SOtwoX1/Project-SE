@@ -21,7 +21,7 @@ export default function Profile() {
       window.location.href = "/Setting-Profile";
     };
     const go_to_Edit_pro = async () => {
-      window.location.href = "/Edit-Profile";
+      window.location.href = "/NewEdit_pro";
     };
 
     return (
