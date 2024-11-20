@@ -1,17 +1,7 @@
-import { useState } from "react";
-import { useEffect } from "react";
 import { Button } from "react-scroll";
 import Swal from 'sweetalert2';
 
 export default function Profile() {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  useEffect(() => {
-    const LoginToken = localStorage.getItem("LoginToken");
-    const userData = JSON.parse(LoginToken);
-    setEmail(userData.email);
-    setUsername(userData.username);
-  }, []);
     const go_to_message = async () => {
       window.location.href = "http://localhost:3000/message";
     };
@@ -50,7 +40,7 @@ export default function Profile() {
             <img className="w-[200px] h-[200px] rounded-full border-[#E9C46A]" src="src/client/img/pure.png" alt="Profile" />
           </div>
           <div className="text-center mt-4 text-[30px] font-bold text-black">
-            {username}
+            ชื่อ USER
           </div>
           <div className="flex flex-row justify-center mt-6 space-x-4">
             <button 
@@ -78,4 +68,4 @@ export default function Profile() {
     </div>
     );
   }
-  
+//dsdsdssd

@@ -24,6 +24,7 @@ import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
 import Preview from "./components/preview";
 import Messages from "./components/messages";
+import Mypackage from "./components/mypackage";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
         <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account/>} />
         <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
         <Route path="/preview" element={<Preview/>} />
+        <Route path="/Mypackage" element={<Mypackage/>} />
 
       </Routes>
     </BrowserRouter>
