@@ -14,7 +14,7 @@ import Profile from "./components/Profile";
 import Edit_pro from "./components/edit_profile";
 import Setting_pro from "./components/setting_profile";
 import Restaurant from "./components/restaurant";
-import Match from "./components/Match";
+import Match from "./components/match";
 import Message from "./components/message";
 import Messages from "./components/messages";
 import Show_me from "./components/show_me";

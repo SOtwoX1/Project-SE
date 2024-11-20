@@ -51,8 +51,26 @@ const userSchema =  mongoose.Schema({
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }, // Optional: Track user registration time
 });
+const profileSchema = new mongoose.Schema({
+  userID: String,
+  photo: [String],
+  bio: String,
+  education: String,
+  job: String,
+  hobby: String,
+  tag: [String],
+  swipeDailyCount: Number,
+  acceptDailyCount: Number,
+  location: {
+    latitude: Number,
+    longitude: Number
+  },
+  isRegistered: Boolean,
+  isHungry: Boolean
+});
 
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
+const Profile = mongoose.model('Profile', profileSchema, 'Profiles');
 // POST Route for User Registration
 
 // register ------------------------------------------------------------------------------------
@@ -167,6 +185,26 @@ app.put('/api/reset-password', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+app.get('/api/match-profile/:user', async (req, res) => {
+  try {
+    const userID = req.params.user;
+    const profile = await Profile.findOne({userID});
+    
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    const tags = profile.tag;
+    const matchedProfile = await Profile.find({ 
+      tag: { $in: tags},
+      userID: { $ne: userID}});
+
+    res.json(matchedProfile || { message: "No matching user found" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
   }
 });
 
