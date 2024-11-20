@@ -45,7 +45,7 @@ mongoose
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Define a Mongoose Schema and Model for the `Users` Collection
-const userSchema = new mongoose.Schema({
+const userSchema =  mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },

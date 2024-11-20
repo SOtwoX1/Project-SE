@@ -1,6 +1,17 @@
 import Swal from 'sweetalert2';
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function Setting_pro() {
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        const LoginToken = localStorage.getItem("LoginToken");
+        const userData = JSON.parse(LoginToken);
+        setEmail(userData.email);
+        setUsername(userData.username);
+    }, []);
     const go_to_profile = () => {
         window.location.href = "/profile";
     }
@@ -18,6 +29,7 @@ export default function Setting_pro() {
     }
     const go_to_login = () => {
         window.location.href = "/Login";
+        localStorage.removeItem("LoginToken");
     }
     const Delete_Account = () => {
         Swal.fire({
@@ -44,9 +56,6 @@ export default function Setting_pro() {
             }
           });
     }
-    const email = {
-        "email": "@gmail.com",
-    }
     return(
         
         <div 
@@ -66,11 +75,12 @@ export default function Setting_pro() {
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m15 19-7-7 7-7"/>
                         </svg>
                     </button>
-                    <p className="text-xl text-black">PROFILE</p>
+                    <p className="text-xl text-black ">PROFILE</p>
+                    <p className="pl-44 text-xl text-[#D9D9D9] ">{username}</p>
                 </div>
                 <div className="flex justify-between text-xl  items-center h-[65px]">
                     <p className="text-black p-12">Email</p>
-                    <p className="text-[#D9D9D9]">{email.email}</p>
+                    <p className="text-[#D9D9D9]">{email}</p>
                 </div>
                 <div className="flex justify-between text-xl  items-center h-[65px]">
                     <p className="text-black p-12">Show Me</p>
