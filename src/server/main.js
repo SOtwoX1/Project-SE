@@ -57,6 +57,8 @@ const profileSchema = new mongoose.Schema({
   bio: String,
   education: String,
   job: String,
+  genderinterest: String,
+  gender: String,
   hobby: String,
   tag: [String],
   swipeDailyCount: Number,
@@ -207,6 +209,67 @@ app.get('/api/match-profile/:user', async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
+// set gernder interest use by username from users = userid from profiles ------------------------------------------------------------------------------------
+app.put('/api/set-gender/:username', async (req, res) => {
+  const { username } = req.params; // Extract username from the URL
+  const { gender } = req.body; // Extract gender from the request body
+
+  try {
+      // Find the user by username
+      const user = await User.findOne({ username });
+      if (!user) {
+          return res.status(404).json({ message: `User with username '${username}' not found.` });
+      }
+
+      // Find the profile associated with the user
+      const profile = await Profile.findOne({ userID: username }); // Assuming user._id is stored in the profile
+      if (!profile) {
+          return res.status(404).json({ message: `Profile for user '${username}' not found.` });
+      }
+
+      // Update the gender interest
+      profile.genderinterest = gender;
+      await profile.save();
+
+      res.status(200).json({ message: 'Gender interest set successfully', gender });
+  } catch (error) {
+      console.error('Error updating gender interest:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+  
+// set password ------------------------------------------------------------------------------------
+app.put('/api/setting/reset-password', async (req, res) => {
+  const { email ,newpassword ,password } = req.body;
+
+  // Validate input
+  if (!email) {
+    return res.status(400).json({ message: 'Email are required.' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Invalid credentials.' });
+    }
+    // set password
+    user.password = newpassword;
+    await user.save();
+
+    // If credentials are correct
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+
 
 ViteExpress.listen(app, 3000, () =>
   console.log("Server is listening on port 3000..."),

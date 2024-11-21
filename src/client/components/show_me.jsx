@@ -1,15 +1,55 @@
 import { useState } from 'react';
+import axios from 'axios'; // Ensure axios is installed: npm install axios
+import Swal from "sweetalert2";
 
 export default function Show_me() {
     const [selectedCategory, setSelectedCategory] = useState(null);
-    
+    const [username, setUsername] = useState('');
+
+    // Navigate to the settings page
     const go_to_setting = () => {
         window.location.href = "/Setting-Profile";
     };
 
-    const handleClick = (category) => {
+    // Handle category selection
+    const handleClick = async (category) => {
         setSelectedCategory(category);
         console.log(`Category selected: ${category}`);
+
+        // Retrieve username from localStorage
+        const LoginToken = localStorage.getItem("LoginToken");
+        if (!LoginToken) {
+            console.error("Login token not found.");
+            return;
+        }
+        const userData = JSON.parse(LoginToken);
+        const { username } = userData;
+        setUsername(username);
+
+        // Construct API URL with username
+        const url = `/api/set-gender/${username}`;
+
+        try {
+            // Send PUT request to backend
+            const response = await axios.put(url, { gender: category });
+            console.log("API Response:", response.data);
+
+            // Show success message
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Preference updated successfully!',
+                });
+            }
+        } catch (error) {
+            console.error("Error updating preference:", error.response?.data || error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update preference. Please try again.',
+            });
+        }
     };
 
     return (
@@ -40,11 +80,11 @@ export default function Show_me() {
                         </button>
                     </div>
                     <div className="flex justify-between text-[20px] items-center h-[65px]">
-                         <button
-                             onClick={() => handleClick('Women')}
-                             className={"text-black p-12 hover:text-[#E9C46A]"}>
-                             Women
-                         </button>
+                        <button
+                            onClick={() => handleClick('Women')}
+                            className={"text-black p-12 hover:text-[#E9C46A]"}>
+                            Women
+                        </button>
                     </div>
                     <div className="flex justify-between text-[20px] items-center h-[65px]">
                         <button
@@ -61,5 +101,3 @@ export default function Show_me() {
         </div>
     );
 }
-
-
