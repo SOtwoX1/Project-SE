@@ -53,7 +53,7 @@ const userSchema =  mongoose.Schema({
   createdAt: { type: Date, default: Date.now }, // Optional: Track user registration time
 });
 const profileSchema = new mongoose.Schema({
-  userID: String,
+  userID: { type: String, required: true },
   photo: [String],
   bio: String,
   education: String,
@@ -62,14 +62,14 @@ const profileSchema = new mongoose.Schema({
   gender: String,
   hobby: String,
   tag: [String],
-  swipeDailyCount: Number,
-  acceptDailyCount: Number,
+  swipeDailyCount: { type: Number, default: 0 },
+  acceptDailyCount: { type: Number, default: 0 },
   location: {
     latitude: Number,
     longitude: Number
   },
-  isRegistered: Boolean,
-  isHungry: Boolean
+  isRegistered: { type: Boolean, default: false },
+  isHungry: { type: Boolean, default: false }
 });
 const cardpaymentSchema = new mongoose.Schema({
   userID: String,
@@ -78,11 +78,25 @@ const cardpaymentSchema = new mongoose.Schema({
   cardNumber: String,
   MMYY: Date,
   cvv: String
+});
+const matchSchema = new mongoose.Schema({
+  matchID: { type: String, AutoIncrement: true }, 
+  userID1: { type: String, required: true },
+  userID2: { type: String, required: true },
+  isMatch: { type: Boolean, default: false },
+  matchTime: { type: Date, default: Date.now }
+});
+const chatSchema = new mongoose.Schema({
+  chatID: { type: String, AutoIncrement: true },
+  matchID: { type: String, required: true },
+  all_messageIDs: [String]
 })
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
 const Profile = mongoose.model('Profile', profileSchema, 'Profiles');
+const Match = mongoose.model('Matches', matchSchema); // draft
+const Chat = mongoose.model('Chats', chatSchema); // draft
 // POST Route for User Registration
 
 // register ------------------------------------------------------------------------------------
@@ -200,9 +214,36 @@ app.put('/api/reset-password', async (req, res) => {
   }
 });
 
-app.get('/api/match-profile/:user', async (req, res) => {
+// get profile user
+app.get('/api/get-profile/:userID', async (req, res) => {
   try {
-    const userID = req.params.user;
+    const userID = req.params.userID;
+
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+
+    const profile = await Profile.findOne({userID});
+    
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.status(200).json(profile);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+// get other profile that match the user interest
+app.get('/api/match-profile/:userID', async (req, res) => {
+  try {
+    const userID = req.params.userID;
+
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+
     const profile = await Profile.findOne({userID});
     
     if (!profile) {
@@ -214,7 +255,23 @@ app.get('/api/match-profile/:user', async (req, res) => {
       tag: { $in: tags},
       userID: { $ne: userID}});
 
-    res.json(matchedProfile || { message: "No matching user found" });
+    res.status(200).json(matchedProfile || { message: "No matching user found" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.get('/api/get-chat/:userID', async (req, res) => {
+  try {
+    const userID = req.params;
+    const chatWithUserID = req.body;
+
+    if (!userID || !chatWithUserID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+
+    // wait for update
+
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
