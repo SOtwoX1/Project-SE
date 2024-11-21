@@ -18,31 +18,45 @@ const Match = () => {
       photo: []
     }
   ]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [matchText, setMatchText] = useState('');
+  const [currentProfile, setCurrentProfile] = useState(
+    {userID: 'undefind',
+      bio: "",
+      photo: []
+    }
+  );
 
   async function pollProfile(username) {
     try {
+      console.log('poll profiles');
       const response = await axios.get(`/api/match-profile/${username}`);
-      console.log("username: ", username);
-      console.log("response.data: ", response.data); // Logs the expected output
-      setProfiles(response.data); // Update profiles state
-      
+      const fetchProfiles = response.data;
+      console.log(response.data);
+      setProfiles(fetchProfiles);
+      setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
     } catch (error) {
       console.error('Error fetching match profile:', error);
     }
   };
 
   useEffect(() => {
-    const LoginToken = localStorage.getItem("LoginToken");
-    const userData = JSON.parse(LoginToken);
-    setEmail(userData.email);
-    setUsername(userData.username);
-    //get profile that matching
-    pollProfile(userData.username);
-  }, []);
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [matchText, setMatchText] = useState('');
-  const [currentProfile, setCurrentProfile] = useState(profiles[currentIndex]);
+    const fetchData = async () => {
+        const LoginToken = localStorage.getItem("LoginToken");
+        const userData = JSON.parse(LoginToken);
+        setEmail(userData.email);
+        setUsername(userData.username);
+        try {
+            const response = await axios.get(`/api/match-profile/${userData.username}`);
+            const fetchProfiles = response.data;
+            setProfiles(fetchProfiles);
+            setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
+        } catch (error) {
+            console.error('Error fetching match profile:', error);
+        }
+    };
+    fetchData();
+}, []);
 
   const sliderSettings = {
     dots: true,
@@ -69,23 +83,20 @@ const Match = () => {
   };
 
   const handleSkip = () => {
-    showNextProfile();
     console.log('Skipped!');
   };
 
-  const showNextProfile = () => {
+  const showNextProfile = async () => {
     console.log("profiles.length: ", profiles.length);
     console.log("currentIndex: ", currentIndex);
-    if (currentIndex <= profiles.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setCurrentProfile(profiles[currentIndex])
-      console.log("profiles[currentIndex]: ", profiles[currentIndex]);
+    if (currentIndex < profiles.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+        setCurrentProfile(profiles[currentIndex + 1]);
     } else {
-      //when not have profile that matching any more poll new profile
-      console.log("relode profile");
-      pollProfile(username);
-      setCurrentIndex(0);
-      setCurrentProfile(profiles[currentIndex])
+        //when not have profile that matching any more poll new profile
+        await pollProfile(username);
+        setCurrentIndex(0);
+        setCurrentProfile(profiles[0]);
     }
   };
 
