@@ -29,7 +29,7 @@ const Match = () => {
     } catch (error) {
       console.error('Error fetching match profile:', error);
     }
-};
+  };
 
   useEffect(() => {
     const LoginToken = localStorage.getItem("LoginToken");

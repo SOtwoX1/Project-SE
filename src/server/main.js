@@ -94,7 +94,7 @@ const chatSchema = new mongoose.Schema({
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
-const Profile = mongoose.model('Profile', profileSchema, 'Profiles');
+const Profile = mongoose.model('Profile', profileSchema);
 const Match = mongoose.model('Matches', matchSchema); // draft
 const Chat = mongoose.model('Chats', chatSchema); // draft
 // POST Route for User Registration
@@ -261,16 +261,114 @@ app.get('/api/match-profile/:userID', async (req, res) => {
   }
 });
 
-app.get('/api/get-chat/:userID', async (req, res) => {
+app.get('/api/get-all-chat/:userID', async (req, res) => {
   try {
-    const userID = req.params;
-    const chatWithUserID = req.body;
+    const { userID } = req.params;
 
-    if (!userID || !chatWithUserID) {
+    if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
 
-    // wait for update
+const matchRooms = await Match.aggregate([
+    {
+        $match: {
+            $and: [
+                {
+                    $or: [
+                        { userID1: userID },
+                        { userID2: userID }
+                    ]
+                },
+                { isMatch: true }
+            ]
+        }
+    },
+    {
+        $lookup: {
+            from: 'profiles',
+            let: { userID1: '$userID1', userID2: '$userID2' },
+            pipeline: [
+                {
+                    $match: {
+                        $expr: {
+                            $or: [
+                                { $eq: ['$userID', '$$userID1'] },
+                                { $eq: ['$userID', '$$userID2'] }
+                            ]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        userID: 1,
+                        photo: 1
+                    }
+                }
+            ],
+            as: 'profiles'
+        }
+    },
+    {
+        $addFields: {
+            otherUserProfile: {
+                $filter: {
+                    input: '$profiles',
+                    as: 'profile',
+                    cond: { $ne: ['$$profile.userID', userID] }
+                }
+            }
+        }
+    },
+    {
+        $unwind: '$otherUserProfile'
+    },
+    {
+        $project: {
+            _id: 1,
+            matchID: 1,
+            userID: '$otherUserProfile.userID',
+            lastContent: 1,
+            photo: "$otherUserProfile.photo"
+        }
+    }
+]);
+    if (!matchRooms) {
+      res.status(404).json({ message: 'Not found'});
+    }
+
+    res.status(200).json(matchRooms);
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.get('/api/get-chat/:userID', async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { matchID } = req.body;
+
+    if (!userID || !matchID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+
+    const matchRoom = await Match.findOne({ 
+      $and: [
+        {
+          $or: [
+            { userID1: userID },
+            { userID2: userID }
+          ]
+        },
+        { matchID },
+        { isMatch: true }
+      ]});
+
+    if (!matchRoom) {
+      res.status(404).json({ message: 'Not found'});
+    }
+
+    res.status(200).json(matchRoom);
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
