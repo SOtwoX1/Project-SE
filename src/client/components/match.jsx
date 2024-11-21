@@ -1,44 +1,48 @@
-import React, { useState } from 'react';
-import { Card, CardContent, Typography, Button, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useNavigate } from "react-router-dom";
+import { Card, CardMedia, CardContent, Typography, Button, Collapse, Box } from '@mui/material';
 import Menu from './Menu';
-
+import axios from 'axios';
 
 const Match = () => {
-  const profiles = [
-    {
-      name: 'น้องขวัญคนสวย',
-      age: 25,
-      bio: 'รักอาหารญี่ปุ่นและขนมหวาน',
-      images: [
-        'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg',
-        'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__97451.jpeg',
-      ],
-    },
-    {
-      name: 'น้องมุกน่ารัก',
-      age: 22,
-      bio: 'ชอบดนตรีและเดินป่า',
-      images: [
-        'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__97451.jpeg',
-        'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg',
-      ],
-    },
-    {
-      name: 'หมาป่าเดียวดาย',
-      age: 25,
-      bio: 'ชอบดนตรีและเดินป่า',
-      images: [
-        'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__97451.jpeg',
-        'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg',
-      ],
-    },
-  ];
+  
+  const navigate = useNavigate(); // สร้างตัวแปร navigate
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [profiles, setProfiles] = useState([
+    {userID: 'undefind',
+      bio: "",
+      photo: []
+    }
+  ]);
+
+  async function pollProfile(username) {
+    try {
+      const response = await axios.get(`/api/match-profile/${username}`);
+      console.log("username: ", username);
+      console.log("response.data: ", response.data); // Logs the expected output
+      setProfiles(response.data); // Update profiles state
+      
+    } catch (error) {
+      console.error('Error fetching match profile:', error);
+    }
+  };
+
+  useEffect(() => {
+    const LoginToken = localStorage.getItem("LoginToken");
+    const userData = JSON.parse(LoginToken);
+    setEmail(userData.email);
+    setUsername(userData.username);
+    //get profile that matching
+    pollProfile(userData.username);
+  }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matchText, setMatchText] = useState('');
+  const [currentProfile, setCurrentProfile] = useState(profiles[currentIndex]);
 
   const sliderSettings = {
     dots: true,
@@ -58,27 +62,35 @@ const Match = () => {
       showNextProfile();
     }, 2000);
   };
-  
 
   const handleDislike = () => {
     showNextProfile();
+    console.log('Disliked!');
   };
 
   const handleSkip = () => {
+    showNextProfile();
     console.log('Skipped!');
+  };
+
+  const showNextProfile = () => {
+    console.log("profiles.length: ", profiles.length);
+    console.log("currentIndex: ", currentIndex);
+    if (currentIndex <= profiles.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setCurrentProfile(profiles[currentIndex])
+      console.log("profiles[currentIndex]: ", profiles[currentIndex]);
+    } else {
+      //when not have profile that matching any more poll new profile
+      console.log("relode profile");
+      pollProfile(username);
+      setCurrentIndex(0);
+      setCurrentProfile(profiles[currentIndex])
+    }
   };
 
   const handleImageClick = () => {
     navigate('/detailmatch'); // ไปยังหน้า /profile-details
-  };
-
-  const profile = {
-    name: 'น้องขวัญคนสวย',
-    age: 25,
-    bio: 'รักอาหารญี่ปุ่นและขนมหวาน',
-    details: 'ฉันชอบไปเที่ยวสวนสาธารณะและวิ่งเล่นกับเพื่อน ๆ สนใจที่จะรู้จักกับคนใหม่ ๆ และแบ่งปันความสุข',
-    image: 'src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg',
-    lifestyle: ['ร้านอาหารบุฟเฟต์', 'ความชอบที่2'],
   };
 
   return (
@@ -98,11 +110,11 @@ const Match = () => {
           <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
             {/* Profile Image Slider */}
             <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
-              {currentProfile.images.map((img, index) => (
-                <Box key={index} display="flex" justifyContent="center">
+              {currentProfile.photo.map(img => (
+                <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center">
                   <img
                     src={img}
-                    alt={`Profile ${index + 1}`}
+                    alt={`Profile ${currentProfile.photo.findIndex(photo => photo === img)}`}
                     style={{
                       width: '100%',
                       maxWidth: '313px',
@@ -117,7 +129,7 @@ const Match = () => {
 
             {/* Profile Details */}
             <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
-              <Typography variant="h6">{`${currentProfile.name}, ${currentProfile.age}`}</Typography>
+              <Typography variant="h6">{`${currentProfile.userID}, ${currentProfile.age}`}</Typography>
               <Typography variant="body2" color="textSecondary">
                 {currentProfile.bio}
               </Typography>

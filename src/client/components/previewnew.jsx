@@ -4,7 +4,7 @@ import { Card, Typography, Button, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const Preview = () => {
+const Previewnew = () => {
   const images = [
     'https://via.placeholder.com/300x250?text=Image+1', // เปลี่ยน URL เป็นรูปจริง
     'https://via.placeholder.com/300x250?text=Image+2',
@@ -117,4 +117,4 @@ const Preview = () => {
   );
 };
 
-export default Preview;
+export default Previewnew;
