@@ -47,29 +47,38 @@ export default function Setting_pro() {
                 confirmButton: "text-white text-sm text-center rounded-lg w-[192px] h-10 border border-gray-800 m-auto",
                 cancelButton: "text-white text-sm text-center rounded-lg w-[192px] h-10 border border-gray-800",
               }
-          }).then((result) => {
+          }).then(async (result) => {
             if (result.isConfirmed) {
-                console.log("Delete Account", username);
-                {
+                // Delete Account
+                let response;
+                if (result.isConfirmed) {
                     try {
-                        axios.delete(`http://localhost:3000/api/delete-account`, {
+                        const response = await axios.delete(`http://localhost:3000/api/delete-account`, {
                             data: {
                                 username: username,
                             },
                         });
+                        // wait for delete account to complete
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: "Account deleted successfully!",
+                            timer: 5000,
+                        })
+                        localStorage.removeItem("LoginToken");
+                        window.location.href = "/Login";
                     } catch (error) {
                         console.log(error);
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Something went wrong!",
+                            text: "Your account could not be deleted. Please try again later. You must have profile to delete account.",
+                            timer: 7000,
                         })
                     }
                 }
-                localStorage.removeItem("LoginToken");
-                window.location.href = "/Login";
             }
-          });
+        });
     }
     return(
         
