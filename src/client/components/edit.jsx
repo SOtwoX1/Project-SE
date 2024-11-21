@@ -2,11 +2,11 @@ import React, { useState } from "react";
 
 export default function Edit() {
     const go_to_edit_profile = () => {
-        window.location.href = "/Edit-Profile";
+        window.location.href = "/NewEdit_pro";
     };
 
     const go_to_preview = () => {
-        window.location.href = "/Preview";
+        window.location.href = "/preview";
     };
 
     const [images, setImages] = useState([null, null, null, null]); //กำหนด 4 ช่องให้ใส่
@@ -48,10 +48,14 @@ export default function Edit() {
                         </button>
                         <p className="text-[20px] text-black">EDIT PROFILE</p>
                     </div>
-                    <div className="w-full m-0 text-[20px] text-black bg-gray-300 border-t border-b border-black text-center py-1.5">Preview</div>
+                    <div className="w-full m-0 text-[20px] text-black bg-gray-300 border-t border-b border-black text-center py-1.5">
+                        <button onClick={go_to_preview} className="w-full">
+                            Preview
+                        </button>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 p-5">
+                <div className="grid grid-cols-2 gap-8 p-5 h-[570px]">
                     {images.map((image, index) => (
                         <div
                             key={index}
@@ -80,7 +84,7 @@ export default function Edit() {
 
                 <button
                     type="button"
-                    onClick={go_to_preview}
+                    onClick={go_to_edit_profile}
                     className="mx-auto w-[148px] h-[39px] p-[5px] mt-2 bg-[#F4A261] text-white rounded-xl text-[16px] font-bold focus:outline-none focus:ring-2">
                     Save
                 </button>

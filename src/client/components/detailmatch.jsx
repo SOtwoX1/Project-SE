@@ -22,7 +22,7 @@ const DetailMatch = () => {
 
   return (
     <div
-      className="  items-center justify-center"
+      className="fixed overflow-hidden  items-center justify-center"
       style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
     >
       {/* Header */}
@@ -40,7 +40,7 @@ const DetailMatch = () => {
           </div>
         
       </div>
-      <div style={{ }}>
+      <div style={{paddingTop:'' }}>
         <button style={{ border: 'none', background: 'none' }}>
             <a href='/Match'><img
             src="src/client/img/Back.png"
@@ -56,14 +56,14 @@ const DetailMatch = () => {
         style={{
           width: '100%',
           maxWidth: '375px',
-          borderRadius: '16px',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+         
+          
           justifyContent: 'center',
         }}
       >
-        <Box display="flex" flexDirection="column" alignItems="center" padding="16px">
+        <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
           {/* Profile Image Slider */}
-          <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
+          <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px'  }}>
             {images.map((img, index) => (
               <Box key={index} display="flex" justifyContent="center">
                 <img
@@ -71,7 +71,7 @@ const DetailMatch = () => {
                   alt={`Profile ${index + 1}`}
                   style={{
                     width: '100%',
-                    maxWidth: '300px',
+                    maxWidth: '350px',
                     height: '250px',
                     objectFit: 'cover',
                     borderRadius: '16px',
@@ -82,11 +82,11 @@ const DetailMatch = () => {
           </Slider>
 
           {/* Fields */}
-          <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px">
-            <Typography>อายุ..</Typography>
-            <Typography>มหาวิทยาลัย .....</Typography>
-            <Typography>แนวร้านอาหารที่ชอบ .....</Typography>
-            <Typography>เกี่ยวกับฉัน.......</Typography>
+          <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
+            <Typography >อายุ..</Typography>
+            <Typography >มหาวิทยาลัย .....</Typography>
+            <Typography >แนวร้านอาหารที่ชอบ .....</Typography>
+            <Typography >เกี่ยวกับฉันจิงอะ.......</Typography>
             <Typography>Lifestyle</Typography>
           </Box>
         </Box>
@@ -96,7 +96,7 @@ const DetailMatch = () => {
           <Button
             variant="contained"
             style={{
-              backgroundColor: '#A3BE8C',
+              backgroundColor: '#B7D55A',
               borderRadius: '20px',
               color: 'white',
               width: '140px',
@@ -108,7 +108,7 @@ const DetailMatch = () => {
           <Button
             variant="contained"
             style={{
-              backgroundColor: '#A3BE8C',
+              backgroundColor: '#B7D55A',
               borderRadius: '20px',
               color: 'white',
               width: '140px',

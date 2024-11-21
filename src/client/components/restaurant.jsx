@@ -14,12 +14,18 @@ export default function Restaurant() {
       const go_to_profile = async () => {
         window.location.href = "http://localhost:3000/profile";
       };
+      const go_to_pro_in_res = async () => {
+        window.location.href = "http://localhost:3000/Promotion_restaurant";
+      };
+      const go_to_resNopro = async () => {
+        window.location.href = "http://localhost:3000/NoPromotion_restaurant";
+      };
 
-      const promotion = [
-      {id:0, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",time:"ระยะเวลา"},
-      {id:1, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",time:"ระยะเวลา"},
-      {id:2, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",time:"ระยะเวลา"},
-      {id:3, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",time:"ระยะเวลา"},
+      const promotions = [
+      {id:0, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",promo:'true',time:"ระยะเวลา"},
+      {id:1, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",promo:'false',time:"ระยะเวลา"},
+      {id:2, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",promo:'false',time:"ระยะเวลา"},
+      {id:3, res_name:"ชื่อร้านอาหาร", Synopsis:"คำแนะนำร้าน", category:"ประเภทร้านอาหาร",promo:'true',time:"ระยะเวลา"},
       
     ];
   
@@ -69,31 +75,38 @@ export default function Restaurant() {
 
           <div className="space-y-[37px] ">
             {
-              promotion.map(promotions => (
-                <div className="flex flex-col w-[308px] h-[90px] bg-[#D9D9D9] p-2 relative">
-                  <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
-                      <p className="text-black text-sm">ชื่อร้าน :{promotions.res_name}</p>
-                      <p className="text-black text-sm">กล่าวแนะนำร้านอาหาร :{promotions.Synopsis}</p>
-                      <p className="text-black text-sm">ประเภทร้านอาหาร :{promotions.category}</p>
-                  </div>
-                  <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
-                  <div className="absolute right-[1px] transform translate-y-3 rotate-90 mt-1">
-                    <p className="text-[#F56464] text-[14px] text-center font-bold">
-                      Promotion
-                    </p>
-                    <p className="text-[#FFFFFF] text-[12px] text-center rounded ">
-                      ระยะเวลา{promotions.duration}
-                    </p>
-                  </div>
-                </div>
-              ))
+              promotions.map((promotion) => (
+                  promotion.promo === 'true' ? (
+                    <button key={promotion.id} onClick={go_to_pro_in_res} className="flex flex-col w-[308px] h-[90px] bg-[#D9D9D9] p-2 relative">
+                      <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
+                          <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.res_name}</p>
+                          <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.Synopsis}</p>
+                          <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.category}</p>
+                      </div>
+                      <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
+                      <div className="absolute right-[1px] transform translate-y-3 rotate-90 mt-1">
+                        <p className="text-[#F56464] text-[14px] text-center font-bold">
+                          Promotion
+                        </p>
+                        <p className="text-[#FFFFFF] text-[12px] text-center rounded ">
+                          ระยะเวลา{promotions.duration}
+                        </p>
+                      </div>
+                      </button>
+                ) : (
+                  <button key={promotion.id} onClick={go_to_resNopro} className="flex flex-col w-[308px] h-[90px] bg-[#D9D9D9] p-2 relative">
+                    <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
+                        <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.res_name}</p>
+                        <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.Synopsis}</p>
+                        <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.category}</p>
+                    </div>
+                    <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
+                  </button>
+                )
+                
+              ))}
               
-            }
-
-            
-              
-
-              
+   
           </div>
           
           

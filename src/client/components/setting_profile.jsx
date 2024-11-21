@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2';
 import { useState } from "react";
 import { useEffect } from "react";
+import axios from 'axios';
 
 export default function Setting_pro() {
     const [email, setEmail] = useState("");
@@ -31,7 +32,7 @@ export default function Setting_pro() {
         window.location.href = "/Login";
         localStorage.removeItem("LoginToken");
     }
-    const Delete_Account = () => {
+    const Delete_Account = async () => {
         Swal.fire({
             title: "Delete My Account ",
             text: "All data within the account will be deleted.",
@@ -46,15 +47,38 @@ export default function Setting_pro() {
                 confirmButton: "text-white text-sm text-center rounded-lg w-[192px] h-10 border border-gray-800 m-auto",
                 cancelButton: "text-white text-sm text-center rounded-lg w-[192px] h-10 border border-gray-800",
               }
-          }).then((result) => {
+          }).then(async (result) => {
             if (result.isConfirmed) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your account has been deleted.",
-                icon: "success"
-              });
+                // Delete Account
+                let response;
+                if (result.isConfirmed) {
+                    try {
+                        const response = await axios.delete(`http://localhost:3000/api/delete-account`, {
+                            data: {
+                                username: username,
+                            },
+                        });
+                        // wait for delete account to complete
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: "Account deleted successfully!",
+                            timer: 5000,
+                        })
+                        localStorage.removeItem("LoginToken");
+                        window.location.href = "/Login";
+                    } catch (error) {
+                        console.log(error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Your account could not be deleted. Please try again later. You must have profile to delete account.",
+                            timer: 7000,
+                        })
+                    }
+                }
             }
-          });
+        });
     }
     return(
         

@@ -7,7 +7,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    localStorage.removeItem("resetToken");
+    localStorage.removeItem("LoginToken");
 
     const go_to_homelog = async () => {
         window.location.href = "http://localhost:3000/home-login-register";
