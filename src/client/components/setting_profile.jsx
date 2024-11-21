@@ -25,7 +25,7 @@ export default function Setting_pro() {
         window.location.href = "/Manage-Payment-Account";
     }
     const go_to_package = () => {
-        window.location.href = "/profile";
+        window.location.href = "/Mypackage";
     }
     const go_to_login = () => {
         window.location.href = "/Login";
