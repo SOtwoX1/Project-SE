@@ -58,6 +58,7 @@ function App() {
         <Route path="/Detail-Match" element={<DetailMatch/>} />
         <Route path="/Manage-Payment-Account" element={<Manage_Payment_Account/>} />
         <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
+        <Route path="/Mypackage" element={<Mypackage />} />
         <Route path="/Edit" element={<Edit/>} />
         <Route path="/Preview" element={<Preview/>} />
         <Route path="/Mypackage" element={<Mypackage/>} />
