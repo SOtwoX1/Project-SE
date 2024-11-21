@@ -20,7 +20,19 @@ export default function Nopromotion_restaurant(){
         window.location.href = "http://localhost:3000/profile";
       };
       const pin_rest = () => {
-        Swal.fire({ title: "Pin Restaurant", icon: "success"});
+        Swal.fire({ 
+            title: "Now!!", 
+            text: "You are chilling at <u>..ชื่อร้าน..</u> <strong>HTML <u>example</u></strong>",
+            html: `
+                You are chilling at <br>
+                ..ชื่อร้าน..`,
+            customClass: {
+                title : "text-[FF0000] text-xl",
+                html : "text-white",
+                popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
+                confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
+            }
+            });
       }
     return (
         <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center ">
