@@ -91,12 +91,21 @@ const chatSchema = new mongoose.Schema({
   matchID: { type: String, required: true },
   all_messageIDs: [String]
 })
+const messageSchema = new mongoose.Schema({
+  chatID: { type: String, required: true },
+  messageID: { type: String, AutoIncrement: true },
+  userID_sender: { type: String, required: true },
+  text: String,
+  time_send: { type: Date, default: Date.now },
+  isRead: { type: Boolean, default: false }
+});
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
 const Profile = mongoose.model('Profile', profileSchema);
-const Match = mongoose.model('Matches', matchSchema); // draft
-const Chat = mongoose.model('Chats', chatSchema); // draft
+const Match = mongoose.model('Matches', matchSchema);
+const Chat = mongoose.model('Chats', chatSchema);
+const Message = mongoose.model('Messages', messageSchema);
 // POST Route for User Registration
 
 // register ------------------------------------------------------------------------------------
@@ -352,23 +361,15 @@ app.get('/api/get-chat/:userID', async (req, res) => {
       return res.status(400).json({ message: 'Missing userID' });
     }
 
-    const matchRoom = await Match.findOne({ 
-      $and: [
-        {
-          $or: [
-            { userID1: userID },
-            { userID2: userID }
-          ]
-        },
-        { matchID },
-        { isMatch: true }
-      ]});
+    const chatRoom = await Chat.findOne({ matchID });
 
-    if (!matchRoom) {
+    if (!chatRoom) {
       res.status(404).json({ message: 'Not found'});
     }
-
-    res.status(200).json(matchRoom);
+    const chatHistory = await Message.find({
+      messageID: { $in: chatRoom.all_messageIDs }
+    })
+    res.status(200).json(chatHistory);    
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });

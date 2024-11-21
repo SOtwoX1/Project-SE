@@ -1,24 +1,27 @@
-import { Button } from "react-scroll";
-import React from "react";
-import vite from "./../../../public/vite.svg";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import 'flowbite';
-import { message } from "antd";
 
 function Chat() {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const { matchID } = useParams();
+
     const go_to_message = async () => {
-        window.location.href = "http://localhost:3000/message";
+        navigate("/message");
       };
       const go_to_accept = async () => {
-        window.location.href = "http://localhost:3000/accept";
+        navigate("/accept");
       };
       const go_to_restaurant = async () => {
-        window.location.href = "http://localhost:3000/restaurant";
+        navigate("/restaurant");
       };
       const go_to_match = async () => {
-        window.location.href = "http://localhost:3000/match";
+        navigate("/match");
       };
       const go_to_profile = async () => {
-        window.location.href = "http://localhost:3000/profile";
+        navigate("/profile");
       };
     const chat = [
         {id:0, name:"ชื่อแอค", messages:[{name:"ชื่อแอค", message:"hi", time:"13:42", status:"Delivery"},{name:"realguy", message:"ข้อความล่าสุด"}]},
@@ -35,22 +38,22 @@ function Chat() {
                 className="bg-white w-[375px] h-[717px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]" 
                 style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
                 <div className="flex flex-row items-center justify-center">
-                  <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
-                  <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="src/client/img/heart.png" alt="Heart" />
+                  <img className="w-[55px] h-[55px] mr-4" src="../src/client/img/French Fries.png" alt="French Fries" />
+                  <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="../src/client/img/heart.png" alt="Heart" />
                   <span className="text-[#E76F51] text-[45px] font-extrabold">Message</span>
-                  <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
-                  <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
+                  <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="../src/client/img/heart2.png" alt="Heart" />
+                  <img className="w-[55px] h-[55px] ml-4" src="../src/client/img/pizza.png" alt="Pizza" />
             </div>
                 <div className="h-[600px] w-[375px] rounded-b-[50px] justify-items-center">
                     <div className="flex w-full">
-                        <div className="pl-[17px]">
+                        <div className="pl-[17px]" onClick={() => navigate(-1)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                             </svg>
                         </div>
                         <div className="text-[20px] pr-[41px] w-full font-extrabold text-center"
                         style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
-                            {chat[0].messages[0].message}
+                            {chat[0].messages[0].message}{matchID}
                         </div>
                     </div>
                     
@@ -78,7 +81,7 @@ function Chat() {
                             </div>
                             :
                             <div class="flex items-start gap-2.5 w-fit max-w-[250px] pb-1">
-                                <img class="w-8 h-8 rounded-full" src={message.photo} alt={message.name + " image"} />
+                                <img class="w-8 h-8 rounded-full" src={".." + message.photo} alt={message.name + " image"} />
                                 <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 bg-[#FE8947] rounded-e-xl rounded-es-xl">
                                     <div class="flex items-center space-x-2 rtl:space-x-reverse">
                                     <span class="text-xs text-gray-200 -mt-3">
