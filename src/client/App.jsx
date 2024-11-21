@@ -27,7 +27,8 @@ import Edit from "./components/edit";
 import Preview from "./components/preview";
 import Mypackage from "./components/mypackage";
 import NewEdit_pro from "./components/newedit_pro";
-
+import Promotion_restaurant from "./components/promotin_in_rest";
+import Nopromotion_restaurant from "./components/nopromotion_rest";
 
 function App() {
   return (
@@ -61,8 +62,8 @@ function App() {
         <Route path="/preview" element={<Preview/>} />
         <Route path="/Mypackage" element={<Mypackage/>} />
         <Route path="/NewEdit_pro" element={<NewEdit_pro/>} />
-        
-
+        <Route path="/Promotion_restaurant" element={<Promotion_restaurant/>} />
+        <Route path="/NoPromotion_restaurant" element={<Nopromotion_restaurant/>} />
       </Routes>
     </BrowserRouter>
   );
