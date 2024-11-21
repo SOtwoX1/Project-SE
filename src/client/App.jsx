@@ -60,7 +60,6 @@ function App() {
         <Route path="/Success-Manage-Payment-Account" element={<Success_MPA/>} />
         <Route path="/Edit" element={<Edit/>} />
         <Route path="/Preview" element={<Preview/>} />
-        <Route path="/preview" element={<Preview/>} />
         <Route path="/Mypackage" element={<Mypackage/>} />
         <Route path="/NewEdit_pro" element={<NewEdit_pro/>} />
         <Route path="/Promotion_restaurant" element={<Promotion_restaurant/>} />
