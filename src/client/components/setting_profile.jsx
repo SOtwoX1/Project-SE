@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2';
 import { useState } from "react";
 import { useEffect } from "react";
+import axios from 'axios';
 
 export default function Setting_pro() {
     const [email, setEmail] = useState("");
@@ -31,7 +32,7 @@ export default function Setting_pro() {
         window.location.href = "/Login";
         localStorage.removeItem("LoginToken");
     }
-    const Delete_Account = () => {
+    const Delete_Account = async () => {
         Swal.fire({
             title: "Delete My Account ",
             text: "All data within the account will be deleted.",
@@ -48,11 +49,25 @@ export default function Setting_pro() {
               }
           }).then((result) => {
             if (result.isConfirmed) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your account has been deleted.",
-                icon: "success"
-              });
+                console.log("Delete Account", username);
+                {
+                    try {
+                        axios.delete(`http://localhost:3000/api/delete-account`, {
+                            data: {
+                                username: username,
+                            },
+                        });
+                    } catch (error) {
+                        console.log(error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                        })
+                    }
+                }
+                localStorage.removeItem("LoginToken");
+                window.location.href = "/Login";
             }
           });
     }

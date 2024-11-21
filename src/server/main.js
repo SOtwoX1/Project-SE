@@ -319,6 +319,32 @@ app.post('/api/create-cardpayment', async (req, res) => {
   }
 });
 
+// delete all account ------------------------------------------------------------------------------------
+app.delete('/api/delete-account', async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    // Check userid in user then go to profile
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const profile = await Profile.findOne({ userID: username });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    // delete all account
+    await User.deleteOne({ username });
+    await Profile.deleteOne({ userID: username });
+    await CardPayment.deleteOne({ userID: username });
+
+    res.status(200).json({ message: 'Account deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+
+});
 
 ViteExpress.listen(app, 3000, () =>
   console.log("Server is listening on port 3000..."),
