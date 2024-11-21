@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import multer from "multer";
 import mysql from "mysql2";
 import mongoose from "mongoose";
+import { Card } from '@mui/material';
 
 const app = express();
 // Middleware
@@ -70,7 +71,16 @@ const profileSchema = new mongoose.Schema({
   isRegistered: Boolean,
   isHungry: Boolean
 });
+const cardpaymentSchema = new mongoose.Schema({
+  userID: String,
+  CardID: {type:String, AutoIncrement: true}, 
+  holderName: String,
+  cardNumber: String,
+  MMYY: Date,
+  cvv: String
+})
 
+const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
 const Profile = mongoose.model('Profile', profileSchema, 'Profiles');
 // POST Route for User Registration
@@ -269,6 +279,45 @@ app.put('/api/setting/reset-password', async (req, res) => {
   }
 });
 
+// create cardpayment ------------------------------------------------------------------------------------
+app.post('/api/create-cardpayment', async (req, res) => {
+  const { username, cardNumber, cardHolderName, expirationDate, cvv } = req.body;
+
+  try {
+    // Check userid in profile
+    const profile = await Profile.findOne({ userID: username });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    // if userid already exist in cardpayment update it
+    const existingCardPayment = await CardPayment.findOne({ userID: username });
+    if (existingCardPayment) {
+      existingCardPayment.CardID = profile._id;
+      existingCardPayment.cardNumber = cardNumber;
+      existingCardPayment.holderName = cardHolderName;
+      existingCardPayment.YYMM = expirationDate;
+      existingCardPayment.CVV = cvv;
+      await existingCardPayment.save();
+      return res.status(200).json({ message: 'Card payment updated successfully' });
+    }
+
+    const cardPayment = new CardPayment({
+      userID: username,
+      CardID: profile._id,
+      cardNumber,
+      holderName: cardHolderName,
+      YYMM: expirationDate,
+      CVV: cvv
+    });
+
+    await cardPayment.save();
+
+    res.status(201).json({ message: 'Card payment created successfully' });
+  } catch (error) {
+    console.error('Error creating card payment:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
 
 
 ViteExpress.listen(app, 3000, () =>
