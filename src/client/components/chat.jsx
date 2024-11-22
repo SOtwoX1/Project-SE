@@ -37,6 +37,16 @@ function Chat() {
         }
     }, [location.search]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (matchID && chatWithUser.userID) {
+                pollChats(matchID, chatWithUser.userID);
+            }
+        }, 10000); // Poll every 10 seconds
+
+        return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, [matchID, chatWithUser.userID]);
+
     async function pollChats(matchID, userID) {
         try {
             console.log('poll chats ', matchID, userID);
@@ -45,7 +55,7 @@ function Chat() {
             console.log(response.data);
             setChats(fetchChats);
         } catch (error) {
-            console.error('Error fetching chats:', error);
+            console.error('Error poll chats:', error);
         }
     }
 
@@ -58,10 +68,10 @@ function Chat() {
             console.log(`sending ${formJson.message} to ${matchID}`);
             const response = await axios.post(`/api/send-message/${username}?matchID=${matchID}&text=${formJson.message}`);
             console.log(response.data);
-            pollChats(matchID, username)
             form.reset(); // Clear the input field after sending the message
+            pollChats(matchID, username); // Poll chats after sending the message
         } catch (error) {
-            console.error('Error fetching chats:', error);
+            console.error('Error sending chats:', error);
         }
     }
 
