@@ -50,7 +50,7 @@ function App() {
         <Route path="/Setting-Profile" element={<Setting_pro />} />
         <Route path="/restaurant" element={<Restaurant />} />
         <Route path="/Match" element={<Match />} />
-        <Route path="/Chat/:matchID" element={<Chat />} />
+        <Route path="/Chat" element={<Chat />} />
         <Route path="/Message" element={<Message />} />
         <Route path="/Show-Me" element={<Show_me />} />
         <Route path="/Password" element={<Password />} />

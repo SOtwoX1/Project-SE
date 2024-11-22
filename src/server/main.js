@@ -355,9 +355,39 @@ const matchRooms = await Match.aggregate([
 app.get('/api/get-chat/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
-    const { matchID } = req.body;
+    const matchID = req.query.matchID;
 
-    if (!userID || !matchID) {
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+    if (!matchID) {
+      return res.status(400).json({ message: 'Missing matchID' });
+    }
+
+    const chatRoom = await Chat.findOne({ matchID });
+
+    if (!chatRoom) {
+      res.status(404).json({ message: 'Not found chat'});
+    }
+    const chatHistory = await Message.find({
+      messageID: { $in: chatRoom.all_messageIDs }
+    })
+    if (!chatHistory) {
+      res.status(404).json({ message: 'Not found message'});
+    }
+    res.status(200).json(chatHistory);    
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.post('/api/send-message/:userID', async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { matchID, text } = req.body;
+
+    if (!userID || !matchID || !text) {
       return res.status(400).json({ message: 'Missing userID' });
     }
 
@@ -366,10 +396,19 @@ app.get('/api/get-chat/:userID', async (req, res) => {
     if (!chatRoom) {
       res.status(404).json({ message: 'Not found'});
     }
-    const chatHistory = await Message.find({
-      messageID: { $in: chatRoom.all_messageIDs }
-    })
-    res.status(200).json(chatHistory);    
+
+    const newMessage = new Message({
+      chatID: chatRoom.chatID,
+      userID_sender: userID,
+      text
+    });
+
+    await newMessage.save();
+
+    chatRoom.all_messageIDs.push(newMessage.messageID);
+    await chatRoom.save();
+
+    res.status(200).json({ message: 'Message sent' });
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });

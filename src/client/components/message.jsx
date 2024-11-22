@@ -12,8 +12,8 @@ function Message() {
           photo:"src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg"}
     ]);
 
-    const goToChatClick = (matchID) => {
-      navigate(`/chat/${matchID}`);
+    const goToChatClick = (matchID, userID, photo) => {
+      navigate(`/chat?matchID=${matchID}&chatWithUserID=${userID}&photo=${photo}`);
     }
 
     async function pollAllChat(username) {
@@ -66,7 +66,7 @@ function Message() {
                     {chats.map(chat => (
                         <div className="w-[324px] h-[80px] justify-self-center flex sticky top-[0px] bg-[#fff7ed] rounded-l-[40px] rounded-r-xl hover:drop-shadow-md hover:scale-105"
                         key={chat._id}
-                        onClick={() => goToChatClick(chat.matchID)}>
+                        onClick={() => goToChatClick(chat.matchID, chat.userID, chat.photo[0])}>
                             <img src={chat.photo[0]} className="h-16 w-16 m-2 rounded-full bg-white items-center drop-shadow-md" />
                             <div className="w-full pl-2 content-center">
                                 <div className="pb-2 font-['Abhaya'] text-black text-[15px] font-bold">-{chat.userID}-</div>
