@@ -49,6 +49,22 @@ function Chat() {
         }
     }
 
+    const sendMessage = async (e) => {
+        try {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const formJson = Object.fromEntries(formData.entries());
+            console.log(`sending ${formJson.message} to ${matchID}`);
+            const response = await axios.post(`/api/send-message/${username}?matchID=${matchID}&text=${formJson.message}`);
+            console.log(response.data);
+            pollChats(matchID, username)
+            form.reset(); // Clear the input field after sending the message
+        } catch (error) {
+            console.error('Error fetching chats:', error);
+        }
+    }
+
     const go_to_message = async () => {
         navigate("/message");
       };
@@ -135,10 +151,10 @@ function Chat() {
                             </div>
                     ))}
                         </div>
-                        <form className="flxed bottom-4 h-[60px] w-[325px] pl-4">   
+                        <form className="flxed bottom-4 h-[60px] w-[325px] pl-4" onSubmit={sendMessage}>   
                             <label htmlFor="message" className="mb-2 text-sm font-medium text-gray-900 sr-only">ส่งข้อความ....</label>
                             <div className="relative">
-                                <input type="text" id="message" 
+                                <input type="text" id="message" name="message" 
                                 className="block w-[309px] h-[60px] p-4 pr-[60px] text-sm text-gray-900 border border-gray-300 rounded-b-[34px] rounded-t-[34px] bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="ส่งข้อความ...." required />
                                 <button type="submit" 
                                 className="text-white absolute end-[6px] bottom-[6px] w-12 h-12 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-[30px] text-sm">

@@ -385,7 +385,7 @@ app.get('/api/get-chat/:userID', async (req, res) => {
 app.post('/api/send-message/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
-    const { matchID, text } = req.body;
+    const { matchID, text } = req.query;
 
     if (!userID || !matchID || !text) {
       return res.status(400).json({ message: 'Missing userID' });
