@@ -65,6 +65,7 @@ function App() {
         <Route path="/NewEdit_pro" element={<NewEdit_pro/>} />
         <Route path="/Promotion_restaurant" element={<Promotion_restaurant/>} />
         <Route path="/NoPromotion_restaurant" element={<Nopromotion_restaurant/>} />
+        <Route path="/detailmatch" element={<DetailMatch />} />
       </Routes>
     </BrowserRouter>
   );

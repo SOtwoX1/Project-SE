@@ -100,8 +100,8 @@ const Match = () => {
     }
   };
 
-  const handleImageClick = () => {
-    navigate('/detailmatch'); // ไปยังหน้า /profile-details
+  const handleImageClick = (userID) => {
+    navigate(`/detailmatch?userID=${userID}`); // ไปยังหน้า /profile-details
   };
 
   return (
@@ -122,7 +122,8 @@ const Match = () => {
             {/* Profile Image Slider */}
             <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
               {currentProfile.photo.map(img => (
-                <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center">
+                <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center"
+                onClick={() => handleImageClick(currentProfile.userID)}>
                   <img
                     src={img}
                     alt={`Profile ${currentProfile.photo.findIndex(photo => photo === img)}`}
