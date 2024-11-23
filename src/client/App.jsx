@@ -31,6 +31,7 @@ import Promotion_restaurant from "./components/promotin_in_rest";
 import Nopromotion_restaurant from "./components/nopromotion_rest";
 import Whothere from "./components/whothere";
 import Accept from "./components/accept";
+import Viewmatchprofile from "./components/viewmatchprofile";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
         <Route path="/Whothere" element={<Whothere/>} />
         <Route path="/detailmatch" element={<DetailMatch />} />
         <Route path="/Accept" element={<Accept />} />
+        <Route path="/Viewmatchprofile" element={<Viewmatchprofile />} />
       </Routes>
     </BrowserRouter>
   );
