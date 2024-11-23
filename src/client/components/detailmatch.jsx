@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import { Card, Typography, Button, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const DetailMatch = () => {
-  const images = [
-    'https://via.placeholder.com/300x250?text=Image+1', // เปลี่ยน URL เป็นรูปจริง
-    'https://via.placeholder.com/300x250?text=Image+2',
-    'https://via.placeholder.com/300x250?text=Image+3',
-  ];
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [userProfile, setUserProfile] = useState({
+    userID: 'undefind',
+    bio: '',
+    photo: []
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = new URLSearchParams(location.search);
+      const userID = params.get('userID');
+      try {
+        const response = await axios.get(`/api/get-profile/${userID}`);
+        setUserProfile(response.data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    }
+    fetchData();
+  }, []);
 
   const sliderSettings = {
     dots: true,
@@ -41,15 +59,16 @@ const DetailMatch = () => {
         
       </div>
       <div style={{paddingTop:'' }}>
-        <button style={{ border: 'none', background: 'none' }}>
-            <a href='/Match'><img
+        <button style={{ border: 'none', background: 'none' }}
+        onClick={() => navigate(-1)}>
+            <img
             src="src/client/img/Back.png"
             alt="Button Image"
             style={{ width: '30px', height: '30px' }}
-          /> </a>
+          />
           
         </button>
-        <span style={{ color: '#E76F51', fontSize: '20px', marginTop: '8px' }}>ชื่อแอค</span>
+        <span style={{ color: '#E76F51', fontSize: '20px', marginTop: '8px' }}>{userProfile.userID}</span>
       </div>
       {/* Card Section */}
       <Card
@@ -64,7 +83,7 @@ const DetailMatch = () => {
         <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
           {/* Profile Image Slider */}
           <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px'  }}>
-            {images.map((img, index) => (
+            {userProfile.photo.map((img, index) => (
               <Box key={index} display="flex" justifyContent="center">
                 <img
                   src={img}
@@ -83,10 +102,10 @@ const DetailMatch = () => {
 
           {/* Fields */}
           <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
-            <Typography >อายุ..</Typography>
+            <Typography >อายุ: {userProfile.age}</Typography>
             <Typography >มหาวิทยาลัย .....</Typography>
-            <Typography >แนวร้านอาหารที่ชอบ .....</Typography>
-            <Typography >เกี่ยวกับฉันจิงอะ.......</Typography>
+            <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tag}</Typography>
+            <Typography >เกี่ยวกับฉันจิงอะ: {userProfile.bio}</Typography>
             <Typography>Lifestyle</Typography>
           </Box>
         </Box>

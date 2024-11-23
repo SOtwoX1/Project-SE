@@ -59,7 +59,7 @@ export default function Edit() {
                     {images.map((image, index) => (
                         <div
                             key={index}
-                            className="relative h-full w-[148px] h-[236px] border border-black rounded-[10px] border-dashed flex items-center justify-center bg-[#C4C4C4]">
+                            className="relative w-[148px] h-[236px] border border-black rounded-[10px] border-dashed flex items-center justify-center bg-[#C4C4C4]">
                             {image ? (
                                 <div className="relative w-full h-full">
                                     <img src={image} alt={"Uploaded ${index}"} className="w-full h-full object-cover rounded-[10px]"/>

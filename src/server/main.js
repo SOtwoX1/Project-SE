@@ -91,12 +91,21 @@ const chatSchema = new mongoose.Schema({
   matchID: { type: String, required: true },
   all_messageIDs: [String]
 })
+const messageSchema = new mongoose.Schema({
+  chatID: { type: String, required: true },
+  messageID: { type: String, AutoIncrement: true },
+  userID_sender: { type: String, required: true },
+  text: String,
+  time_send: { type: Date, default: Date.now },
+  isRead: { type: Boolean, default: false }
+});
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
 const Profile = mongoose.model('Profile', profileSchema);
-const Match = mongoose.model('Matches', matchSchema); // draft
-const Chat = mongoose.model('Chats', chatSchema); // draft
+const Match = mongoose.model('Matches', matchSchema);
+const Chat = mongoose.model('Chats', chatSchema);
+const Message = mongoose.model('Messages', messageSchema);
 // POST Route for User Registration
 
 // register ------------------------------------------------------------------------------------
@@ -269,68 +278,68 @@ app.get('/api/get-all-chat/:userID', async (req, res) => {
       return res.status(400).json({ message: 'Missing userID' });
     }
 
-const matchRooms = await Match.aggregate([
-    {
-        $match: {
-            $and: [
-                {
-                    $or: [
-                        { userID1: userID },
-                        { userID2: userID }
-                    ]
-                },
-                { isMatch: true }
-            ]
-        }
-    },
-    {
-        $lookup: {
-            from: 'profiles',
-            let: { userID1: '$userID1', userID2: '$userID2' },
-            pipeline: [
-                {
-                    $match: {
-                        $expr: {
-                            $or: [
-                                { $eq: ['$userID', '$$userID1'] },
-                                { $eq: ['$userID', '$$userID2'] }
-                            ]
-                        }
-                    }
-                },
-                {
-                    $project: {
-                        userID: 1,
-                        photo: 1
-                    }
-                }
-            ],
-            as: 'profiles'
-        }
-    },
-    {
-        $addFields: {
-            otherUserProfile: {
-                $filter: {
-                    input: '$profiles',
-                    as: 'profile',
-                    cond: { $ne: ['$$profile.userID', userID] }
-                }
-            }
-        }
-    },
-    {
-        $unwind: '$otherUserProfile'
-    },
-    {
-        $project: {
-            _id: 1,
-            matchID: 1,
-            userID: '$otherUserProfile.userID',
-            lastContent: 1,
-            photo: "$otherUserProfile.photo"
-        }
-    }
+  const matchRooms = await Match.aggregate([
+      {
+          $match: {
+              $and: [
+                  {
+                      $or: [
+                          { userID1: userID },
+                          { userID2: userID }
+                      ]
+                  },
+                  { isMatch: true }
+              ]
+          }
+      },
+      {
+          $lookup: {
+              from: 'profiles',
+              let: { userID1: '$userID1', userID2: '$userID2' },
+              pipeline: [
+                  {
+                      $match: {
+                          $expr: {
+                              $or: [
+                                  { $eq: ['$userID', '$$userID1'] },
+                                  { $eq: ['$userID', '$$userID2'] }
+                              ]
+                          }
+                      }
+                  },
+                  {
+                      $project: {
+                          userID: 1,
+                          photo: 1
+                      }
+                  }
+              ],
+              as: 'profiles'
+          }
+      },
+      {
+          $addFields: {
+              otherUserProfile: {
+                  $filter: {
+                      input: '$profiles',
+                      as: 'profile',
+                      cond: { $ne: ['$$profile.userID', userID] }
+                  }
+              }
+          }
+      },
+      {
+          $unwind: '$otherUserProfile'
+      },
+      {
+          $project: {
+              _id: 1,
+              matchID: 1,
+              userID: '$otherUserProfile.userID',
+              lastContent: 1,
+              photo: "$otherUserProfile.photo"
+          }
+      }
 ]);
     if (!matchRooms) {
       res.status(404).json({ message: 'Not found'});
@@ -346,29 +355,60 @@ const matchRooms = await Match.aggregate([
 app.get('/api/get-chat/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
-    const { matchID } = req.body;
+    const matchID = req.query.matchID;
 
-    if (!userID || !matchID) {
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+    if (!matchID) {
+      return res.status(400).json({ message: 'Missing matchID' });
+    }
+
+    const chatRoom = await Chat.findOne({ matchID });
+
+    if (!chatRoom) {
+      res.status(404).json({ message: 'Not found chat'});
+    }
+    const chatHistory = await Message.find({
+      messageID: { $in: chatRoom.all_messageIDs }
+    })
+    if (!chatHistory) {
+      res.status(404).json({ message: 'Not found message'});
+    }
+    res.status(200).json(chatHistory);    
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.post('/api/send-message/:userID', async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { matchID, text } = req.query;
+
+    if (!userID || !matchID || !text) {
       return res.status(400).json({ message: 'Missing userID' });
     }
 
-    const matchRoom = await Match.findOne({ 
-      $and: [
-        {
-          $or: [
-            { userID1: userID },
-            { userID2: userID }
-          ]
-        },
-        { matchID },
-        { isMatch: true }
-      ]});
+    const chatRoom = await Chat.findOne({ matchID });
 
-    if (!matchRoom) {
+    if (!chatRoom) {
       res.status(404).json({ message: 'Not found'});
     }
 
-    res.status(200).json(matchRoom);
+    const newMessage = new Message({
+      chatID: chatRoom.chatID,
+      userID_sender: userID,
+      text
+    });
+
+    await newMessage.save();
+
+    chatRoom.all_messageIDs.push(newMessage.messageID);
+    await chatRoom.save();
+
+    res.status(200).json({ message: 'Message sent' });
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
