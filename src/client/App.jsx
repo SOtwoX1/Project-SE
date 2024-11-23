@@ -29,6 +29,7 @@ import Mypackage from "./components/mypackage";
 import NewEdit_pro from "./components/newedit_pro";
 import Promotion_restaurant from "./components/promotin_in_rest";
 import Nopromotion_restaurant from "./components/nopromotion_rest";
+import Whothere from "./components/whothere";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
         <Route path="/NewEdit_pro" element={<NewEdit_pro/>} />
         <Route path="/Promotion_restaurant" element={<Promotion_restaurant/>} />
         <Route path="/NoPromotion_restaurant" element={<Nopromotion_restaurant/>} />
+        <Route path="/Whothere" element={<Whothere/>} />
       </Routes>
     </BrowserRouter>
   );

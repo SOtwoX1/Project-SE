@@ -69,7 +69,8 @@ const Match = () => {
   };
 
   const handleSkip = () => {
-    
+    showNextProfile();
+  
     console.log('Skipped!');
   };
 
