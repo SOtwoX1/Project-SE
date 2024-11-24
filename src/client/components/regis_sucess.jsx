@@ -19,7 +19,7 @@ export default function Regis_sucess(){
                 <button 
                 onClick={go_to_welcome}
                 className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg font-semibold">
-                    Back to Login
+                    Set up your Account
                 </button>
             </div>
         </div>
