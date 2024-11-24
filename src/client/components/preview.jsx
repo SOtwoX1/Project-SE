@@ -42,7 +42,7 @@ const Preview = () => {
       </div>
       <div style={{ }}>
         <button style={{ border: 'none', background: 'none' }}>
-            <a href='/Edit'><img
+            <a href='/Edit-Profile'><img
             src="src/client/img/Back.png"
             alt="Button Image"
             style={{ width: '30px', height: '30px' }}
