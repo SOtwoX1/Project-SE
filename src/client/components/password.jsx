@@ -77,28 +77,20 @@ export default function Password() {
     return (
         <div
             className="flex bg-white items-center justify-center"
-            style={{ fontFamily: "Abhaya Libre, sans-serif" }}
-        >
+            style={{ fontFamily: "Abhaya Libre, sans-serif" }}>
             <div className="w-[375px] h-[812px] text-[45px] font-extrabold flex flex-col p-3 pt-[8px]">
-                <div className="flex flex-row items-center justify-center">
-                    <span className="text-[#E76F51] text-[45px] font-extrabold">PASSWORD</span>
+                <div className="flex flex-row items-center justify-center ">
+                    <img className="w-[55px] h-[55px] absolute left-[1%] mr-4" src="src/client/img/French Fries.png" alt="French Fries"/>
+                    <img className="w-[22px] h-[27px] mt-12 absolute left-[15%]" src="src/client/img/heart.png" alt="Heart"/>
+                    <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[15%]" src="src/client/img/heart2.png" alt="Heart"/>
+                    <img className="w-[55px] h-[55px] mr-[-300px]" src="src/client/img/pizza.png" alt="Pizza"/>
+                    <span className="absolute text-[#E76F51] text-[45px] font-extrabold">PASSWORD</span>
                 </div>
                 <div className="divide-y divide-gray-300">
                     <div className="flex items-center h-[65px]">
                         <button onClick={go_to_setting} className="ml-2">
-                            <svg
-                                className="w-[42px] h-[42px] text-gray-800"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="1"
-                                    d="m15 19-7-7 7-7"
-                                />
+                            <svg className="w-[42px] h-[42px] text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="m15 19-7-7 7-7" />
                             </svg>
                         </button>
                         <p className="text-[20px] text-black">SETTINGS</p>
@@ -144,7 +136,7 @@ export default function Password() {
                             type="submit"
                             disabled={isSubmitting}
                             className={`w-full p-[5px] mt-6 text-white rounded-xl text-[16px] font-bold focus:outline-none focus:ring-2 ${
-                                isSubmitting ? "bg-gray-400" : "bg-[#E76F51] hover:bg-[#d15c45]"
+                                isSubmitting ? "bg-gray-400" : "bg-[#E9C46A]"
                             }`}
                         >
                             {isSubmitting ? "Updating..." : "Update Password"}

@@ -4,6 +4,7 @@ export default function Personal_info(){
     const go_to_add_photo = () => {
         window.location.href = "/Add-photo";
     }
+
     const [selectedCategory, setSelectedCategory] = useState(null);
     //เลือกเพศ
     const handleClick = (category) => {
@@ -203,7 +204,7 @@ export default function Personal_info(){
                     </div>
                 </div>
 
-                <div className='m-auto font-[Inter] text-white py-6 '>
+                <div className='m-auto text-white text-[16px] py-6 '>
                     <button 
                     onClick={go_to_add_photo}
                     className='w-[331px] h-[39px] bg-[#E9C46A] rounded-2xl'>
