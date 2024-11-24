@@ -68,8 +68,7 @@ const profileSchema = new mongoose.Schema({
     latitude: Number,
     longitude: Number
   },
-  isRegistered: { type: Boolean, default: false },
-  isHungry: { type: Boolean, default: false }
+  isFree: { type: Boolean, default: false }
 });
 const cardpaymentSchema = new mongoose.Schema({
   userID: String,
@@ -414,7 +413,7 @@ app.post('/api/send-message/:userID', async (req, res) => {
     const { matchID, text } = req.query;
 
     if (!userID || !matchID || !text) {
-      return res.status(400).json({ message: 'Missing userID' });
+      return res.status(400).json({ message: 'Missing userID/matchID/text' });
     }
 
     const chatRoom = await Chat.findOne({ matchID });
@@ -438,6 +437,32 @@ app.post('/api/send-message/:userID', async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.put('/api/change-status/:userID', async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { isFree } = req.query;
+
+    if (!userID || !isFree) {
+      return res.status(400).json({ message: 'Missing userID or isFree' });
+    }
+
+    const profile = await Profile.findOne({ userID });
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    // Update the profile status
+    profile.isFree = isFree;
+
+    await profile.save();
+
+    res.status(200).json({ message: 'isFree set successfully', isFree });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 

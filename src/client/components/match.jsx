@@ -12,6 +12,7 @@ const Match = () => {
   const navigate = useNavigate(); // สร้างตัวแปร navigate
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [status, setStatus] = useState(false);
   const [profiles, setProfiles] = useState([
     {userID: 'undefind',
       bio: "",
@@ -40,6 +41,18 @@ const Match = () => {
     }
   };
 
+  async function changeStatus(status) {
+    try {
+      console.log('change status');
+      const response = await axios.put(`/api/change-status/${username}?isFree=${!status}`);
+      console.log(response.data.isFree);
+      setStatus(!status);
+      
+    } catch (error) {
+      console.error('Error fetching match profile:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
         const LoginToken = localStorage.getItem("LoginToken");
@@ -53,6 +66,14 @@ const Match = () => {
             setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
         } catch (error) {
             console.error('Error fetching match profile:', error);
+        }
+        try {
+          console.log('get status');
+          const response = await axios.get(`/api/get-profile/${username}`);
+          console.log(response.data.isFree);
+          setStatus(response.data.isFree);
+        } catch (error) {
+          console.error('Error fetching match profile:', error);
         }
     };
     fetchData();
@@ -83,10 +104,8 @@ const Match = () => {
   };
 
   const handleSkip = () => {
-
-    showNextProfile();
-  
-    console.log('Skipped!');
+    changeStatus(status)
+    console.log(status ? 'ว่าง':'ไม่ว่าง');
   };
 
   const showNextProfile = async () => {
@@ -179,8 +198,10 @@ const Match = () => {
             <Button onClick={handleDislike} style={{ color: 'gray' }} aria-label="Dislike">
               <img src="src/client/img/Frame 14.png" alt="Dislike" style={{ width: '84px', height: '84px' }} />
             </Button>
-            <Button onClick={handleSkip} style={{ color: 'green' }} aria-label="Free">
-            <img src='src/client/img/Component 1.png' alt="Free" style={{ width: '84px', height: '84px' }} />
+            <Button className='h-[84px] w-[84px]' onClick={handleSkip} style={{ color: 'green' }} aria-label="Free">
+              <div className={`h-[64px] w-[64px] ${status?'bg-[#b7d55a]':'bg-[#d82d4b]'} text-white content-center rounded-full drop-shadow-xl`}>{status ? 'ว่าง':'ไม่ว่าง'}</div>
+            {//<img src='src/client/img/Component 1.png' alt="Free" style={{ width: '84px', height: '84px' }} />
+}
             </Button>
           </div>
         </Card>
