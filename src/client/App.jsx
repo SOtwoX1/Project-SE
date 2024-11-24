@@ -32,6 +32,9 @@ import Nopromotion_restaurant from "./components/nopromotion_rest";
 import Whothere from "./components/whothere";
 import Accept from "./components/accept";
 import Viewmatchprofile from "./components/viewmatchprofile";
+import Welcome from "./components/regis_set_id/welcome";
+import Personal_info from "./components/regis_set_id/personal_info";
+import Add_photo from "./components/regis_set_id/add photo";
 
 function App() {
   return (
@@ -72,6 +75,9 @@ function App() {
         <Route path="/detailmatch" element={<DetailMatch />} />
         <Route path="/Accept" element={<Accept />} />
         <Route path="/Viewmatchprofile" element={<Viewmatchprofile />} />
+        <Route path="/Welcome" element={<Welcome />} />
+        <Route path="/Personal-info" element={<Personal_info />} />
+        <Route path="/Add-photo" element={<Add_photo />} />
       </Routes>
     </BrowserRouter>
   );

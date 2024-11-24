@@ -38,7 +38,7 @@ app.get('/api/protected-route', authenticateToken, (req, res) => {
 //-----------------------------------------------------------------------------------------------
 
 // MongoDB Connection
-const mongoURI = 'mongodb+srv://Otwo:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
+const mongoURI = 'mongodb+srv://get:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
 
 mongoose
   .connect(mongoURI)
