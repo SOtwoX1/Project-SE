@@ -93,11 +93,37 @@ const chatSchema = new mongoose.Schema({
 })
 const messageSchema = new mongoose.Schema({
   chatID: { type: String, required: true },
-  messageID: { type: String, AutoIncrement: true },
+  messageID: { type: String },
   userID_sender: { type: String, required: true },
   text: String,
   time_send: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false }
+});
+// Pre-save hook to generate the next messageID
+messageSchema.pre('save', async function (next) {
+  // Only generate a new messageID if it's a new document
+  if (this.isNew) {
+    try {
+      // Find the last message by messageID (sorted in descending order)
+      const lastMessage = await this.constructor.findOne().sort({ messageID: -1 });
+
+      let newIDNumber;
+      if (lastMessage && lastMessage.messageID) {
+        // Extract the numeric part of the messageID, increment it, and format it
+        const lastIDNumber = parseInt(lastMessage.messageID.slice(3), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        // Start at 1 if there are no previous messages
+        newIDNumber = 1;
+      }
+
+      // Set the new messageID with 'm' prefix and zero-padding to 3 digits
+      this.messageID = `MSG${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
 });
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
