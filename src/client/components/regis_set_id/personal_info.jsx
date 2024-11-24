@@ -34,7 +34,7 @@ export default function Personal_info(){
                     <img className="w-[22px] h-[27px] mt-12 absolute left-[20%] top-[2%]" src="src/client/img/heart.png" alt="Heart" />
                     <span className="text-[#E76F51] text-[45px] font-extrabold text-center">PERSONAL INFOMATION</span>
                     <img className="w-[22px] h-[27px] mt-[-45px] absolute right-[17%] top-[6.5%] rotate-6" src="src/client/img/heart2.png" alt="Heart" />
-                    <img className="w-[50px] h-[50px] absolute right-[10.5%] bottom-[88.8%]  transform -rotate-12" src="src/client/img/pizza.png" alt="Pizza" />
+                    <img className="w-[50px] h-[50px] absolute right-[6%] bottom-[88%]  transform -rotate-12" src="src/client/img/pizza.png" alt="Pizza" />
                 </div>
                 {/*-------Your first name------*/}
                 <div className="flex flex-col space-y-5 ">

@@ -95,6 +95,7 @@ export default function Password() {
                         </button>
                         <p className="text-[20px] text-black">SETTINGS</p>
                     </div>
+                    <div></div>
                 </div>
                 <div className="flex flex-col p-5 mt-[-10px]">
                     <h2 className="text-[18px] text-black font-bold mb-1">Set a New Password</h2>
