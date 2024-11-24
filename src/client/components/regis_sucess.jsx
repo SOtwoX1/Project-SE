@@ -1,6 +1,6 @@
 export default function Regis_sucess(){
-    const go_to_login = () => {
-        window.location.href = "/login";
+    const go_to_welcome = () => {
+        window.location.href = "/Welcome";
     }
     return(
         <div className="w-full h-screen flex flex-col justify-center items-center space-y-[51px]">
@@ -17,7 +17,7 @@ export default function Regis_sucess(){
             </div>
             <div>
                 <button 
-                onClick={go_to_login}
+                onClick={go_to_welcome}
                 className="w-[331px] h-[56px] bg-[#E9C46A] rounded-lg font-semibold">
                     Back to Login
                 </button>

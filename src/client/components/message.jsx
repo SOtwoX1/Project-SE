@@ -84,7 +84,7 @@ function Message() {
             <div className="">
                 <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">
                     <div className="w-[67px] h-[67px] rounded-full flex items-center justify-center bg-white border-2 border-[#F4A261] cursor-pointer ">
-                        <img className="w-[48px] h-[48px] cursor-pointer" src="src/client/img/messege.png" alt="message icon" onClick={go_to_message} />
+                        <img className="w-[41px] h-[41px] cursor-pointer" src="src/client/img/Communication.png" alt="message icon" onClick={go_to_message} />
                     </div>
                     <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/accept.png" alt="accept icon" onClick={go_to_accept} />
                     <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/restaurant.png" alt="restaurant icon" onClick={go_to_restaurant} />   
