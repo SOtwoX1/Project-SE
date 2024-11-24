@@ -44,6 +44,10 @@ export default function Register() {
       });
   
       console.log("Success", response.data);
+      localStorage.setItem("LoginToken", 
+        JSON.stringify({ email: email,
+            username:username
+        }));
   
       if (response.status === 201) {
         Swal.fire({
