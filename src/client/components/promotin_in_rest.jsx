@@ -17,20 +17,19 @@ export default function Promotion_restaurant(){
         window.location.href = "http://localhost:3000/profile";
       };
       const go_to_Whothere = async () => {
-        window.location.href = "http://localhost:3000/profile"; //รอหน้าwhothere
+        window.location.href = "http://localhost:3000/Whothere"; //รอหน้าwhothere
       };
       const pin_rest = () => {
         Swal.fire({ 
             title: "Now!!", 
-            text: "You are chilling at <u>..ชื่อร้าน..</u> <strong>HTML <u>example</u></strong>",
             html: `
                 You are chilling at <br>
                 ..ชื่อร้าน..`,
             customClass: {
-                title : "text-[FF0000] text-xl",
+                title : "text-[#FF0000] text-xl",
                 html : "text-white",
-                popup: " w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
-                confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
+                popup: " w-[220px] h-[180px] bg-[#E9C46A] text-white text-sm" ,
+                confirmButton: "text-white text-sm bg-[#F4A261] text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
             }
             });
       }

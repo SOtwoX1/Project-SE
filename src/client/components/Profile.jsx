@@ -22,7 +22,7 @@ export default function Profile() {
       window.location.href = "http://localhost:3000/restaurant";
     };
     const go_to_match = async () => {
-      window.location.href = "http://localhost:3000/match";
+      window.location.href = "http://localhost:3000/Match";
     };
     const go_to_profile = async () => {
       window.location.href = "http://localhost:3000/profile";
