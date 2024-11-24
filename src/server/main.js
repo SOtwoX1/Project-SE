@@ -68,8 +68,7 @@ const profileSchema = new mongoose.Schema({
     latitude: Number,
     longitude: Number
   },
-  isRegistered: { type: Boolean, default: false },
-  isHungry: { type: Boolean, default: false }
+  isFree: { type: Boolean, default: false }
 });
 const cardpaymentSchema = new mongoose.Schema({
   userID: String,
@@ -93,11 +92,37 @@ const chatSchema = new mongoose.Schema({
 })
 const messageSchema = new mongoose.Schema({
   chatID: { type: String, required: true },
-  messageID: { type: String, AutoIncrement: true },
+  messageID: { type: String },
   userID_sender: { type: String, required: true },
   text: String,
   time_send: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false }
+});
+// Pre-save hook to generate the next messageID
+messageSchema.pre('save', async function (next) {
+  // Only generate a new messageID if it's a new document
+  if (this.isNew) {
+    try {
+      // Find the last message by messageID (sorted in descending order)
+      const lastMessage = await this.constructor.findOne().sort({ messageID: -1 });
+
+      let newIDNumber;
+      if (lastMessage && lastMessage.messageID) {
+        // Extract the numeric part of the messageID, increment it, and format it
+        const lastIDNumber = parseInt(lastMessage.messageID.slice(3), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        // Start at 1 if there are no previous messages
+        newIDNumber = 1;
+      }
+
+      // Set the new messageID with 'm' prefix and zero-padding to 3 digits
+      this.messageID = `MSG${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
 });
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
@@ -388,7 +413,7 @@ app.post('/api/send-message/:userID', async (req, res) => {
     const { matchID, text } = req.query;
 
     if (!userID || !matchID || !text) {
-      return res.status(400).json({ message: 'Missing userID' });
+      return res.status(400).json({ message: 'Missing userID/matchID/text' });
     }
 
     const chatRoom = await Chat.findOne({ matchID });
@@ -412,6 +437,32 @@ app.post('/api/send-message/:userID', async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.put('/api/change-status/:userID', async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { isFree } = req.query;
+
+    if (!userID || !isFree) {
+      return res.status(400).json({ message: 'Missing userID or isFree' });
+    }
+
+    const profile = await Profile.findOne({ userID });
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    // Update the profile status
+    profile.isFree = isFree;
+
+    await profile.save();
+
+    res.status(200).json({ message: 'isFree set successfully', isFree });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 

@@ -9,7 +9,7 @@ const Mypackage = () => {
     >
       {/* Header */}
       <div
-        className="bg-white w-[350px] h-[80px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]"
+        className="bg-white w-[375px] h-[80px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]"
         style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
       >
         
@@ -22,28 +22,69 @@ const Mypackage = () => {
           </div>
         
       </div>
-      <div style={{paddingTop:'' }}>
-        <button style={{ border: 'none', background: 'none' }}>
-            <a href='/Match'><img
-            src="src/client/img/Back.png"
-            alt="Button Image"
-            style={{ width: '30px', height: '30px' }}
-          /> </a>
-          
-        </button>
-        <span style={{  fontSize: '20px', marginTop: '8px' }}>SETTINGS</span>
-      </div>
+      <div
+  style={{
+    display: 'flex',
+    flexDirection: 'column', // เพื่อให้ส่วนเส้นคั่นอยู่ด้านล่าง
+    alignItems: 'center',
+    padding: '8px 16px',
+    backgroundColor: '#fff', // เพิ่มพื้นหลังสีขาว
+  }}
+>
+  {/* ส่วนหัวข้อ */}
+  <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    <button
+      style={{
+        border: 'none',
+        background: 'none',
+        marginRight: '8px', // ระยะห่างระหว่างปุ่มและข้อความ
+        cursor: 'pointer',
+      }}
+    >
+      <a href="/Setting-Profile">
+        <img
+          src="src/client/img/Back.png"
+          alt="Button Image"
+          style={{ width: '24px', height: '24px' }} // ขนาดเล็กลงให้พอดี
+        />
+      </a>
+    </button>
+    <span
+      style={{
+        fontSize: '20px',
+        fontWeight: 'bold',
+        color: '#000',
+      }}
+    >
+      SETTINGS
+    </span>
+  </div>
+
+  {/* เส้นคั่น */}
+  <div
+    style={{
+      width: '80%', // ความยาวเส้น 80% ของหน้าจอ
+      height: '1px', // ความหนาของเส้น
+      backgroundColor: '#d3d3d3', // สีเทา
+      marginTop: '8px', // ระยะห่างจากหัวข้อ
+    }}
+  ></div>
+</div>
+
+
+
 
       {/* Cards Section */}
       <div
         style={{
           width: '100%',
-          maxWidth: '306px',
+          maxWidth: '375px',
           display: 'flex',
           flexDirection: 'column',
           gap: '16px',
           paddingTop:"20px",
-          paddingLeft:"60px",
+          paddingLeft:"35px",
+          borderRadius: '0px',
         }}
       >
         {/* Option Cards */}
@@ -56,23 +97,25 @@ const Mypackage = () => {
             key={index}
             style={{
               backgroundColor: option.color,
-              padding: '16px',
+              padding: '0px 5px 5px 5px',
               marginBottom: '20px',
               boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+              height:'76px',
+              width:'306px'
             }}
           >
             <Typography
               variant="h6"
               style={{
                 fontWeight: 'bold',
-                fontSize: '18px',
+                fontSize: '15px',
                 color: '#fff',
                 marginBottom: '8px',
               }}
             >
               {option.title}
             </Typography>
-            <Typography style={{ color: '#fff', fontSize: '14px' }}>
+            <Typography style={{ color: '#fff', fontSize: '9px' }}>
               {option.description}
             </Typography>
           </Card>
