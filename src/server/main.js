@@ -92,13 +92,12 @@ const chatSchema = new mongoose.Schema({
 })
 const messageSchema = new mongoose.Schema({
   chatID: { type: String, required: true },
-  messageID: { type: String },
+  messageID: { type: String, required: true },
   userID_sender: { type: String, required: true },
   text: String,
   time_send: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false }
 });
-// Pre-save hook to generate the next messageID
 messageSchema.pre('save', async function (next) {
   // Only generate a new messageID if it's a new document
   if (this.isNew) {
@@ -124,6 +123,17 @@ messageSchema.pre('save', async function (next) {
   }
   next();
 });
+const restaurantSchema = new mongoose.Schema({
+  restaurantID: String,
+  name: { type: String, required: true },
+  tag: [String],
+  location: {
+    latitude: Number,
+    longitude: Number
+  },
+  photo: [String],
+  description: { type: String }
+});
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
@@ -131,6 +141,7 @@ const Profile = mongoose.model('Profile', profileSchema);
 const Match = mongoose.model('Matches', matchSchema);
 const Chat = mongoose.model('Chats', chatSchema);
 const Message = mongoose.model('Messages', messageSchema);
+const Restaurant = mongoose.model('Restaurants', restaurantSchema);
 // POST Route for User Registration
 
 // register ------------------------------------------------------------------------------------
@@ -465,6 +476,39 @@ app.put('/api/change-status/:userID', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
+
+app.get('/api/get-all-restaurants', async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
+    res.status(200).json(restaurants);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+})
+app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
+  try {
+    const { restaurantID } = req.params;
+    const { promo } = req.query;
+
+    if (!restaurantID) {
+      return res.status(400).json({ message: 'Missing restaurantID' });
+    }
+
+    const restaurant = await Restaurant.findOne({ restaurantID });
+
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+    if (!promo) {
+      res.status(200).json(restaurant);
+    }
+    else {
+      //restaurant that have promotion coming soon
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+})
 
 // set gernder interest use by username from users = userid from profiles ------------------------------------------------------------------------------------
 app.put('/api/set-gender/:username', async (req, res) => {

@@ -48,7 +48,7 @@ export default function Edit_pro() {
 
     //เลือกเพศ
     const handleClick = (category) => {
-        setSelectedCategory(category);
+        setSelectedCategories(category);
         console.log(`Category selected: ${category}`);
     };
     
