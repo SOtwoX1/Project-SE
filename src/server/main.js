@@ -869,6 +869,27 @@ app.post('/api/chilling-with-you/:userID', async (req, res) => {
   }
 });
 
+app.delete('/api/denied-match/:matchID', async (req, res) => {
+  try {
+    const { matchID } = req.params;
+
+    if (!matchID) {
+      return res.status(400).json({ message: 'Missing matchID' });
+    }
+
+    const match = await Match.findOne({ matchID });
+    if (!match) {
+      return res.status(404).json({ message: 'Match not found' });
+    }
+
+    await Match.deleteOne({ matchID });
+
+    res.status(200).json({ message: 'Match denied and deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
 // set gernder interest use by username from users = userid from profiles ------------------------------------------------------------------------------------
 app.put('/api/set-gender/:username', async (req, res) => {
   const { username } = req.params; // Extract username from the URL
