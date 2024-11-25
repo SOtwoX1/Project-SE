@@ -85,11 +85,50 @@ const matchSchema = new mongoose.Schema({
   isMatch: { type: Boolean, default: false },
   matchTime: { type: Date, default: Date.now }
 });
+matchSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastMessage = await this.constructor.findOne().sort({ matchID: -1 });
+
+      let newIDNumber;
+      if (lastMessage && lastMessage.matchID) {
+        const lastIDNumber = parseInt(lastMessage.matchID.slice(1), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.matchID = `M${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
 const chatSchema = new mongoose.Schema({
   chatID: { type: String, AutoIncrement: true },
   matchID: { type: String, required: true },
-  all_messageIDs: [String]
-})
+  all_messageIDs: [String],
+  createdAt: { type: Date, default: Date.now } // Add expiration time
+});
+chatSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastMessage = await this.constructor.findOne().sort({ chatID: -1 });
+
+      let newIDNumber;
+      if (lastMessage && lastMessage.chatID) {
+        const lastIDNumber = parseInt(lastMessage.chatID.slice(3), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.messageID = `C${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
 const messageSchema = new mongoose.Schema({
   chatID: { type: String, required: true },
   messageID: { type: String, required: true },
@@ -140,6 +179,7 @@ const User = mongoose.model('Users', userSchema); // Target the `Users` collecti
 const Profile = mongoose.model('Profile', profileSchema);
 const Match = mongoose.model('Matches', matchSchema);
 const Chat = mongoose.model('Chats', chatSchema);
+Chat.createIndexes({ "createdAt": 1 }, { expireAfterSeconds: 259200 }); // delete chat after 3 days
 const Message = mongoose.model('Messages', messageSchema);
 const Restaurant = mongoose.model('Restaurants', restaurantSchema);
 // POST Route for User Registration
@@ -289,18 +329,125 @@ app.get('/api/match-profile/:userID', async (req, res) => {
       return res.status(400).json({ message: 'Missing userID' });
     }
 
-    const profile = await Profile.findOne({userID});
+    const profile = await Profile.findOne({ userID });
     
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
-
     const tags = profile.tag;
-    const matchedProfile = await Profile.find({ 
+    const alreadyInMatch = (await Match.find({userID2: userID}).distinct('userID1')).concat((await Match.find({userID1: userID}).distinct('userID2')));
+    const matchedProfile = await Profile.find(
+      {
       tag: { $in: tags},
-      userID: { $ne: userID}});
+      userID: {$nin:alreadyInMatch.concat(userID)}
+    }
+  );
 
     res.status(200).json(matchedProfile || { message: "No matching user found" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.post('/api/like-profile/:userID', async (req, res) => {
+  try {
+    const userID = req.params.userID;
+    const { otherUserID } = req.query;
+
+    if (!userID || !otherUserID) {
+      return res.status(400).json({ message: 'Missing userID/otherUserID' });
+    }
+
+    const isOtherUserFree = await Profile.findOne({ userID: otherUserID }).distinct('isFree');
+    const match = new Match({
+      userID1: userID,
+      userID2: otherUserID,
+      isMatch: isOtherUserFree === 'true' ? true : false
+    });
+
+    await match.save();
+
+    if (isOtherUserFree) {
+      //create chat
+      const chat = new Chat({
+        matchID: match.matchID,
+        all_messageIDs: []
+      });
+      await chat.save();
+
+      return res.status(201).json({ message: 'Matched and created chat' });
+    }
+
+    res.status(201).json({ message: 'Matched' });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.get('/api/matches-request/:userID', async (req, res) => {
+  try {
+    const userID = req.params.userID;
+
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+
+    const matchRequests = await Match.find({ userID2: userID, isMatch: false });
+
+    if (!matchRequests) {
+      return res.status(404).json({ message: 'Not found'});
+    }
+
+    res.status(200).json(matchRequests);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.put('/api/accept-match/:userID', async (req, res) => {
+  try {
+    const userID = req.params.userID;
+    const { matchID } = req.query;
+
+    if (!userID || !matchID) {
+      return res.status(400).json({ message: 'Missing userID/matchID' });
+    }
+
+    const match = await Match.findOne({ matchID });
+
+    if (!match) {
+      return res.status(404).json({ message: 'Match not found' });
+    }
+
+    match.isMatch = true;
+    await match.save();
+
+    res.status(200).json({ message: 'Match accepted' });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.post('api/create-chat/:userID', async (req, res) => {
+  try {
+    const userID = req.params.userID;
+    const { matchID } = req.query;
+
+    if (!userID || !matchID) {
+      return res.status(400).json({ message: 'Missing userID/matchID' });
+    }
+
+    const chat = new Chat({
+      matchID,
+      all_messageIDs: []
+    });
+
+    await chat.save();
+
+    res.status(201).json({ message: 'Chat created' });
+
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
