@@ -9,9 +9,9 @@ export default function Nopromotion_restaurant(){
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [restaurantID, setRestaurantID] = useState("");
-    const [restaurant, setRestaurant] = useState([
-      {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tag:"ประเภทร้านอาหาร",promo:false,time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1" ]}
-    ]);
+    const [restaurant, setRestaurant] = useState(
+      {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tag:"ประเภทร้านอาหาร",promo:false,time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1", "asdf"]}
+    );
     useEffect(() => {
         const fetchData = async () => {
             const LoginToken = localStorage.getItem("LoginToken");
@@ -47,22 +47,28 @@ export default function Nopromotion_restaurant(){
     const go_to_profile = async () => {
       navigate("/profile");
     };
-    const go_to_Whothere = async () => {
-      navigate("/Whothere");
+    const go_to_Whothere = async (restaurantID) => {
+      navigate(`/Whothere?restaurantID=${restaurantID}`);
     };
-    const pin_rest = () => {
-      Swal.fire({ 
-          title: "Now!!", 
-          html: `
-              You are chilling at <br>
-              ..ชื่อร้าน..`,
-          customClass: {
-              title : "text-[#FF0000] text-xl",
-              html : "text-white",
-              popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
-              confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
-          }
-          });
+    const pin_rest = async (restaurantID, userID) => {
+        try {
+            const response = await axios.post(`/api/chilling-at/${restaurantID}?userID=${userID}`);
+            console.log(response.data);
+            Swal.fire({ 
+                title: "Now!!", 
+                html: `
+                    You are chilling at <br>
+                    ${restaurant.name}`,
+                customClass: {
+                    title : "text-[#FF0000] text-xl",
+                    html : "text-white",
+                    popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
+                    confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
+                }
+                });
+        } catch (error) {
+            console.error('Error posting chilling:', error);
+        }
     }
     return (
       <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center ">
@@ -103,13 +109,13 @@ export default function Nopromotion_restaurant(){
                         </div>
                     </div>
                     <div className="flex flex-row justify-between w-[320px]">
-                        <button onClick={pin_rest} className="bg-[#B7D55A] w-[75px] h-[75px] rounded-full">
+                        <button onClick={() => pin_rest(restaurant.restaurantID, username)} className="bg-[#B7D55A] w-[75px] h-[75px] rounded-full">
                             <div className="relative flex flex-col space-y-1 ">
                                 <img className="w-[34px] h-[31px] object-cover m-auto" src="src\client\img\Fast Food.png" alt="Chilling IMG" />
                                 <p className="text-[12px] text-white">Chilling</p>
                             </div>
                         </button>
-                        <button onClick={go_to_Whothere} className="bg-[#F6A570] w-[75px] h-[75px] rounded-full">
+                        <button onClick={() => go_to_Whothere(restaurant.restaurantID)} className="bg-[#F6A570] w-[75px] h-[75px] rounded-full">
                             <div className="relative flex flex-col space-y-2 ">
                                 <img className="w-[35px] h-[32px] object-cover m-auto" src="src\client\img\Location.png" alt="Who’s there IMG" />
                                 <p className="text-[11px] text-white">Who’s there</p>

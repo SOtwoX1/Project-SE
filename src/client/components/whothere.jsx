@@ -1,40 +1,52 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import { Button } from "react-scroll";
 import Swal from 'sweetalert2';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function Whothere() {
-  //const [email, setEmail] = useState("");
-  //const [username, setUsername] = useState("");
-  /*
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [restaurantID, setRestaurantID] = useState("");
+  const [restaurant, setRestaurant] = useState(
+    {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tag:"ประเภทร้านอาหาร",promo:false,time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1", "asdf"]}
+  );
   useEffect(() => {
-    const LoginToken = localStorage.getItem("LoginToken");
-    const userData = JSON.parse(LoginToken);
-    setEmail(userData.email);
-    setUsername(userData.username);
+      const fetchData = async () => {
+          const LoginToken = localStorage.getItem("LoginToken");
+          const userData = JSON.parse(LoginToken);
+          setEmail(userData.email);
+          setUsername(userData.username);
+          const params = new URLSearchParams(location.search);
+          const restaurantID = params.get('restaurantID');
+          console.log('restaurantID', restaurantID);
+          setRestaurantID(restaurantID);
+          try {
+              const response = await axios.get(`/api/get-restaurant/${restaurantID}`);
+              const fetchRestaurant = response.data;
+              setRestaurant(fetchRestaurant);
+          } catch (error) {
+              console.error('Error fetching promotion:', error);
+          }
+      };
+      fetchData();
   }, []);
-  */
-    const go_to_message = async () => {
-      window.location.href = "http://localhost:3000/message";
-    };
-    const go_to_accept = async () => {
-      window.location.href = "http://localhost:3000/accept";
-    };
-    const go_to_restaurant = async () => {
-      window.location.href = "http://localhost:3000/restaurant";
-    };
-    const go_to_match = async () => {
-      window.location.href = "http://localhost:3000/match";
-    };
-    const go_to_profile = async () => {
-      window.location.href = "http://localhost:3000/profile";
-    };
-    const go_to_setting = async () => {
-      window.location.href = "/Setting-Profile";
-    };
-    const go_to_Edit_pro = async () => {
-      window.location.href = "/NewEdit_pro";
-    };
+  const go_to_message = async () => {
+      navigate("/message");
+  };
+  const go_to_accept = async () => {
+    navigate("/accept");
+  };
+  const go_to_restaurant = async () => {
+    navigate("/restaurant");
+  };
+  const go_to_match = async () => {
+    navigate("/match");
+  };
+  const go_to_profile = async () => {
+    navigate("/profile");
+  };
 
     return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
@@ -59,7 +71,7 @@ export default function Whothere() {
       padding: '10px 20px',
       cursor: 'pointer',
     }}
-    onClick={go_to_restaurant}
+    onClick={() => navigate(-1)}
   >
     <img
       src="src/client/img/Back.png"
