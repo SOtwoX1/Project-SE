@@ -87,23 +87,32 @@ const Match = () => {
     slidesToScroll: 1,
     arrows: true,
   };
+  const handleLike = async (otherUserID) => {
+    try {
+      console.log('Like profile clicked');
+      const response = await axios.post(`/api/like-profile/${username}?otherUserID=${otherUserID}`, { userID: currentProfile.userID });
+      setMatchText(`${response.data.message}! 🎉`);
+      console.log('matchText:', 'Matched! 🎉');
+      setTimeout(() => {
+        setMatchText('');
+        showNextProfile();
+      }, 2000);
+    } catch (error) {
+      console.error('Error liking profile:', error);
+    }
+  };
 
-  const handleLike = () => {
-    console.log('Like clicked');
-    setMatchText('Matched! 🎉');
-    console.log('matchText:', 'Matched! 🎉');
-    setTimeout(() => {
-      setMatchText('');
+  const handleDislike = async (otherUserID) => {
+    try {
+      console.log('Dislike clicked');
+      await axios.put(`/api/dislike-profile/${username}?otherUserID=${otherUserID}`, { userID: currentProfile.userID });
       showNextProfile();
-    }, 2000);
+    } catch (error) {
+      console.error('Error disliking profile:', error);
+    }
   };
 
-  const handleDislike = () => {
-    showNextProfile();
-    console.log('Disliked!');
-  };
-
-  const handleSkip = () => {
+  const handleStatus = () => {
     changeStatus(status)
     console.log(status ? 'ว่าง':'ไม่ว่าง');
   };
@@ -192,13 +201,13 @@ const Match = () => {
 
           {/* Buttons */}
           <div style={{ display: 'flex', justifyContent: 'space-around', padding: '5px 0' }}>
-            <Button onClick={handleLike} style={{ color: 'red' }} aria-label="Like">
+            <Button onClick={() => handleLike(currentProfile.userID)} style={{ color: 'red' }} aria-label="Like">
               <img src="src/client/img/Frame 13.png" alt="Like" style={{ width: '84px', height: '84px' }} />
             </Button>
-            <Button onClick={handleDislike} style={{ color: 'gray' }} aria-label="Dislike">
+            <Button onClick={() => handleDislike(currentProfile.userID)} style={{ color: 'gray' }} aria-label="Dislike">
               <img src="src/client/img/Frame 14.png" alt="Dislike" style={{ width: '84px', height: '84px' }} />
             </Button>
-            <Button className='h-[84px] w-[84px]' onClick={handleSkip} style={{ color: 'green' }} aria-label="Free">
+            <Button className='h-[84px] w-[84px]' onClick={handleStatus} style={{ color: 'green' }} aria-label="Free">
               <div className={`h-[64px] w-[64px] ${status?'bg-[#b7d55a]':'bg-[#d82d4b]'} text-white content-center rounded-full drop-shadow-xl`}>{status ? 'ว่าง':'ไม่ว่าง'}</div>
             {//<img src='src/client/img/Component 1.png' alt="Free" style={{ width: '84px', height: '84px' }} />
 }

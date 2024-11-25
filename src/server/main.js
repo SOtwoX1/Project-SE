@@ -7,9 +7,11 @@ import jwt from "jsonwebtoken";
 import multer from "multer";
 import mysql from "mysql2";
 import mongoose from "mongoose";
+import cron from "node-cron";
 import { Card } from '@mui/material';
 
 const app = express();
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -182,6 +184,16 @@ const Chat = mongoose.model('Chats', chatSchema);
 Chat.createIndexes({ "createdAt": 1 }, { expireAfterSeconds: 259200 }); // delete chat after 3 days
 const Message = mongoose.model('Messages', messageSchema);
 const Restaurant = mongoose.model('Restaurants', restaurantSchema);
+
+// A cron job allows you to execute something on a schedule or a task to be executed sometime in the future.
+cron.schedule("0 0 * * *", async () => {
+  try {
+    const result = await Profile.updateMany({}, { $set: {acceptDailyCount: 0, swipeDailyCount: 0}})
+  } catch (error) {
+    console.error('Error resetting count: ', error);
+  }
+});
+
 // POST Route for User Registration
 
 // register ------------------------------------------------------------------------------------
@@ -367,7 +379,7 @@ app.post('/api/like-profile/:userID', async (req, res) => {
 
     await match.save();
 
-    if (isOtherUserFree) {
+    if (isOtherUserFree === 'true') {
       //create chat
       const chat = new Chat({
         matchID: match.matchID,
@@ -375,13 +387,34 @@ app.post('/api/like-profile/:userID', async (req, res) => {
       });
       await chat.save();
 
-      return res.status(201).json({ message: 'Matched and created chat' });
+      return res.status(201).json({ message: 'Matched and Created chat' });
     }
 
-    res.status(201).json({ message: 'Matched' });
+    res.status(201).json({ message: 'Request Matched' });
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.put('/api/dislike-profile/:userID', async (req, res) => {
+  try {
+    const userID = req.params.userID
+
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
+
+    const profile = await Profile.findOne({ userID });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    profile.swipeDailyCount += 1;
+    await profile.save();
+
+    res.status(200).json({ message: 'Update swipe daily count success' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 
@@ -415,13 +448,19 @@ app.put('/api/accept-match/:userID', async (req, res) => {
     }
 
     const match = await Match.findOne({ matchID });
-
     if (!match) {
       return res.status(404).json({ message: 'Match not found' });
     }
-
+    const profile = Profile.findOne({ userID });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    profile.acceptDailyCount += 1;
     match.isMatch = true;
     await match.save();
+    await profile.save();
+
+    
 
     res.status(200).json({ message: 'Match accepted' });
 
