@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-scroll";
+import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   useEffect(() => {
@@ -12,26 +13,26 @@ export default function Profile() {
     setEmail(userData.email);
     setUsername(userData.username);
   }, []);
-    const go_to_message = async () => {
-      window.location.href = "http://localhost:3000/message";
-    };
-    const go_to_accept = async () => {
-      window.location.href = "http://localhost:3000/accept";
-    };
-    const go_to_restaurant = async () => {
-      window.location.href = "http://localhost:3000/restaurant";
-    };
-    const go_to_match = async () => {
-      window.location.href = "http://localhost:3000/Match";
-    };
-    const go_to_profile = async () => {
-      window.location.href = "http://localhost:3000/profile";
-    };
+  const go_to_message = async () => {
+    navigate("/message");
+  };
+  const go_to_accept = async () => {
+    navigate("/accept");
+  };
+  const go_to_restaurant = async () => {
+    navigate("/restaurant");
+  };
+  const go_to_match = async () => {
+    navigate("/match");
+  };
+  const go_to_profile = async () => {
+    navigate("/profile");
+  };
     const go_to_setting = async () => {
-      window.location.href = "/Setting-Profile";
+      navigate("/Setting-Profile");
     };
     const go_to_Edit_pro = async () => {
-      window.location.href = "/NewEdit_pro";
+      navigate("/NewEdit_pro");
     };
 
     return (

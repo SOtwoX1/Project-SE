@@ -426,10 +426,36 @@ app.get('/api/matches-request/:userID', async (req, res) => {
       return res.status(400).json({ message: 'Missing userID' });
     }
 
-    const matchRequests = await Match.find({ userID2: userID, isMatch: false });
+    const matchRequests = await Match.aggregate([
+      {
+        $match: {
+          userID2: userID,
+          isMatch: false
+        }
+      },
+      {
+        $lookup: {
+          from: 'profiles',
+          localField: 'userID1',
+          foreignField: 'userID',
+          as: 'profile'
+        }
+      },
+      {
+        $unwind: '$profile'
+      },
+      {
+        $project: {
+          matchID: 1,
+          userID: '$profile.userID',
+          photo: '$profile.photo',
+          tag: '$profile.tag'
+        }
+      }
+    ]);
 
-    if (!matchRequests) {
-      return res.status(404).json({ message: 'Not found'});
+    if (!matchRequests.length) {
+      return res.status(404).json({ message: 'No match requests found' });
     }
 
     res.status(200).json(matchRequests);
@@ -459,8 +485,6 @@ app.put('/api/accept-match/:userID', async (req, res) => {
     match.isMatch = true;
     await match.save();
     await profile.save();
-
-    
 
     res.status(200).json({ message: 'Match accepted' });
 

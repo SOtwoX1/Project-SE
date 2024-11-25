@@ -37,19 +37,19 @@ function Message() {
     }, []);
     const go_to_message = async () => {
         navigate("/message");
-      };
-      const go_to_accept = async () => {
-        navigate("/accept");
-      };
-      const go_to_restaurant = async () => {
-        navigate("/restaurant");
-      };
-      const go_to_match = async () => {
-        navigate("/match");
-      };
-      const go_to_profile = async () => {
-        navigate("/profile");
-      };
+    };
+    const go_to_accept = async () => {
+      navigate("/accept");
+    };
+    const go_to_restaurant = async () => {
+      navigate("/restaurant");
+    };
+    const go_to_match = async () => {
+      navigate("/match");
+    };
+    const go_to_profile = async () => {
+      navigate("/profile");
+    };
     return (
         <div className="h-full w-full fixed overflow-hidden flex flex-col pb-[26px] bg-[#e9c46a]">
             <div
