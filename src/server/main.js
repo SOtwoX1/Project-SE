@@ -787,19 +787,9 @@ app.get('/api/get-chilling/:restaurantID', async (req, res) => {
           userID: 1,
           restaurantID: 1,
           createdAt: 1,
-          profile: {
-            userID: '$profile.userID',
-            photo: '$profile.photo',
-            bio: '$profile.bio',
-            education: '$profile.education',
-            job: '$profile.job',
-            genderinterest: '$profile.genderinterest',
-            gender: '$profile.gender',
-            hobby: '$profile.hobby',
-            tag: '$profile.tag',
-            location: '$profile.location',
-            isFree: '$profile.isFree'
-          }
+          userID: '$profile.userID',
+          photo: '$profile.photo',
+          tag: '$profile.tag'
         }
       }
     ]);
@@ -851,7 +841,20 @@ app.post('/api/chilling-with-you/:userID', async (req, res) => {
     if (!userID || !otherUserID) {
       return res.status(400).json({ message: 'Missing userID or otherUserID' });
     }
+    if (userID === otherUserID) {
+      return res.status(200).json({ message: "you can't chilling with youself"});
+    }
 
+    const existingMatch = await Match.findOne({
+      $or: [
+        { userID1: userID, userID2: otherUserID },
+        { userID1: otherUserID, userID2: userID }
+      ]
+    });
+
+    if (existingMatch) {
+      return res.status(200).json({ message: 'Match already exists' });
+    }
     const match = new Match({
       userID1: userID,
       userID2: otherUserID,
@@ -860,7 +863,7 @@ app.post('/api/chilling-with-you/:userID', async (req, res) => {
 
     await match.save();
 
-    res.status(201).json({ message: 'Match created successfully' });
+    res.status(201).json({ message: `${userID} want to chilling with ${otherUserID}` });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
