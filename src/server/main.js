@@ -1128,7 +1128,7 @@ app.put("/api/set-photo", async (req, res) => {
 app.use("/uploads", express.static(uploadDir));
 //---------------------------------------------------------------------------------------------------
 // get data profile by username
-app.get('/api/get-profile', async (req, res) => {
+app.get('/api/get-data', async (req, res) => {
   const { username } = req.query;  // Use query parameter for username
   try {
     const profile = await Profile.findOne({ userID: username });
