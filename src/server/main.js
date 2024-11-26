@@ -1142,4 +1142,28 @@ app.get('/api/get-data', async (req, res) => {
   }
 });
 
-  
+//--------------------------------------------------------------------------------------------------
+// update data profile
+app.put('/api/update-dataprofile', async (req, res) => {
+  const { username, bio, name, address, dob, education, job, hobby, tags, gender } = req.body;
+  try {
+    const profile = await Profile.findOne({ userID: username });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    profile.bio = bio;
+    profile.name = name;
+    profile.address = address;
+    profile.dob = dob;
+    profile.education = education;
+    profile.job = job;
+    profile.hobby = hobby;
+    profile.tags = tags;
+    profile.gender = gender;
+    await profile.save();
+    res.status(200).json({ message: 'Data updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});

@@ -1,15 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import Slider from 'react-slick';
 import { Card, Typography, Button, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import axios from 'axios';
 
 const Preview = () => {
-  const images = [
-    'https://via.placeholder.com/300x250?text=Image+1', // เปลี่ยน URL เป็นรูปจริง
-    'https://via.placeholder.com/300x250?text=Image+2',
-    'https://via.placeholder.com/300x250?text=Image+3',
-  ];
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const LoginToken = localStorage.getItem("LoginToken");
+    const userData = JSON.parse(LoginToken);
+    setEmail(userData.email);
+    setUsername(userData.username);
+
+    // Fetch profile data from the backend
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/get-data", {
+          params: { username: userData.username }, // Send username as query parameter
+        });
+        setProfile(response.data); // Set profile data in state
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        setError("Failed to load profile");
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+
+    // Set up auto scroll every 5 seconds
+    const intervalId = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % 5); // Cycle through images (0 to 4)
+    }, 2000); // 5 seconds interval
+
+    return () => clearInterval(intervalId); // Cleanup the interval on component unmount
+  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+
 
   const sliderSettings = {
     dots: true,
@@ -19,6 +53,13 @@ const Preview = () => {
     slidesToScroll: 1,
     arrows: true,
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
+  // Extract profile data
+  const { bio, name: profileName, address, dob, education, job, hobby, tags, gender, photo } = profile || {};
+  const images = photo || [];
 
   return (
     <div
@@ -82,12 +123,15 @@ const Preview = () => {
           </Slider>
 
           {/* Fields */}
-          <Box fontStyle=" "display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
-            <Typography >อายุ..</Typography>
-            <Typography >มหาวิทยาลัย .....</Typography>
-            <Typography >แนวร้านอาหารที่ชอบ .....</Typography>
-            <Typography >เกี่ยวกับฉันจิงอะ.......</Typography>
-            <Typography>Lifestyle</Typography>
+          <Box fontStyle=" "display="flex" flexDirection="column" gap={2} width="100%" marginTop="40px"className="divide-y divide-gray-300">
+            <Typography >วันเกิด : {dob}</Typography>
+            <Typography >มหาวิทยาลัย : {address} </Typography>
+            <Typography>แนวร้านอาหารที่ชอบ : {tags[0]}</Typography>
+            <Typography>เกี่ยวกับฉันจิงอะ : 
+                <div>Name : {profileName}</div>
+                <div>Bio : {bio}</div>
+            </Typography>
+            <Typography>Lifestyle : {job} {hobby} {education} </Typography>
           </Box>
         </Box>
 
@@ -103,19 +147,19 @@ const Preview = () => {
               height: '40px',
             }}
           >
-            xxxxxxxxx
+            out to eat
           </Button>
           <Button
             variant="contained"
             style={{
-              backgroundColor: '#B7D55A',
+              backgroundColor: 'red',
               borderRadius: '20px',
               color: 'white',
               width: '140px',
               height: '40px',
             }}
           >
-            xxxxxxxxx
+            dine in
           </Button>
         </Box>
       </Card>

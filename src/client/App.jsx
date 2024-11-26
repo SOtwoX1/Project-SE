@@ -68,7 +68,6 @@ function App() {
         <Route path="/Edit" element={<Edit/>} />
         <Route path="/Preview" element={<Preview/>} />
         <Route path="/Mypackage" element={<Mypackage/>} />
-        <Route path="/NewEdit_pro" element={<NewEdit_pro/>} />
         <Route path="/Promotion_restaurant" element={<Promotion_restaurant/>} />
         <Route path="/NoPromotion_restaurant" element={<Nopromotion_restaurant/>} />
         <Route path="/Whothere" element={<Whothere/>} />

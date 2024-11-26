@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Promotion_restaurant from './promotin_in_rest';
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -50,7 +49,7 @@ export default function Profile() {
   const go_to_match = () => navigate("/match");
   const go_to_profile = () => navigate("/profile");
   const go_to_setting = () => navigate("/Setting-Profile");
-  const go_to_Edit_pro = () => navigate("/NewEdit_pro");
+  const go_to_Edit_pro = () => navigate("/Edit-Profile");
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
