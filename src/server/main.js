@@ -210,7 +210,7 @@ const restaurantSchema = new mongoose.Schema({
   },
   photo: [String],
   description: { type: String },
-  promotion: { type: String , default: null}
+  hasPromo: { type: Boolean, default: false }
 });
 const chillingSchema = new mongoose.Schema({
   chillingID: { type: String, AutoIncrement: true },
@@ -237,6 +237,31 @@ chillingSchema.pre('save', async function (next) {
   }
   next();
 });
+const promotionSchema = new mongoose.Schema({
+  promoID: { type: String, AutoIncrement: true },
+  restaurantID: { type: String, required: true },
+  discountEnd: { type: Date, default: Date.now, expires: '3h' }, // Add expiration time,
+  description: { type: String }
+});
+promotionSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastMessage = await this.constructor.findOne().sort({ promoID: -1 });
+
+      let newIDNumber;
+      if (lastMessage && lastMessage.promoID) {
+        const lastIDNumber = parseInt(lastMessage.promoID.slice(1), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.promoID = `P${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
 const User = mongoose.model('Users', userSchema); // Target the `Users` collection
@@ -246,7 +271,7 @@ const Chat = mongoose.model('Chats', chatSchema);
 const Message = mongoose.model('Messages', messageSchema);
 const Restaurant = mongoose.model('Restaurants', restaurantSchema);
 const Chilling = mongoose.model('Chilling', chillingSchema);
-
+const Promotion = mongoose.model('Promotions', promotionSchema);
 
 // A cron job allows you to execute something on a schedule or a task to be executed sometime in the future.
 cron.schedule("0 0 * * *", async () => {
@@ -780,7 +805,6 @@ app.get('/api/get-all-restaurants', async (req, res) => {
 app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
   try {
     const { restaurantID } = req.params;
-    const { promo } = req.query;
 
     if (!restaurantID) {
       return res.status(400).json({ message: 'Missing restaurantID' });
@@ -791,11 +815,12 @@ app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
     if (!restaurant) {
       return res.status(404).json({ message: 'Restaurant not found' });
     }
-    if (!promo) {
-      res.status(200).json(restaurant);
+    if (!restaurant.hasPromo) {
+      res.status(200).json({restaurant, promotion: false});
     }
     else {
-      //restaurant that have promotion coming soon
+      const promotion = await Promotion.find({ restaurantID });
+      res.status(200).json({restaurant, promotion});
     }
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
