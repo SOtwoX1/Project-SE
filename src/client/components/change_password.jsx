@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Change_passwords(){
+    const navigate = useNavigate();
     const go_to_setting = () => {
-        window.location.href = "/Setting-Profile";
+        navigate("/Setting-Profile");
     };
     return(
         <div className="w-full h-screen flex flex-col justify-center items-center space-y-[51px]">

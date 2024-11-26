@@ -4,16 +4,18 @@ import { Card, Typography, Button, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function NewEdit_pro() {
+    const navigate = useNavigate();
     const go_to_profile = () => {
-        window.location.href = "/profile";
+        navigate("/profile");
     }
     const go_to_edit = () => {
-        window.location.href = "/Edit";
+        navigate("/Edit");
     }
     const go_to_preview = () => {
-        window.location.href = "/preview";
+        navigate("/preview");
     }
 
     const images = [
@@ -33,7 +35,7 @@ export default function NewEdit_pro() {
 
     //เลือกเพศ
     const handleClick = (category) => {
-        setSelectedCategory(category);
+        setSelectedCategories(category);
         console.log(`Category selected: ${category}`);
     };
     

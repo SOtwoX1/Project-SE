@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Button } from "react-scroll";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Cnr() {
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const go_to_otp = () => {
-    window.location.href = "http://localhost:3000/OTP";
+    navigate("/OTP");
   };
 
   const resetPassword = async () => {

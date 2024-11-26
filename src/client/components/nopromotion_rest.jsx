@@ -90,7 +90,6 @@ export default function Nopromotion_restaurant(){
                             </svg>
                         </button>
                         <div className="flex flex-row space-x-1">
-                            <p className="text-[15px] text-black">ชื่อร้านอาหาร</p>
                             <p className="text-[15px] text-black">{restaurant.name}</p>
                         </div>
                         

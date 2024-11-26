@@ -2,23 +2,25 @@ import { Button } from "react-scroll";
 import { useState } from "react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     localStorage.removeItem("LoginToken");
 
     const go_to_homelog = async () => {
-        window.location.href = "http://localhost:3000/home-login-register";
+        navigate("/home-login-register");
     };
 
     const go_to_regis = async () => {
-        window.location.href = "http://localhost:3000/Regis";
+        navigate("/Regis");
     };
 
     const go_to_forgot = async () => {
-        window.location.href = "http://localhost:3000/Forgot-password";
+        navigate("/Forgot-password");
     };
 
     const handleLogin = async (e) => {
@@ -42,7 +44,7 @@ export default function Login() {
               icon: 'success',
               title: 'Login successful',
             });
-            window.location.href = "http://localhost:3000/Profile";
+            navigate("/Profile");
           }
         } catch (error) {
             console.error(error);

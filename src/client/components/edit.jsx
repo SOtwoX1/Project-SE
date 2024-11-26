@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Edit() {
+    const navigate = useNavigate();
     const go_to_edit_profile = () => {
-        window.location.href = "/NewEdit_pro";
+        navigate("/NewEdit_pro");
     };
 
     const go_to_preview = () => {
-        window.location.href = "/preview";
+        navigate("/preview");
     };
 
     const [images, setImages] = useState([null, null, null, null]); //กำหนด 4 ช่องให้ใส่

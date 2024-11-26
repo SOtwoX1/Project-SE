@@ -10,9 +10,9 @@ const DetailMatch = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userProfile, setUserProfile] = useState({
-    userID: 'undefind',
-    bio: '',
-    photo: []
+    userID: 'loading',
+    bio: 'loading',
+    photo: ['']
   });
 
   useEffect(() => {

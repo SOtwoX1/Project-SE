@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-scroll";
 import Swal from 'sweetalert2';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import 'flowbite';
 import axios from "axios";
 
 export default function Accept() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [acceptRequests, setAcceptRequests] = useState([
-    {_id:0, userID:"Unknow", age:0, restaurant:"loading", tag:["loading"], photo:["src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg"]}
-  ]);
+  const [acceptRequests, setAcceptRequests] = useState([]);
   
   useEffect(() => {
     const LoginToken = localStorage.getItem("LoginToken");
@@ -20,17 +17,18 @@ export default function Accept() {
     setEmail(userData.email);
     setUsername(userData.username);
     try {
-      const fetchData = async () => {
-      const response = await axios.get(`/api/matches-request/${userData.username}`);
-      console.log("username: ", userData.username);
-      console.log("response.data: ", response.data);
-      setAcceptRequests(response.data);
-      };
-      fetchData();
+      fetchData(userData.username);
     } catch (error) {
       console.error('Error fetching match profile:', error);
       }
   }, []);
+
+  const fetchData = async (userID) => {
+    const response = await axios.get(`/api/matches-request/${userID}`);
+    console.log("username: ", userID);
+    console.log("response.data: ", response.data);
+    setAcceptRequests(response.data);
+  };
 
   const go_to_message = async () => {
     navigate("/message");
@@ -47,15 +45,16 @@ export default function Accept() {
   const go_to_profile = async () => {
     navigate("/profile");
   };
-  const accept = async (matchID) => {
+  const accept = async (userID, matchID) => {
     try {
-      const response = await axios.post(`/api/accept-match/${matchID}`);
+      const response = await axios.put(`/api/accept-match/${userID}?matchID=${matchID}`);
       console.log(response.data);
       Swal.fire({
         icon: 'success',
         title: 'Accepted',
         text: 'The match request has been accepted successfully.',
       });
+      fetchData();
     } catch (error) {
       console.error('Error accepting match request:', error);
       Swal.fire({
@@ -75,6 +74,7 @@ export default function Accept() {
         title: 'Denied',
         text: 'The match request has been denied successfully.',
       });
+      fetchData();
     } catch (error) {
       console.error('Error denying match request:', error);
       Swal.fire({
@@ -100,15 +100,11 @@ export default function Accept() {
           </div>
 
           <div style={{ width: '100%', display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-  
-        
       </div>
-      
-
-
         {/* List */}
       <div className=" flex flex-col items-center">
-        {acceptRequests.map(profile => (
+        {acceptRequests.length !== 0 ?
+        acceptRequests.map(profile => (
           <div className="flex content-center">
           <div
             key={profile._id}
@@ -123,11 +119,11 @@ export default function Accept() {
               <div className="w-[150px]">
                 <p className="text-[18px] text-gray-600">{profile.userID}, {profile.age}</p>
                 <p className="text-[14px] text-gray-600">{profile.restaurant ? "ร้าน" + profile.restaurant : ""}</p>
-                <p className="text-[14px] text-gray-600 truncate hover:text-clip hover:text-wrap">แนวที่ชอบ: {profile.tag.join(', ')}</p>
+                <p className="text-[14px] text-gray-600 truncate hover:text-clip hover:text-wrap">แนวที่ชอบ: {profile.tag.length === 0 ? profile.tag : profile.tag.join(', ')}</p>
               </div>
             </div>
             <img
-              onClick={() => accept(profile.matchID)}
+              onClick={() => accept(username, profile.matchID)}
               src="src/client/img/Group 19194.png"
               alt="Checkmark"
               className="w-[50px] h-[50px] text-green-500"
@@ -140,7 +136,9 @@ export default function Accept() {
             <path d="M6 4H18V21H6z" opacity=".3"></path><path d="M11 18H9V7h2V18zM15 18h-2V7h2V18zM4 3H20V5H4z"></path><path d="M17 5L14 2 10 2 7 5z"></path><path d="M17,22H7c-1.1,0-2-0.9-2-2V3h14v17C19,21.1,18.1,22,17,22z M7,5v15h10V5H7z"></path>
           </svg>
           </div>
-        ))}
+          
+        )):
+          <div>ไม่มีคำขอ</div>}
       </div>
         </div>
         <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">
