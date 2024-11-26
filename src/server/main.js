@@ -9,6 +9,9 @@ import mysql from "mysql2";
 import mongoose from "mongoose";
 import cron from "node-cron";
 import { Card } from '@mui/material';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 
@@ -16,9 +19,8 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 ViteExpress.listen(app, 3000, () =>
   console.log("Server is listening on port 3000..."),
@@ -42,6 +44,30 @@ function authenticateToken(req, res, next) {
 app.get('/api/protected-route', authenticateToken, (req, res) => {
   res.json({ message: 'This is a protected route.' });
 });
+
+// multer---------------------------------------------------------------------------------------
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Ensure the uploads directory exists
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure Multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname); // Generate a unique filename
+  },
+});
+const upload = multer({ storage });
+
+
 //-----------------------------------------------------------------------------------------------
 
 // MongoDB Connection
@@ -1060,33 +1086,59 @@ app.post('/api/register/profile', async (req, res) => {
     return res.status(500).json({ message: 'Internal Server Error.' });
   }
 });
+//---------------------------------------------------------------------------------------------------
+// API endpoint to upload photos
+app.post("/api/upload", upload.single("photo"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "Photo upload failed" });
+  }
+  res.status(200).json({ filePath: `/uploads/${req.file.filename}` });
+});
 
-// set photo ------------------------------------------------------------------------------------
-app.put('/api/set-photo', async (req, res) => {
+// API endpoint to update user photos
+app.put("/api/set-photo", async (req, res) => {
   const { username, photo } = req.body;
 
-  // Validate input
-  if (!username || !Array.isArray(photo)) {
-    return res.status(400).json({ message: 'Username and photo are required.' });
+  if (!username || !photo || photo.length < 2) {
+    return res.status(400).json({ message: "Username and at least 2 photos are required" });
   }
 
   try {
-    // Check userid in user then go to profile
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
+    // check profile exist
     const profile = await Profile.findOne({ userID: username });
     if (!profile) {
-      return res.status(404).json({ message: 'Profile not found' });
+      return res.status(404).json({ message: "Profile not found" });
     }
-    // set photo
+    // update profile value photo
     profile.photo = photo;
     await profile.save();
 
-    res.status(200).json({ message: 'Photo uploaded successfully' });
+    res.status(200).json({ message: "Photos updated successfully" });
   } catch (error) {
-    console.error('Error uploading photo:', error);
-    res.status(500).json({ message: 'Internal server error.' });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
+// Serve static files for uploaded images
+app.use("/uploads", express.static(uploadDir));
+//---------------------------------------------------------------------------------------------------
+// get data profile by username
+app.get('/api/get-profile', async (req, res) => {
+  const { username } = req.query;  // Use query parameter for username
+  try {
+    const profile = await Profile.findOne({ userID: username });
+    if (!profile) { 
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error(error); 
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+  
