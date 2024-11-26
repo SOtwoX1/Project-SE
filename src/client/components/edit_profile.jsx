@@ -125,6 +125,7 @@ export default function Edit_pro() {
         try {
             const response = await axios.put("http://localhost:3000/api/update-dataprofile", fromdata);
             console.log(response.data);
+            alert("บันทึกข้อมูลเรียบร้อยแล้ว");
         } catch (error) {
             console.error("Error updating profile:", error);
         }
