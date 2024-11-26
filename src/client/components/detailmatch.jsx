@@ -12,7 +12,8 @@ const DetailMatch = () => {
   const [userProfile, setUserProfile] = useState({
     userID: 'loading',
     bio: 'loading',
-    photo: ['']
+    photo: [''],
+    tags: []
   });
 
   useEffect(() => {
@@ -104,7 +105,7 @@ const DetailMatch = () => {
           <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
             <Typography >อายุ: {userProfile.age}</Typography>
             <Typography >มหาวิทยาลัย .....</Typography>
-            <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tag}</Typography>
+            <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tags.join(', ')}</Typography>
             <Typography >เกี่ยวกับฉันจิงอะ: {userProfile.bio}</Typography>
             <Typography>Lifestyle</Typography>
           </Box>

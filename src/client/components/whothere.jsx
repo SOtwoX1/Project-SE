@@ -119,7 +119,7 @@ export default function Whothere() {
               />
               <div>
                 <p className="text-[18px] text-gray-600">{profile.userID}{profile.age}</p>
-                <p className="text-[14px] text-gray-600">แนวที่ชอบ: {profile.tag}</p>
+                <p className="text-[14px] text-gray-600">แนวที่ชอบ: {profile.tags}</p>
               </div>
             </div>
             <img

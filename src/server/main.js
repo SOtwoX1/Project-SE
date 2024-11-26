@@ -177,7 +177,7 @@ messageSchema.pre('save', async function (next) {
 const restaurantSchema = new mongoose.Schema({
   restaurantID: { type: String, required: true },
   name: { type: String, required: true },
-  tag: [String],
+  tags: [String],
   location: {
     latitude: Number,
     longitude: Number
@@ -383,11 +383,11 @@ app.get('/api/match-profile/:userID', async (req, res) => {
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
-    const tags = profile.tag;
+    const tags = profile.tags;
     const alreadyInMatch = (await Match.find({userID2: userID}).distinct('userID1')).concat((await Match.find({userID1: userID}).distinct('userID2')));
     const matchedProfile = await Profile.find(
       {
-      tag: { $in: tags},
+      tags: { $in: tags},
       userID: {$nin:alreadyInMatch.concat(userID)}
     }
   );
@@ -499,7 +499,7 @@ app.get('/api/matches-request/:userID', async (req, res) => {
         matchID: 1,
         userID: '$profile.userID',
         photo: '$profile.photo',
-        tag: '$profile.tag',
+        tags: '$profile.tags',
         restaurantName: { $ifNull: ['$restaurant.name', null] },
         restaurantID: { $ifNull: ['$restaurant.restaurantID', null]}
       }
@@ -802,7 +802,7 @@ app.get('/api/get-chilling/:restaurantID', async (req, res) => {
           createdAt: 1,
           userID: '$profile.userID',
           photo: '$profile.photo',
-          tag: '$profile.tag'
+          tags: '$profile.tags'
         }
       }
     ]);

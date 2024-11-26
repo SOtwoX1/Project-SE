@@ -119,7 +119,7 @@ export default function Accept() {
               <div className="w-[150px]">
                 <p className="text-[18px] text-gray-600">{profile.userID}, {profile.age}</p>
                 <p className="text-[14px] text-gray-600">{profile.restaurant ? "ร้าน" + profile.restaurant : ""}</p>
-                <p className="text-[14px] text-gray-600 truncate hover:text-clip hover:text-wrap">แนวที่ชอบ: {profile.tag.length === 0 ? profile.tag : profile.tag.join(', ')}</p>
+                <p className="text-[14px] text-gray-600 truncate hover:text-clip hover:text-wrap">แนวที่ชอบ: {profile.tags.length === 0 ? profile.tags : profile.tags.join(', ')}</p>
               </div>
             </div>
             <img
