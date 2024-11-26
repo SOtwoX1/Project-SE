@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export default function Manage_Payment_Account() {
+    const navigate = useNavigate();
     const [cardHolderName, setCardHolderName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
@@ -10,11 +12,11 @@ export default function Manage_Payment_Account() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const go_to_setting = () => {
-        window.location.href = "/Setting-Profile";
+        navigate("/Setting-Profile");
     };
 
     const go_to_success_MPA = () => {
-        window.location.href = "/Success-Manage-Payment-Account";
+        navigate("/Success-Manage-Payment-Account");
     };
 
     const handleSaveCard = async () => {

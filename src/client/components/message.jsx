@@ -7,10 +7,7 @@ function Message() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
-    const [chats, setChats] = useState([
-        {_id:0, matchID:"M000", userID:"Unknow", lastContent:"loading", 
-          photo:"src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg"}
-    ]);
+    const [chats, setChats] = useState([]);
 
     const goToChatClick = (matchID, userID, photo) => {
       navigate(`/chat?matchID=${matchID}&chatWithUserID=${userID}&photo=${photo}`);
@@ -62,9 +59,11 @@ function Message() {
                   <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
                   <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
             </div>
-                <div className="pt-8 grid gap-10 h-[600px] w-[375px] rounded-b-[50px] overflow-auto">
-                    {chats.map(chat => (
-                        <div className="w-[324px] h-[80px] justify-self-center flex sticky top-[0px] bg-[#fff7ed] rounded-l-[40px] rounded-r-xl hover:drop-shadow-md hover:scale-105"
+                <div className="h-[600px] w-[375px] rounded-b-[50px] overflow-auto">
+                    {
+                      chats.length !== 0 ?
+                    chats.map(chat => (
+                        <div className="mt-6 w-[324px] h-[80px] justify-self-center flex sticky top-[0px] bg-[#fff7ed] rounded-l-[40px] rounded-r-xl hover:drop-shadow-md hover:scale-105"
                         key={chat._id}
                         onClick={() => goToChatClick(chat.matchID, chat.userID, chat.photo[0])}>
                             <img src={chat.photo[0]} className="h-16 w-16 m-2 rounded-full bg-white items-center drop-shadow-md" />
@@ -76,7 +75,9 @@ function Message() {
                                 </svg>
                             </div>
                         </div>
-                    ))}
+                    ))
+                    :
+                  <div></div>}
                     <div className="pb-1"></div>
                 </div>
             </div>

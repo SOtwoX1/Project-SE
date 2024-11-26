@@ -10,7 +10,7 @@ export default function Nopromotion_restaurant(){
     const [username, setUsername] = useState("");
     const [restaurantID, setRestaurantID] = useState("");
     const [restaurant, setRestaurant] = useState(
-      {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tag:"ประเภทร้านอาหาร",promo:false,time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1", "asdf"]}
+      {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tags:["ประเภทร้านอาหาร"],promo:false,time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1", "asdf"]}
     );
     useEffect(() => {
         const fetchData = async () => {
@@ -90,7 +90,6 @@ export default function Nopromotion_restaurant(){
                             </svg>
                         </button>
                         <div className="flex flex-row space-x-1">
-                            <p className="text-[15px] text-black">ชื่อร้านอาหาร</p>
                             <p className="text-[15px] text-black">{restaurant.name}</p>
                         </div>
                         

@@ -7,7 +7,7 @@ export default function Restaurant() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [promotions, setPromotions] = useState([
-    {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tag:"ประเภทร้านอาหาร",promo:false,time:"00:00"}
+    {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tags:["ประเภทร้านอาหาร"],promo:false,time:"00:00"}
   ]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -17,7 +17,7 @@ export default function Restaurant() {
 
   const filteredPromotions = promotions.filter((promotion) =>
     promotion.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    promotion.tag.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    promotion.tags.toLowerCase().includes(searchTerm.toLowerCase()) ||
     promotion.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -108,7 +108,7 @@ return (
                 <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
                     <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.name}</p>
                     <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.description}</p>
-                    <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tag}</p>
+                    <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tags.join(', ')}</p>
                 </div>
                 <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
                 <div className="absolute right-[1px] transform translate-y-3 rotate-90 mt-1">
@@ -125,7 +125,7 @@ return (
               <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
                   <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.name}</p>
                   <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.description}</p>
-                  <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tag}</p>
+                  <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tags}</p>
               </div>
               <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
             </button>

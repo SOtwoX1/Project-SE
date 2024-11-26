@@ -1,5 +1,3 @@
-import { Button } from "react-scroll";
-import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 
 export default function Menu() {

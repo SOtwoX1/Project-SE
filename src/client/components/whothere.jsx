@@ -9,9 +9,7 @@ export default function Whothere() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [restaurantID, setRestaurantID] = useState("");
-  const [whoThere, setWhoThere] = useState([
-    {userID:"loading", age:0, tag:"ประเภทร้านอาหาร", photo:["https://via.placeholder.com/300x250?text=Image+1", "https://via.placeholder.com/300x250?text=Image+1"]}
-  ]);
+  const [whoThere, setWhoThere] = useState([]);
   useEffect(() => {
       const fetchData = async () => {
           const LoginToken = localStorage.getItem("LoginToken");
@@ -107,7 +105,8 @@ export default function Whothere() {
 
         {/* List */}
       <div className=" flex flex-col items-center">
-        {whoThere.map(profile => (
+        {whoThere.length !== 0 ?
+        whoThere.map(profile => (
           <div
             key={profile._id}
             className="bg-gray-200 rounded-full w-[300px] p-4 flex flex-row items-center justify-between mt-4"
@@ -120,7 +119,7 @@ export default function Whothere() {
               />
               <div>
                 <p className="text-[18px] text-gray-600">{profile.userID}{profile.age}</p>
-                <p className="text-[14px] text-gray-600">แนวที่ชอบ: {profile.tag}</p>
+                <p className="text-[14px] text-gray-600">แนวที่ชอบ: {profile.tags}</p>
               </div>
             </div>
             <img
@@ -130,7 +129,9 @@ export default function Whothere() {
               onClick={() => requestMatch(username, profile.userID, restaurantID)}
             />
           </div>
-        ))}
+        )):
+        <div>Nobody chilling</div>
+        }
       </div>
         </div>
         <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">

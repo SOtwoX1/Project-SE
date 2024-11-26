@@ -10,16 +10,7 @@ function Chat() {
     const [username, setUsername] = useState("");
     const [matchID, setMatchID] = useState("");
     const [chatWithUser, setChatWithUser] = useState("");
-    const [chats, setChats] = useState([
-        {
-            "_id": "_",
-            "userID_sender": "unknown",
-            "text": "text...",
-            "isRead": false,
-            "time_send": "2024-11-22T04:58:53.279Z",
-            "__v": 0
-        }
-    ]);
+    const [chats, setChats] = useState([]);
 
     useEffect(() => {
         const LoginToken = localStorage.getItem("LoginToken");
@@ -122,7 +113,9 @@ function Chat() {
                     
                     <div className="h-[571px] w-[341px] bg-[#fff3f3] border-[#d9d9d9] rounded-tr-[20px] rounded-b-[50px] overflow-auto">
                         <div className="w-[341px] h-[495px] overflow-auto p-4">
-                        {chats.map(message => (
+                        {
+                        chats.length !== 0 ?
+                        chats.map(message => (
                             (message.userID_sender === username)
                             ?
                             <div 
@@ -163,7 +156,9 @@ function Chat() {
                                     </span>*/}
                                </div>
                             </div>
-                    ))}
+                    ))
+                :
+                <div></div>}
                         </div>
                         <form className="flxed bottom-4 h-[60px] w-[325px] pl-4" onSubmit={sendMessage}>   
                             <label htmlFor="message" className="mb-2 text-sm font-medium text-gray-900 sr-only">ส่งข้อความ....</label>

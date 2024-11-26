@@ -146,7 +146,7 @@ const chatSchema = new mongoose.Schema({
   chatID: { type: String, AutoIncrement: true },
   matchID: { type: String, required: true },
   all_messageIDs: [String],
-  createdAt: { type: Date, default: Date.now } // Add expiration time
+  createdAt: { type: Date, default: Date.now, expires: '3d'  } // Add expiration time
 });
 chatSchema.pre('save', async function (next) {
   if (this.isNew) {
@@ -203,19 +203,20 @@ messageSchema.pre('save', async function (next) {
 const restaurantSchema = new mongoose.Schema({
   restaurantID: { type: String, required: true },
   name: { type: String, required: true },
-  tag: [String],
+  tags: [String],
   location: {
     latitude: Number,
     longitude: Number
   },
   photo: [String],
-  description: { type: String }
+  description: { type: String },
+  promotion: { type: String , default: null}
 });
 const chillingSchema = new mongoose.Schema({
   chillingID: { type: String, AutoIncrement: true },
   userID: { type: String, required: true },
   restaurantID: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now } // Add expiration time
+  createdAt: { type: Date, default: Date.now, expires: '3h' } // Add expiration time
 });
 chillingSchema.pre('save', async function (next) {
   if (this.isNew) {
@@ -242,11 +243,10 @@ const User = mongoose.model('Users', userSchema); // Target the `Users` collecti
 const Profile = mongoose.model('Profile', profileSchema);
 const Match = mongoose.model('Matches', matchSchema);
 const Chat = mongoose.model('Chats', chatSchema);
-Chat.createIndexes({ "createdAt": 1 }, { expireAfterSeconds: 259200 }); // delete chat after 3 days
 const Message = mongoose.model('Messages', messageSchema);
 const Restaurant = mongoose.model('Restaurants', restaurantSchema);
 const Chilling = mongoose.model('Chilling', chillingSchema);
-Chilling.createIndexes({ "createdAt": 1 }, { expireAfterSeconds: 10800 }); // delete chilling after 3 hr.
+
 
 // A cron job allows you to execute something on a schedule or a task to be executed sometime in the future.
 cron.schedule("0 0 * * *", async () => {
@@ -409,11 +409,11 @@ app.get('/api/match-profile/:userID', async (req, res) => {
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
-    const tags = profile.tag;
+    const tags = profile.tags;
     const alreadyInMatch = (await Match.find({userID2: userID}).distinct('userID1')).concat((await Match.find({userID1: userID}).distinct('userID2')));
     const matchedProfile = await Profile.find(
       {
-      tag: { $in: tags},
+      tags: { $in: tags},
       userID: {$nin:alreadyInMatch.concat(userID)}
     }
   );
@@ -525,16 +525,12 @@ app.get('/api/matches-request/:userID', async (req, res) => {
         matchID: 1,
         userID: '$profile.userID',
         photo: '$profile.photo',
-        tag: '$profile.tag',
+        tags: '$profile.tags',
         restaurantName: { $ifNull: ['$restaurant.name', null] },
         restaurantID: { $ifNull: ['$restaurant.restaurantID', null]}
       }
       }
     ]);
-
-    if (!matchRequests.length) {
-      return res.status(404).json({ message: 'No match requests found' });
-    }
 
     res.status(200).json(matchRequests);
   } catch (error) {
@@ -555,14 +551,22 @@ app.put('/api/accept-match/:userID', async (req, res) => {
     if (!match) {
       return res.status(404).json({ message: 'Match not found' });
     }
-    const profile = Profile.findOne({ userID });
-    if (!profile) {
-      return res.status(404).json({ message: 'Profile not found' });
-    }
-    profile.acceptDailyCount += 1;
     match.isMatch = true;
     await match.save();
+
+    const profile = await Profile.findOne({userID});
+    
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+    profile.acceptDailyCount += 1;
     await profile.save();
+    
+    const chat = new Chat({
+      matchID: match.matchID,
+      all_messageIDs: []
+    });
+    await chat.save();
 
     res.status(200).json({ message: 'Match accepted' });
 
@@ -824,13 +828,10 @@ app.get('/api/get-chilling/:restaurantID', async (req, res) => {
           createdAt: 1,
           userID: '$profile.userID',
           photo: '$profile.photo',
-          tag: '$profile.tag'
+          tags: '$profile.tags'
         }
       }
     ]);
-    if (!chillings.length) {
-      return res.status(404).json({ message: 'No chillings found for this restaurant' });
-    }
 
     res.status(200).json(chillings);
   } catch (error) {

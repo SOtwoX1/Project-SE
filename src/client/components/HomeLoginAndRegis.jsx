@@ -1,13 +1,15 @@
 import { Button } from "react-scroll";
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 export default function HomeLoginAndRegister() {
+   const navigate = useNavigate();
     const go_to_Login = async() => {
-        window.location.href = "http://localhost:3000/Login";
+      navigate("/Login");
       }
 
     const go_to_regis = async() => {
-        window.location.href = "http://localhost:3000/regis";
+      navigate("/regis");
       }
     return(
             <div className="fixed overflow-hidden flex flex-col justify-center space-y-[122px]">

@@ -118,7 +118,6 @@ export default function Profile() {
           </button>
         </div>
         
-        <div className="text-center mt-4 text-[24px] font-bold text-black"><div className="text-center mt-4 text-[30px] font-bold text-black">{name}</div></div>
 
         {/* Scrollable Image Section */}
         <div className="bg-gray-200 w-[346px] h-[161px] mt-6 overflow-x-auto flex items-center justify-start space-x-4">

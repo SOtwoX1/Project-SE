@@ -2,13 +2,15 @@ import { Button } from "react-scroll";
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function Forgetpass() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
   // Navigate to login and reset token
   const go_to_login = async () => {
-    window.location.href = "http://localhost:3000/Login";
+    navigate("/Login");
   };
 
   // Handle email submission

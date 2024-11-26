@@ -14,19 +14,14 @@ const Match = () => {
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState(false);
   const [profiles, setProfiles] = useState([
-    {userID: 'undefind',
-      bio: "",
-      photo: []
+    {userID: 'loading',
+      bio: "loading",
+      photo: ['']
     }
   ]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matchText, setMatchText] = useState('');
-  const [currentProfile, setCurrentProfile] = useState(
-    {userID: 'undefind',
-      bio: "",
-      photo: []
-    }
-  );
+  const [currentProfile, setCurrentProfile] = useState(profiles[0]);
 
   async function pollProfile(username) {
     try {
