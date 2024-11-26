@@ -24,7 +24,7 @@ export default function Nopromotion_restaurant(){
             setRestaurantID(restaurantID);
             try {
                 const response = await axios.get(`/api/get-restaurant/${restaurantID}`);
-                const fetchRestaurant = response.data;
+                const fetchRestaurant = response.data.restaurant;
                 setRestaurant(fetchRestaurant);
             } catch (error) {
                 console.error('Error fetching promotion:', error);
@@ -47,12 +47,12 @@ export default function Nopromotion_restaurant(){
     const go_to_profile = async () => {
       navigate("/profile");
     };
-    const go_to_Whothere = async (restaurantID) => {
+    const go_to_Whothere = async () => {
       navigate(`/Whothere?restaurantID=${restaurantID}`);
     };
-    const pin_rest = async (restaurantID, userID) => {
+    const pin_rest = async () => {
         try {
-            const response = await axios.post(`/api/chilling-at/${restaurantID}?userID=${userID}`);
+            const response = await axios.post(`/api/chilling-at/${restaurantID}?userID=${username}`);
             console.log(response.data);
             Swal.fire({ 
                 title: "Now!!", 
@@ -108,13 +108,13 @@ export default function Nopromotion_restaurant(){
                         </div>
                     </div>
                     <div className="flex flex-row justify-between w-[320px]">
-                        <button onClick={() => pin_rest(restaurant.restaurantID, username)} className="bg-[#B7D55A] w-[75px] h-[75px] rounded-full">
+                        <button onClick={() => pin_rest()} className="bg-[#B7D55A] w-[75px] h-[75px] rounded-full">
                             <div className="relative flex flex-col space-y-1 ">
                                 <img className="w-[34px] h-[31px] object-cover m-auto" src="src\client\img\Fast Food.png" alt="Chilling IMG" />
                                 <p className="text-[12px] text-white">Chilling</p>
                             </div>
                         </button>
-                        <button onClick={() => go_to_Whothere(restaurant.restaurantID)} className="bg-[#F6A570] w-[75px] h-[75px] rounded-full">
+                        <button onClick={() => go_to_Whothere()} className="bg-[#F6A570] w-[75px] h-[75px] rounded-full">
                             <div className="relative flex flex-col space-y-2 ">
                                 <img className="w-[35px] h-[32px] object-cover m-auto" src="src\client\img\Location.png" alt="Who’s there IMG" />
                                 <p className="text-[11px] text-white">Who’s there</p>

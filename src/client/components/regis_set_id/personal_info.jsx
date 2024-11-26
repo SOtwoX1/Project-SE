@@ -101,7 +101,7 @@ export default function Personal_info() {
                     <p className="text-xl">My birthday is</p>
                     <div className="flex flex-col divide-y divide-gray-300">
                         <input
-                            type="text"
+                            type="date"
                             value={dob}
                             onChange={(e) => setDob(e.target.value)}
                             placeholder="BB/MM/YYYY"

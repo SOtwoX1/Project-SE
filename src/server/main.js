@@ -413,8 +413,17 @@ app.get('/api/get-profile/:userID', async (req, res) => {
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
-
-    res.status(200).json(profile);
+    // calculate age
+    const currentDate = new Date();
+    const dob = new Date(profile.dob);
+    let age = currentDate.getUTCFullYear() - dob.getUTCFullYear();
+    const monthDifference = currentDate.getMonth() - dob.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dob.getDate())) {
+        age--;
+    }
+    const profileDict = profile.toObject();
+    profileDict.age = age;
+    res.status(200).json(profileDict);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
@@ -442,8 +451,18 @@ app.get('/api/match-profile/:userID', async (req, res) => {
       userID: {$nin:alreadyInMatch.concat(userID)}
     }
   );
+  const matchedProfilesWithAge = matchedProfile.map(profile => {
+    const currentDate = new Date();
+    const dob = new Date(profile.dob);
+    let age = currentDate.getUTCFullYear() - dob.getUTCFullYear();
+    const monthDifference = currentDate.getMonth() - dob.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dob.getDate())) {
+      age--;
+    }
+    return { ...profile.toObject(), age };
+  });
 
-    res.status(200).json(matchedProfile || { message: "No matching user found" });
+    res.status(200).json(matchedProfilesWithAge || { message: "No matching user found" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
@@ -462,12 +481,12 @@ app.post('/api/like-profile/:userID', async (req, res) => {
     const match = new Match({
       userID1: userID,
       userID2: otherUserID,
-      isMatch: isOtherUserFree === 'true' ? true : false
+      isMatch: isOtherUserFree == 'true' ? true : false
     });
 
     await match.save();
 
-    if (isOtherUserFree === 'true') {
+    if (isOtherUserFree == 'true') {
       //create chat
       const chat = new Chat({
         matchID: match.matchID,

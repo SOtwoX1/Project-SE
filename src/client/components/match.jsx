@@ -170,11 +170,12 @@ const Match = () => {
               (<Box display="flex" flexDirection="column" alignItems="center" padding="36px">
               <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
               {currentProfile.photo.map(img => (
+                img == null ? null :
                 <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center"
                 onClick={() => handleImageClick(currentProfile.userID)}>
                   <img
                     src={img}
-                    alt={`Profile ${currentProfile.photo.findIndex(photo => photo === img)}`}
+                    alt={`Profile ${currentProfile.photo.findIndex(photo => photo === img) + 1}`}
                     style={{
                       width: '100%',
                       maxWidth: '313px',

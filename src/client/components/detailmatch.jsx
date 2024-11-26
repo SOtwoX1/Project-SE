@@ -85,6 +85,7 @@ const DetailMatch = () => {
           {/* Profile Image Slider */}
           <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px'  }}>
             {userProfile.photo.map((img, index) => (
+              img == null ? null :
               <Box key={index} display="flex" justifyContent="center">
                 <img
                   src={img}
@@ -104,7 +105,7 @@ const DetailMatch = () => {
           {/* Fields */}
           <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
             <Typography >อายุ: {userProfile.age}</Typography>
-            <Typography >มหาวิทยาลัย .....</Typography>
+            <Typography >มหาวิทยาลัย {userProfile.address}</Typography>
             <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tags.join(', ')}</Typography>
             <Typography >เกี่ยวกับฉันจิงอะ: {userProfile.bio}</Typography>
             <Typography>Lifestyle</Typography>

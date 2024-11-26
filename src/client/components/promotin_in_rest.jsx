@@ -1,38 +1,80 @@
 import Swal from 'sweetalert2';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
-export default function Promotion_restaurant(){
-    const go_to_message = async () => {
-        window.location.href = "http://localhost:3000/message";
-      };
-      const go_to_accept = async () => {
-        window.location.href = "http://localhost:3000/accept";
-      };
-      const go_to_restaurant = async () => {
-        window.location.href = "http://localhost:3000/restaurant";
-      };
-      const go_to_match = async () => {
-        window.location.href = "http://localhost:3000/match";
-      };
-      const go_to_profile = async () => {
-        window.location.href = "http://localhost:3000/profile";
-      };
-      const go_to_Whothere = async () => {
-        window.location.href = "http://localhost:3000/Whothere"; //รอหน้าwhothere
-      };
-      const pin_rest = () => {
-        Swal.fire({ 
-            title: "Now!!", 
-            html: `
-                You are chilling at <br>
-                ..ชื่อร้าน..`,
-            customClass: {
-                title : "text-[#FF0000] text-xl",
-                html : "text-white",
-                popup: " w-[220px] h-[180px] bg-[#E9C46A] text-white text-sm" ,
-                confirmButton: "text-white text-sm bg-[#F4A261] text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
+export default function Nopromotion_restaurant(){
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [restaurantID, setRestaurantID] = useState("");
+    const [restaurant, setRestaurant] = useState(
+      {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tags:["ประเภทร้านอาหาร"],promo:false,time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1", "asdf"]}
+    );
+    const [promo, setPromo] = useState([{
+        _id: 0, promoID: "P001", restaurantID: "R002", discountEnd: "", description: "ลด 100%"
+    }]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const LoginToken = localStorage.getItem("LoginToken");
+            const userData = JSON.parse(LoginToken);
+            setEmail(userData.email);
+            setUsername(userData.username);
+            const params = new URLSearchParams(location.search);
+            const restaurantID = params.get('restaurantID');
+            console.log('restaurantID', restaurantID);
+            setRestaurantID(restaurantID);
+            try {
+                const response = await axios.get(`/api/get-restaurant/${restaurantID}`);
+                const fetchRestaurant = response.data;
+                console.log(fetchRestaurant)
+                setRestaurant(fetchRestaurant.restaurant);
+                setPromo(fetchRestaurant.promotion);
+            } catch (error) {
+                console.error('Error fetching promotion:', error);
             }
-            });
-      }
+        };
+        fetchData();
+    }, []);
+    const go_to_message = async () => {
+        navigate("/message");
+    };
+    const go_to_accept = async () => {
+      navigate("/accept");
+    };
+    const go_to_restaurant = async () => {
+      navigate("/restaurant");
+    };
+    const go_to_match = async () => {
+      navigate("/match");
+    };
+    const go_to_profile = async () => {
+      navigate("/profile");
+    };
+    const go_to_Whothere = async () => {
+      navigate(`/Whothere?restaurantID=${restaurantID}`);
+    };
+    const pin_rest = async () => {
+        try {
+            const response = await axios.post(`/api/chilling-at/${restaurantID}?userID=${username}`);
+            console.log(response.data);
+            Swal.fire({ 
+                title: "Now!!", 
+                html: `
+                    You are chilling at <br>
+                    ${restaurant.name}`,
+                customClass: {
+                    title : "text-[#FF0000] text-xl",
+                    html : "text-white",
+                    popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
+                    confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
+                }
+                });
+        } catch (error) {
+            console.error('Error posting chilling:', error);
+        }
+    }
     return (
         <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center ">
             <div 
@@ -47,14 +89,13 @@ export default function Promotion_restaurant(){
                 </div>
                     <div className="flex flex-col w-full justify-start divide-y divide-gray-300">
                         <div className="flex items-center h-[65px]">
-                            <button onClick={go_to_restaurant} className="ml-2" >
+                            <button onClick={() => navigate(-1)} className="ml-2" >
                                 <svg class="w-[42px] h-[42px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m15 19-7-7 7-7"/>
                                 </svg>
                             </button>
                             <div className="flex flex-row space-x-1">
-                                <p className="text-[15px] text-black">ชื่อร้านอาหาร</p>
-                                <p className="text-[15px] text-black"> ................</p>
+                                <p className="text-[15px] text-black">{restaurant.name}</p>
                             </div>
                             
                         </div>
@@ -64,18 +105,22 @@ export default function Promotion_restaurant(){
                         <div className="flex flex-col justify-center space-y-5 mt-5">
                             <img 
                                 className="w-[325px] h-[180px] object-cover" 
-                                src="https://via.placeholder.com/300x250?text=Image+1" 
+                                src={restaurant.photo[0]} 
                                 alt="รูปอาหาร" 
                             />
                             <div className="w-[325px] h-[89px] bg-[#F9BDBB] bg-opacity-75 border border-[#FF2C2C] ">
                                 <div className="" >
-                                    <p className="text-[12px] text-black text-left p-2">โปรโมชั่งงงงงงงงง {/**/} .............................</p>
+                                    <p className="text-[12px] text-black text-left p-2">โปรโมชั่น</p>
+                                    {promo.map(promotion => (
+                                        <p className="text-[12px] text-black text-left p-2">{[promotion.description]}</p>
+                                    )
+                                    )}
                                 </div>
                                 <img className="w-[56px] h-[56px] absolute left-[0%] bottom-[42%]" src="src\client\img\Fire.png" alt="fire" />
                                 <img className="w-[49.4px] h-[49.4px] absolute right-[2%] bottom-[51.5%]" src="src\client\img\Time.png" alt="time" />
                             </div>
                             <div className="w-[325px] h-auto border">
-                                <p className="text-[12px] text-black">บรรยายร้านอาหาร  {/**/} ......................</p>
+                                <p className="text-[12px] text-black">บรรยายร้านอาหาร  {restaurant.description}</p>
                             </div>
                         </div>
                         <div className="flex flex-row justify-between w-[320px] ">
@@ -93,8 +138,7 @@ export default function Promotion_restaurant(){
                             </button>
                         </div>
                     </div>
-                
-                
+                    
             </div>
             <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">
                 <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/messege.png" alt="message icon" onClick={go_to_message} />

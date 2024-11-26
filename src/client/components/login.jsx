@@ -77,7 +77,7 @@ export default function Login() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-[331px] h-[56px] bg-[#F7F8F9] placeholder-[#8391A1] border border-[#E8ECF4] rounded-lg"
-                            placeholder="Enter your username"
+                            placeholder="Enter your email"
                         />
                         <input
                             type="password"
