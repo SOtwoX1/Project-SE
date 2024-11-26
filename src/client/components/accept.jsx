@@ -11,7 +11,7 @@ export default function Accept() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [acceptRequests, setAcceptRequests] = useState([
-    {_id:0, userID:"Unknow", age:0, restaurant:"loading", tag:"loading", photo:["src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg"]}
+    {_id:0, userID:"Unknow", age:0, restaurant:"loading", tag:["loading"], photo:["src/client/img/freepik__candid-image-photography-natural-textures-highly-r__69794.jpeg"]}
   ]);
   
   useEffect(() => {
@@ -47,6 +47,44 @@ export default function Accept() {
   const go_to_profile = async () => {
     navigate("/profile");
   };
+  const accept = async (matchID) => {
+    try {
+      const response = await axios.post(`/api/accept-match/${matchID}`);
+      console.log(response.data);
+      Swal.fire({
+        icon: 'success',
+        title: 'Accepted',
+        text: 'The match request has been accepted successfully.',
+      });
+    } catch (error) {
+      console.error('Error accepting match request:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'There was an error accepting the match request.',
+      });
+    }
+
+  };
+  const denied = async (matchID) => {
+    try {
+      const response = await axios.delete(`/api/denied-match/${matchID}`);
+      console.log(response.data);
+      Swal.fire({
+        icon: 'success',
+        title: 'Denied',
+        text: 'The match request has been denied successfully.',
+      });
+    } catch (error) {
+      console.error('Error denying match request:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'There was an error denying the match request.',
+      });
+    }
+
+  };
 
     return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
@@ -71,6 +109,7 @@ export default function Accept() {
         {/* List */}
       <div className=" flex flex-col items-center">
         {acceptRequests.map(profile => (
+          <div className="flex content-center">
           <div
             key={profile._id}
             className="bg-gray-200 rounded-full w-[300px] p-4 flex flex-row items-center justify-between mt-4"
@@ -81,17 +120,25 @@ export default function Accept() {
                 alt={`Profile ${profile.userID}`}
                 className="w-[50px] h-[50px] rounded-full mr-4"
               />
-              <div>
+              <div className="w-[150px]">
                 <p className="text-[18px] text-gray-600">{profile.userID}, {profile.age}</p>
-                <p className="text-[14px] text-gray-600">ร้านอาหารที่ชวนไป: {profile.restaurant}</p>
-                <p className="text-[14px] text-gray-600">แนวร้านอาหารที่ชอบ: {profile.tag}</p>
+                <p className="text-[14px] text-gray-600">{profile.restaurant ? "ร้าน" + profile.restaurant : ""}</p>
+                <p className="text-[14px] text-gray-600 truncate hover:text-clip hover:text-wrap">แนวที่ชอบ: {profile.tag.join(', ')}</p>
               </div>
             </div>
             <img
-              src="src/client/img/Group 19193.png"
+              onClick={() => accept(profile.matchID)}
+              src="src/client/img/Group 19194.png"
               alt="Checkmark"
               className="w-[50px] h-[50px] text-green-500"
             />
+          </div>
+          <svg
+          onClick={() => denied(profile.matchID)}
+          className="w-5 pt-4"
+          xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
+            <path d="M6 4H18V21H6z" opacity=".3"></path><path d="M11 18H9V7h2V18zM15 18h-2V7h2V18zM4 3H20V5H4z"></path><path d="M17 5L14 2 10 2 7 5z"></path><path d="M17,22H7c-1.1,0-2-0.9-2-2V3h14v17C19,21.1,18.1,22,17,22z M7,5v15h10V5H7z"></path>
+          </svg>
           </div>
         ))}
       </div>

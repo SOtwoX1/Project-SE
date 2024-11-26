@@ -94,6 +94,7 @@ const matchSchema = new mongoose.Schema({
   userID1: { type: String, required: true },
   userID2: { type: String, required: true },
   isMatch: { type: Boolean, default: false },
+  restaurantID: { type: String },
   matchTime: { type: Date, default: Date.now }
 });
 matchSchema.pre('save', async function (next) {
@@ -133,7 +134,7 @@ chatSchema.pre('save', async function (next) {
       } else {
         newIDNumber = 1;
       }
-      this.messageID = `C${newIDNumber.toString().padStart(3, '0')}`;
+      this.chatID = `C${newIDNumber.toString().padStart(3, '0')}`;
     } catch (err) {
       return next(err);
     }
@@ -174,7 +175,7 @@ messageSchema.pre('save', async function (next) {
   next();
 });
 const restaurantSchema = new mongoose.Schema({
-  restaurantID: String,
+  restaurantID: { type: String, required: true },
   name: { type: String, required: true },
   tag: [String],
   location: {
@@ -183,6 +184,31 @@ const restaurantSchema = new mongoose.Schema({
   },
   photo: [String],
   description: { type: String }
+});
+const chillingSchema = new mongoose.Schema({
+  chillingID: { type: String, AutoIncrement: true },
+  userID: { type: String, required: true },
+  restaurantID: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now } // Add expiration time
+});
+chillingSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastMessage = await this.constructor.findOne().sort({ chillingID: -1 });
+
+      let newIDNumber;
+      if (lastMessage && lastMessage.chillingID) {
+        const lastIDNumber = parseInt(lastMessage.chillingID.slice(3), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.chillingID = `CHL${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
 });
 
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
@@ -193,6 +219,8 @@ const Chat = mongoose.model('Chats', chatSchema);
 Chat.createIndexes({ "createdAt": 1 }, { expireAfterSeconds: 259200 }); // delete chat after 3 days
 const Message = mongoose.model('Messages', messageSchema);
 const Restaurant = mongoose.model('Restaurants', restaurantSchema);
+const Chilling = mongoose.model('Chilling', chillingSchema);
+Chilling.createIndexes({ "createdAt": 1 }, { expireAfterSeconds: 10800 }); // delete chilling after 3 hr.
 
 // A cron job allows you to execute something on a schedule or a task to be executed sometime in the future.
 cron.schedule("0 0 * * *", async () => {
@@ -434,32 +462,47 @@ app.get('/api/matches-request/:userID', async (req, res) => {
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-
     const matchRequests = await Match.aggregate([
       {
-        $match: {
-          userID2: userID,
-          isMatch: false
-        }
+      $match: {
+        userID2: userID,
+        isMatch: false
+      }
       },
       {
-        $lookup: {
-          from: 'profiles',
-          localField: 'userID1',
-          foreignField: 'userID',
-          as: 'profile'
-        }
+      $lookup: {
+        from: 'profiles',
+        localField: 'userID1',
+        foreignField: 'userID',
+        as: 'profile'
+      }
       },
       {
-        $unwind: '$profile'
+      $unwind: '$profile'
       },
       {
-        $project: {
-          matchID: 1,
-          userID: '$profile.userID',
-          photo: '$profile.photo',
-          tag: '$profile.tag'
-        }
+      $lookup: {
+        from: 'restaurants',
+        localField: 'restaurantID',
+        foreignField: 'restaurantID',
+        as: 'restaurant'
+      }
+      },
+      {
+      $unwind: {
+        path: '$restaurant',
+        preserveNullAndEmptyArrays: true
+      }
+      },
+      {
+      $project: {
+        matchID: 1,
+        userID: '$profile.userID',
+        photo: '$profile.photo',
+        tag: '$profile.tag',
+        restaurantName: { $ifNull: ['$restaurant.name', null] },
+        restaurantID: { $ifNull: ['$restaurant.restaurantID', null]}
+      }
       }
     ]);
 
@@ -703,7 +746,7 @@ app.get('/api/get-all-restaurants', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
-})
+});
 app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
   try {
     const { restaurantID } = req.params;
@@ -727,7 +770,134 @@ app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
-})
+});
+
+app.get('/api/get-chilling/:restaurantID', async (req, res) => {
+  try {
+    const { restaurantID } = req.params;
+
+    if (!restaurantID) {
+      return res.status(400).json({ message: 'Missing restaurantID' });
+    }
+    const chillings = await Chilling.aggregate([
+      { $match: { restaurantID } },
+      {
+        $lookup: {
+          from: 'profiles',
+          localField: 'userID',
+          foreignField: 'userID',
+          as: 'profile'
+        }
+      },
+      { $unwind: '$profile' },
+      {
+        $project: {
+          chillingID: 1,
+          userID: 1,
+          restaurantID: 1,
+          createdAt: 1,
+          userID: '$profile.userID',
+          photo: '$profile.photo',
+          tag: '$profile.tag'
+        }
+      }
+    ]);
+    if (!chillings.length) {
+      return res.status(404).json({ message: 'No chillings found for this restaurant' });
+    }
+
+    res.status(200).json(chillings);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.post('/api/chilling-at/:restaurantID', async (req, res) => {
+  try {
+    const { restaurantID } = req.params;
+    const { userID } = req.query;
+
+    if (!restaurantID || !userID) {
+      return res.status(400).json({ message: 'Missing restaurantID or userID' });
+    }
+
+    // Check if the user has a chilling at another restaurant
+    const existingChilling = await Chilling.findOne({ userID });
+    if (existingChilling) {
+      await Chilling.deleteOne({ userID });
+    }
+
+    // Create a new chilling at the specified restaurant
+    const newChilling = new Chilling({
+      userID,
+      restaurantID
+    });
+
+    await newChilling.save();
+
+    res.status(201).json({ message: 'Chilling created successfully' });
+  } catch (error) {
+    console.error('Error creating chilling:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+app.post('/api/chilling-with-you/:userID', async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { otherUserID, restaurantID } = req.query;
+
+    if (!userID || !otherUserID) {
+      return res.status(400).json({ message: 'Missing userID or otherUserID' });
+    }
+    if (userID === otherUserID) {
+      return res.status(200).json({ message: "you can't chilling with youself"});
+    }
+
+    const existingMatch = await Match.findOne({
+      $or: [
+        { userID1: userID, userID2: otherUserID },
+        { userID1: otherUserID, userID2: userID }
+      ]
+    });
+
+    if (existingMatch) {
+      return res.status(200).json({ message: 'Match already exists' });
+    }
+    const match = new Match({
+      userID1: userID,
+      userID2: otherUserID,
+      restaurantID: restaurantID
+    });
+
+    await match.save();
+
+    res.status(201).json({ message: `${userID} want to chilling with ${otherUserID}` });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+app.delete('/api/denied-match/:matchID', async (req, res) => {
+  try {
+    const { matchID } = req.params;
+
+    if (!matchID) {
+      return res.status(400).json({ message: 'Missing matchID' });
+    }
+
+    const match = await Match.findOne({ matchID });
+    if (!match) {
+      return res.status(404).json({ message: 'Match not found' });
+    }
+
+    await Match.deleteOne({ matchID });
+
+    res.status(200).json({ message: 'Match denied and deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
 
 // set gernder interest use by username from users = userid from profiles ------------------------------------------------------------------------------------
 app.put('/api/set-gender/:username', async (req, res) => {

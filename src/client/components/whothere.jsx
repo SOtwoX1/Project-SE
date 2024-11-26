@@ -1,40 +1,71 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import { Button } from "react-scroll";
 import Swal from 'sweetalert2';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function Whothere() {
-  //const [email, setEmail] = useState("");
-  //const [username, setUsername] = useState("");
-  /*
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [restaurantID, setRestaurantID] = useState("");
+  const [whoThere, setWhoThere] = useState([
+    {userID:"loading", age:0, tag:"ประเภทร้านอาหาร", photo:["https://via.placeholder.com/300x250?text=Image+1", "https://via.placeholder.com/300x250?text=Image+1"]}
+  ]);
   useEffect(() => {
-    const LoginToken = localStorage.getItem("LoginToken");
-    const userData = JSON.parse(LoginToken);
-    setEmail(userData.email);
-    setUsername(userData.username);
+      const fetchData = async () => {
+          const LoginToken = localStorage.getItem("LoginToken");
+          const userData = JSON.parse(LoginToken);
+          setEmail(userData.email);
+          setUsername(userData.username);
+          const params = new URLSearchParams(location.search);
+          const restaurantID = params.get('restaurantID');
+          console.log('restaurantID', restaurantID);
+          setRestaurantID(restaurantID);
+          try {
+              const response = await axios.get(`/api/get-chilling/${restaurantID}`);
+              const fetchChilling = response.data;
+              setWhoThere(fetchChilling);
+          } catch (error) {
+              console.error('Error fetching promotion:', error);
+          }
+      };
+      fetchData();
   }, []);
-  */
-    const go_to_message = async () => {
-      window.location.href = "http://localhost:3000/message";
-    };
-    const go_to_accept = async () => {
-      window.location.href = "http://localhost:3000/accept";
-    };
-    const go_to_restaurant = async () => {
-      window.location.href = "http://localhost:3000/restaurant";
-    };
-    const go_to_match = async () => {
-      window.location.href = "http://localhost:3000/match";
-    };
-    const go_to_profile = async () => {
-      window.location.href = "http://localhost:3000/profile";
-    };
-    const go_to_setting = async () => {
-      window.location.href = "/Setting-Profile";
-    };
-    const go_to_Edit_pro = async () => {
-      window.location.href = "/NewEdit_pro";
-    };
+  const go_to_message = async () => {
+      navigate("/message");
+  };
+  const go_to_accept = async () => {
+    navigate("/accept");
+  };
+  const go_to_restaurant = async () => {
+    navigate("/restaurant");
+  };
+  const go_to_match = async () => {
+    navigate("/match");
+  };
+  const go_to_profile = async () => {
+    navigate("/profile");
+  };
+  const requestMatch = async (userID, otherUserID, restaurantID) => {
+    try {
+      const response = await axios.post(`/api/chilling-with-you/${userID}?otherUserID=${otherUserID}&restaurantID=${restaurantID}`);
+      console.log(response.data);
+      Swal.fire({ 
+        title: "Note!!", 
+        html: `
+            ${response.data.message}`,
+        customClass: {
+            title : "text-[#FF0000] text-xl",
+            html : "text-white",
+            popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
+            confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
+        }
+      });
+    } catch (error) {
+      console.error('Error chilling with you:', error);
+    }
+  };
 
     return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
@@ -59,7 +90,7 @@ export default function Whothere() {
       padding: '10px 20px',
       cursor: 'pointer',
     }}
-    onClick={go_to_restaurant}
+    onClick={() => navigate(-1)}
   >
     <img
       src="src/client/img/Back.png"
@@ -76,26 +107,27 @@ export default function Whothere() {
 
         {/* List */}
       <div className=" flex flex-col items-center">
-        {[...Array(4)].map((_, index) => (
+        {whoThere.map(profile => (
           <div
-            key={index}
+            key={profile._id}
             className="bg-gray-200 rounded-full w-[300px] p-4 flex flex-row items-center justify-between mt-4"
           >
             <div className="flex flex-row items-center">
               <img
-                src="/path-to-assets/dog.png"
+                src={profile.photo[0]}
                 alt="Dog"
                 className="w-[50px] h-[50px] rounded-full mr-4"
               />
               <div>
-                <p className="text-[18px] text-gray-600">ชื่อแอค....อายุ......</p>
-                <p className="text-[14px] text-gray-600">แนวร้านอาหารที่ชอบ.......</p>
+                <p className="text-[18px] text-gray-600">{profile.userID}{profile.age}</p>
+                <p className="text-[14px] text-gray-600">แนวที่ชอบ: {profile.tag}</p>
               </div>
             </div>
             <img
               src="src/client/img/Group 19194.png"
               alt="Checkmark"
               className="w-[50px] h-[50px] text-green-500"
+              onClick={() => requestMatch(username, profile.userID, restaurantID)}
             />
           </div>
         ))}
