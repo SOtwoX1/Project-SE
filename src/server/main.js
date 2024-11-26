@@ -20,6 +20,11 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.json());
 
+ViteExpress.listen(app, 3000, () =>
+  console.log("Server is listening on port 3000..."),
+);
+
+
 // jwt-----------------------------------------------------------------------------------------
 function authenticateToken(req, res, next) {
   const token = req.headers['authorization'];
@@ -56,6 +61,9 @@ const userSchema =  mongoose.Schema({
 });
 const profileSchema = new mongoose.Schema({
   userID: { type: String, required: true },
+  name: { type: String},
+  address : String,
+  dob: String,
   photo: [String],
   bio: String,
   education: String,
@@ -63,14 +71,15 @@ const profileSchema = new mongoose.Schema({
   genderinterest: String,
   gender: String,
   hobby: String,
-  tag: [String],
+  tags: [String],
   swipeDailyCount: { type: Number, default: 0 },
   acceptDailyCount: { type: Number, default: 0 },
   location: {
     latitude: Number,
     longitude: Number
   },
-  isFree: { type: Boolean, default: false }
+  isFree: { type: Boolean, default: false },
+  isPremium: { type: Boolean, default: false },
 });
 const cardpaymentSchema = new mongoose.Schema({
   userID: String,
@@ -846,7 +855,68 @@ app.delete('/api/delete-account', async (req, res) => {
 
 });
 
-ViteExpress.listen(app, 3000, () =>
-  console.log("Server is listening on port 3000..."),
-);
-// http://localhost:3000
+
+// Register profile endpoint -----------------------------------------------------------------
+app.post('/api/register/profile', async (req, res) => {
+  const { username, name, dob, gender, interestgender, address, tags } = req.body;
+
+  // Validate request data
+  if (!username || !name || !dob || !gender || !interestgender || !address || !Array.isArray(tags) || tags.length === 0) {
+    return res.status(400).json({ message: 'All fields are required, and tags must be a non-empty array.' });
+  }
+
+  try {
+    // Check if the user already exists in the profile collection
+    const existingProfile = await Profile.findOne({ userID: username });
+    if (existingProfile) {
+      return res.status(400).json({ message: 'User already has a profile.' });
+    }
+
+    // Create and save the new profile
+    const newProfile = new Profile({
+      userID: username,
+      name,
+      dob,
+      gender,
+      genderinterest: interestgender,
+      address,
+      tags
+    });
+    await newProfile.save();
+
+    return res.status(201).json({ message: 'Profile registered successfully!' });
+  } catch (error) {
+    console.error('Error during registration:', error);
+    return res.status(500).json({ message: 'Internal Server Error.' });
+  }
+});
+
+// set photo ------------------------------------------------------------------------------------
+app.put('/api/set-photo', async (req, res) => {
+  const { username, photo } = req.body;
+
+  // Validate input
+  if (!username || !Array.isArray(photo)) {
+    return res.status(400).json({ message: 'Username and photo are required.' });
+  }
+
+  try {
+    // Check userid in user then go to profile
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const profile = await Profile.findOne({ userID: username });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    // set photo
+    profile.photo = photo;
+    await profile.save();
+
+    res.status(200).json({ message: 'Photo uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading photo:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
