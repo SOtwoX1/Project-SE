@@ -9,30 +9,14 @@ export default function Welcome() {
     <div
       className="fixed overflow-hidden flex bg-white items-center justify-center w-screen h-screen"
       style={{ fontFamily: "Abhaya Libre, sans-serif" }}>
-      <div className="w-[375px] h-[812px] mt-[400px] text-[45px] font-extrabold flex flex-col pt-[15px]">
+      <div className="w-[375px] h-[812px]  text-[45px] font-extrabold flex flex-col pt-[15px]">
         <div className="relative flex flex-row items-center justify-center">
-          <img
-            className="w-[55px] h-[55px] absolute left-[2%]"
-            src="/src/client/img/French Fries.png"
-            alt="French Fries"/>
-          <img
-            className="w-[22px] h-[27px] mt-12 absolute left-[15%]"
-            src="/src/client/img/heart.png"
-            alt="Heart"/>
-          <img
-            className="w-[22px] h-[27px] mt-[-40px] absolute right-[15%]"
-            src="/src/client/img/heart2.png"
-            alt="Heart"/>
-          <img
-            className="w-[55px] h-[55px] absolute right-[2%]"
-            src="/src/client/img/pizza.png"
-            alt="Pizza"/>
-          <span className="absolute text-[#E76F51] text-[45px] font-extrabold">
-            .....รอicon....
-          </span>
+            <img 
+            className="w-[211px] h-[220px] object-cover"
+            src="src\client\img\image 2.png" alt="Logo" />
         </div>
 
-        <div className="text-center mt-16">
+        <div className="text-center mt-[10px]">
           <p className="text-[25px] text-black">Welcome to KOO - KINN</p>
           <p className="text-[20px] text-black mt-1">
             Please follow these House Rules
