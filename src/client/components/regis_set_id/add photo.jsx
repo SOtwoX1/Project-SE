@@ -1,32 +1,61 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 export default function AddPhoto() {
-  const [images, setImages] = useState(Array(4).fill(null)); // สร้าง state สำหรับเก็บรูปภาพ (สูงสุด 4 รูป)
+  const [images, setImages] = useState(Array(4).fill(null)); // Create state to store the images (up to 4)
+  const [username, setUsername] = useState("");
+  const loginToken = localStorage.getItem("LoginToken");
+
+  React.useEffect(() => {
+    if (loginToken) {
+      const userData = JSON.parse(loginToken);
+      setUsername(userData.username);
+    }
+  }, [loginToken]);
 
   const handleImageUpload = (e, index) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const newImages = [...images];
-        newImages[index] = reader.result;
-        setImages(newImages);
-      };
-      reader.readAsDataURL(file);
+      // Create a temporary blob URL for the uploaded image
+      const objectURL = URL.createObjectURL(file);
+      
+      const newImages = [...images];
+      newImages[index] = objectURL; // Store the blob URL instead of base64
+      setImages(newImages);
     }
   };
 
   const handleImageRemove = (index) => {
     const newImages = [...images];
     newImages[index] = null;
-    setImages(newImages);
+    setImages(newImages); // Remove the image from the state
   };
 
-  const canContinue = images.filter((img) => img).length >= 2; // ตรวจสอบว่ามีรูปอย่างน้อย 2 รูป
+  const canContinue = images.filter((img) => img).length >= 2; // Ensure at least 2 images are uploaded
 
-  const go_to_profile = () => {
+  const handleSubmit = async () => {
     if (canContinue) {
-      window.location.href = "/profile"; // ลิงก์ไปยังหน้าที่ต้องการ
+      // Prepare the payload to send to the backend
+      const payload = {
+        username: username, // Include the username
+        photo: images.filter(image => image !== null) // Filter out null values and send the valid images
+      };
+
+      try {
+        console.log(payload);
+        // Sending the data to the backend API (make sure to replace with your actual API endpoint)
+        const response = await axios.put("http://localhost:3000/api/set-photo", payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(response.data);
+        alert("Photos uploaded successfully!");
+        window.location.href = "/profile"; // Redirect after successful upload
+      } catch (error) {
+        console.error("Error uploading photo:", error);
+        alert("Failed to upload photos. Please try again.");
+      }
     }
   };
 
@@ -58,14 +87,13 @@ export default function AddPhoto() {
           </span>
         </div>
 
-        <p className="text-[20px] text-black p-5 ">Add least 2 photos to continue</p>
+        <p className="text-[20px] text-black p-5 ">Add at least 2 photos to continue</p>
 
         <div className="grid grid-cols-2 gap-8 mt-[-20px] p-5 h-[570px]">
           {images.map((image, index) => (
             <div
               key={index}
-              className="relative w-[148px] h-[236px] border border-black rounded-[10px] border-dashed flex items-center justify-center bg-[#C4C4C4]"
-            >
+              className="relative w-[148px] h-[236px] border border-black rounded-[10px] border-dashed flex items-center justify-center bg-[#C4C4C4]">
               {image ? (
                 <div className="relative w-full h-full">
                   <img
@@ -92,15 +120,16 @@ export default function AddPhoto() {
                 </label>)}
             </div>))}
         </div>
+
         <div className="flex items-center justify-center">
-        <button
-          onClick={go_to_profile}
-          className={`w-[331px] h-[39px] bg-[#E9C46A] rounded-2xl font-bold text-white text-[16px] mt-5 ${
-            canContinue ? "opacity-100 cursor-pointer" : "opacity-50 cursor-not-allowed"
-          }`}
-          disabled={!canContinue}>
-          CONTINUE
-        </button>
+          <button
+            onClick={handleSubmit}
+            className={`w-[331px] h-[39px] bg-[#E9C46A] rounded-2xl font-bold text-white text-[16px] mt-5 ${
+              canContinue ? "opacity-100 cursor-pointer" : "opacity-50 cursor-not-allowed"
+            }`}
+            disabled={!canContinue}>
+            CONTINUE
+          </button>
         </div>
       </div>
     </div>
