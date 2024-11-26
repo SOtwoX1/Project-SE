@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function VerifyLetter() {
+  const navigate = useNavigate();
   const inputRefs = useRef([]);
   const [generatedCode, setGeneratedCode] = useState(generateCode());
   const [userInput, setUserInput] = useState(Array(4).fill(""));
@@ -17,14 +19,14 @@ export default function VerifyLetter() {
 
   // Navigate to the forgot password page
   const go_to_forgotpass = async () => {
-    window.location.href = "http://localhost:3000/Forgot-password";
+    navigate("/Forgot-password");
   };
 
   // Check if the entered code matches the displayed code
   const checkCode = () => {
     if (userInput.join("") === generatedCode) {
       Swal.fire("Success", "Verification successful!", "success");
-      window.location.href = "http://localhost:3000/Create-new-password";
+      navigate("/Create-new-password");
     } else {
       Swal.fire("Error", "Incorrect code. Please try again.", "error");
     }

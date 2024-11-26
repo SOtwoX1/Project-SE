@@ -3,8 +3,10 @@ import Slider from 'react-slick';
 import { Card, Typography, Button, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useNavigate } from 'react-router-dom';
 
 const Previewnew = () => {
+  const navigate = useNavigate();
   const images = [
     'https://via.placeholder.com/300x250?text=Image+1', // เปลี่ยน URL เป็นรูปจริง
     'https://via.placeholder.com/300x250?text=Image+2',
@@ -21,7 +23,7 @@ const Previewnew = () => {
   };
 
   const go_to_edit = () => {
-    window.location.href = "/Edit";
+    navigate("/Edit");
   }
 
   return (

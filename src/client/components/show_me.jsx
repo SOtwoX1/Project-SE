@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import axios from 'axios'; // Ensure axios is installed: npm install axios
 import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
 
 export default function Show_me() {
+    const navigate = useNavigate();
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [username, setUsername] = useState('');
 
     // Navigate to the settings page
     const go_to_setting = () => {
-        window.location.href = "/Setting-Profile";
+        navigate("/Setting-Profile");
     };
 
     // Handle category selection

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card, Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Mypackage = () => {
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -41,7 +43,7 @@ const Mypackage = () => {
           marginBottom: '16px',
         }}
       >
-        <a href="/Setting-Profile" style={{ textDecoration: 'none' }}>
+        <a onClick={() => navigate(-1)} style={{ textDecoration: 'none' }}>
           <img
             src="src/client/img/Back.png"
             alt="Back"

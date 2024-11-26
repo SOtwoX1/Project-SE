@@ -2,23 +2,25 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Button } from "react-scroll";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const go_to_homelog = () => {
-    window.location.href = "http://localhost:3000/home-login-register";
+    navigate("/home-login-register");
   };
 
   const go_to_login = () => {
-    window.location.href = "http://localhost:3000/Login";
+    navigate("/Login");
   };
 
   const go_sucess = () => {
-    window.location.href = "http://localhost:3000/Register-Sucessfull";
+    navigate("/Register-Sucessfull");
   };
 
   const saveData = async (e) => {

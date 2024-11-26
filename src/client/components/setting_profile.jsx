@@ -2,8 +2,10 @@ import Swal from 'sweetalert2';
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 export default function Setting_pro() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
 
@@ -14,22 +16,22 @@ export default function Setting_pro() {
         setUsername(userData.username);
     }, []);
     const go_to_profile = () => {
-        window.location.href = "/profile";
+        navigate("/profile");
     }
     const go_to_show_me = () => {
-        window.location.href = "/Show-Me";
+        navigate("/Show-Me");
     }
     const go_to_Password = () => {
-        window.location.href = "/Password";
+        navigate("/Password");
     }
     const go_to_MPA = () => {
-        window.location.href = "/Manage-Payment-Account";
+        navigate("/Manage-Payment-Account");
     }
     const go_to_package = () => {
-        window.location.href = "/Mypackage";
+        navigate("/Mypackage");
     }
     const go_to_login = () => {
-        window.location.href = "/Login";
+        navigate("/Login");
         localStorage.removeItem("LoginToken");
     }
     const Delete_Account = async () => {
@@ -66,7 +68,7 @@ export default function Setting_pro() {
                             timer: 5000,
                         })
                         localStorage.removeItem("LoginToken");
-                        window.location.href = "/Login";
+                        navigate("/Login");
                     } catch (error) {
                         console.log(error);
                         Swal.fire({

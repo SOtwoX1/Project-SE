@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 export default function Regis_sucess(){
+    const navigate = useNavigate();
     const go_to_welcome = () => {
-        window.location.href = "/Welcome";
+        navigate("/Welcome");
     }
     return(
         <div className="w-full h-screen flex flex-col justify-center items-center space-y-[51px]">

@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 export default function Success_MPA(){
+    const navigate = useNavigate();
     const go_to_setting = () => {
-        window.location.href = "/Setting-Profile";
+        navigate("/Setting-Profile");
     };
     return(
         <div className="w-full h-screen flex flex-col justify-center items-center">

@@ -4,8 +4,10 @@ import { Card, Typography, Button, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Preview = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -83,7 +85,7 @@ const Preview = () => {
       </div>
       <div style={{ }}>
         <button style={{ border: 'none', background: 'none' }}>
-            <a href='/Edit-Profile'><img
+            <a onClick={() => navigate('/Edit-Profile')}><img
             src="src/client/img/Back.png"
             alt="Button Image"
             style={{ width: '30px', height: '30px' }}

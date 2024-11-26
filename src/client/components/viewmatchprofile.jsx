@@ -10,17 +10,19 @@ const Viewmatchprofile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userProfile, setUserProfile] = useState({
-    userID: 'undefind',
+    userID: 'undefined',
     bio: '',
-    photo: []
+    photo: [],
+    tags: []
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const params = new URLSearchParams(location.search);
-      const userID = params.get('userID');
+      const LoginToken = localStorage.getItem("LoginToken");
+      const userData = JSON.parse(LoginToken);
       try {
-        const response = await axios.get(`/api/get-profile/${userID}`);
+        const response = await axios.get(`/api/get-profile/${userData.username}`);
+        console.log(response.data);
         setUserProfile(response.data);
       } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -103,7 +105,7 @@ const Viewmatchprofile = () => {
           {/* Fields */}
           <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
             <Typography >อายุ: {userProfile.age}</Typography>
-            <Typography >มหาวิทยาลัย .....</Typography>
+            <Typography >มหาวิทยาลัย {userProfile.address}</Typography>
             <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tag}</Typography>
             <Typography >เกี่ยวกับฉันจิงอะ: {userProfile.bio}</Typography>
             <Typography>Lifestyle</Typography>
@@ -112,8 +114,10 @@ const Viewmatchprofile = () => {
 
         {/* Lifestyle Buttons */}
         <Box display="flex" justifyContent="space-around" padding="16px">
-          <Button
+          {userProfile.tags.map((tag, index) => (
+            <Button
             variant="contained"
+            key={index}
             style={{
               backgroundColor: '#B7D55A',
               borderRadius: '20px',
@@ -122,20 +126,9 @@ const Viewmatchprofile = () => {
               height: '40px',
             }}
           >
-            ร้านอาหารบุฟเฟต์
+            {tag}
           </Button>
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: '#B7D55A',
-              borderRadius: '20px',
-              color: 'white',
-              width: '140px',
-              height: '40px',
-            }}
-          >
-            ร้านอาหารท้องถิ่น
-          </Button>
+            ))}
         </Box>
       </Card>
     </div>

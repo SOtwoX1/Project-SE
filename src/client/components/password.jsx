@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Password() {
+    const navigate = useNavigate();
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const go_to_setting = () => {
-        window.location.href = "/Setting-Profile";
+        navigate("/Setting-Profile");
     };
 
     const resetPassword = async () => {
@@ -60,7 +62,7 @@ export default function Password() {
                     title: "Password Reset Successfully",
                     text: "You can now log in with your new password.",
                 });
-                window.location.href = "/Password-Change";
+                navigate("/Password-Change");
             }
         } catch (error) {
             console.error(error);
