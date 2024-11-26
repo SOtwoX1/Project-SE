@@ -31,7 +31,7 @@ export default function Setting_pro() {
         navigate("/Mypackage");
     }
     const go_to_login = () => {
-        navigate("/Login");
+        navigate("/home-login-register");
         localStorage.removeItem("LoginToken");
     }
     const Delete_Account = async () => {
