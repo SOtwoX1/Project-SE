@@ -78,7 +78,7 @@ mongoose
   .then(() => console.log('MongoDB connected successfully to DatingApp!'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Define a Mongoose Schema and Model for the `Users` Collection
+// Define a Mongoose Schema and Model for the Collections
 const userSchema =  mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -98,13 +98,14 @@ const profileSchema = new mongoose.Schema({
   gender: String,
   hobby: String,
   tags: [String],
-  swipeDailyCount: { type: Number, default: 0 },
+  swipeDailyCount: { type: Number, default: 0 }, // counter to track daily swipe limit for free users
   acceptDailyCount: { type: Number, default: 0 },
   location: {
     latitude: Number,
     longitude: Number
   },
-  isFree: { type: Boolean, default: false },
+  //Users can set their status as free or not free for matching. If set to free, they can be automatically matched with other available users.
+  isFree: { type: Boolean, default: false }, 
   isPremium: { type: Boolean, default: false },
 });
 const cardpaymentSchema = new mongoose.Schema({
@@ -123,49 +124,11 @@ const matchSchema = new mongoose.Schema({
   restaurantID: { type: String },
   matchTime: { type: Date, default: Date.now }
 });
-matchSchema.pre('save', async function (next) {
-  if (this.isNew) {
-    try {
-      const lastMessage = await this.constructor.findOne().sort({ matchID: -1 });
-
-      let newIDNumber;
-      if (lastMessage && lastMessage.matchID) {
-        const lastIDNumber = parseInt(lastMessage.matchID.slice(1), 10); // remove 'MSG' prefix
-        newIDNumber = lastIDNumber + 1;
-      } else {
-        newIDNumber = 1;
-      }
-      this.matchID = `M${newIDNumber.toString().padStart(3, '0')}`;
-    } catch (err) {
-      return next(err);
-    }
-  }
-  next();
-});
 const chatSchema = new mongoose.Schema({
   chatID: { type: String, AutoIncrement: true },
   matchID: { type: String, required: true },
   all_messageIDs: [String],
   createdAt: { type: Date, default: Date.now, expires: '3d'  } // Add expiration time
-});
-chatSchema.pre('save', async function (next) {
-  if (this.isNew) {
-    try {
-      const lastMessage = await this.constructor.findOne().sort({ chatID: -1 });
-
-      let newIDNumber;
-      if (lastMessage && lastMessage.chatID) {
-        const lastIDNumber = parseInt(lastMessage.chatID.slice(3), 10); // remove 'MSG' prefix
-        newIDNumber = lastIDNumber + 1;
-      } else {
-        newIDNumber = 1;
-      }
-      this.chatID = `C${newIDNumber.toString().padStart(3, '0')}`;
-    } catch (err) {
-      return next(err);
-    }
-  }
-  next();
 });
 const messageSchema = new mongoose.Schema({
   chatID: { type: String, required: true },
@@ -174,31 +137,6 @@ const messageSchema = new mongoose.Schema({
   text: String,
   time_send: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false }
-});
-messageSchema.pre('save', async function (next) {
-  // Only generate a new messageID if it's a new document
-  if (this.isNew) {
-    try {
-      // Find the last message by messageID (sorted in descending order)
-      const lastMessage = await this.constructor.findOne().sort({ messageID: -1 });
-
-      let newIDNumber;
-      if (lastMessage && lastMessage.messageID) {
-        // Extract the numeric part of the messageID, increment it, and format it
-        const lastIDNumber = parseInt(lastMessage.messageID.slice(3), 10); // remove 'MSG' prefix
-        newIDNumber = lastIDNumber + 1;
-      } else {
-        // Start at 1 if there are no previous messages
-        newIDNumber = 1;
-      }
-
-      // Set the new messageID with 'm' prefix and zero-padding to 3 digits
-      this.messageID = `MSG${newIDNumber.toString().padStart(3, '0')}`;
-    } catch (err) {
-      return next(err);
-    }
-  }
-  next();
 });
 const restaurantSchema = new mongoose.Schema({
   restaurantID: { type: String, required: true },
@@ -218,14 +156,82 @@ const chillingSchema = new mongoose.Schema({
   restaurantID: { type: String, required: true },
   createdAt: { type: Date, default: Date.now, expires: '3h' } // Add expiration time
 });
+const promotionSchema = new mongoose.Schema({
+  promoID: { type: String, AutoIncrement: true },
+  restaurantID: { type: String, required: true },
+  discountEnd: { type: Date, default: Date.now, expires: '3h' }, // Add expiration time,
+  description: { type: String }
+});
+
+// Before saving the document to the collection, generate a new string ID in the format 'M001', 'MSG003'
+matchSchema.pre('save', async function (next) {
+  // Only generate a new matchID if it's a new document
+  if (this.isNew) {
+    try {
+      // Find the last match by matchID (sorted in descending order)
+      const lastMatch = await this.constructor.findOne().sort({ matchID: -1 });
+
+      let newIDNumber;
+      if (lastMatch && lastMatch.matchID) {
+        // Extract the numeric part of the matchID, increment it, and format it
+        const lastIDNumber = parseInt(lastMatch.matchID.slice(1), 10); // remove 'M' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        // Start at 1 if there are no previous matches
+        newIDNumber = 1;
+      }
+      // Set the new matchID with 'm' prefix and zero-padding to 3 digits
+      this.matchID = `M${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
+chatSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastChat = await this.constructor.findOne().sort({ chatID: -1 });
+      let newIDNumber;
+      if (lastChat && lastChat.chatID) {
+        const lastIDNumber = parseInt(lastChat.chatID.slice(1), 10); // remove 'C' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.chatID = `C${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
+messageSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastMessage = await this.constructor.findOne().sort({ messageID: -1 });
+      let newIDNumber;
+      if (lastMessage && lastMessage.messageID) {
+        const lastIDNumber = parseInt(lastMessage.messageID.slice(3), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.messageID = `MSG${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
 chillingSchema.pre('save', async function (next) {
   if (this.isNew) {
     try {
-      const lastMessage = await this.constructor.findOne().sort({ chillingID: -1 });
+      const lastChilling = await this.constructor.findOne().sort({ chillingID: -1 });
 
       let newIDNumber;
-      if (lastMessage && lastMessage.chillingID) {
-        const lastIDNumber = parseInt(lastMessage.chillingID.slice(3), 10); // remove 'MSG' prefix
+      if (lastChilling && lastChilling.chillingID) {
+        const lastIDNumber = parseInt(lastChilling.chillingID.slice(3), 10); // remove 'CHL' prefix
         newIDNumber = lastIDNumber + 1;
       } else {
         newIDNumber = 1;
@@ -237,20 +243,14 @@ chillingSchema.pre('save', async function (next) {
   }
   next();
 });
-const promotionSchema = new mongoose.Schema({
-  promoID: { type: String, AutoIncrement: true },
-  restaurantID: { type: String, required: true },
-  discountEnd: { type: Date, default: Date.now, expires: '3h' }, // Add expiration time,
-  description: { type: String }
-});
 promotionSchema.pre('save', async function (next) {
   if (this.isNew) {
     try {
-      const lastMessage = await this.constructor.findOne().sort({ promoID: -1 });
+      const lastPromotion = await this.constructor.findOne().sort({ promoID: -1 });
 
       let newIDNumber;
-      if (lastMessage && lastMessage.promoID) {
-        const lastIDNumber = parseInt(lastMessage.promoID.slice(1), 10); // remove 'MSG' prefix
+      if (lastPromotion && lastPromotion.promoID) {
+        const lastIDNumber = parseInt(lastPromotion.promoID.slice(1), 10); // remove 'P' prefix
         newIDNumber = lastIDNumber + 1;
       } else {
         newIDNumber = 1;
@@ -263,8 +263,9 @@ promotionSchema.pre('save', async function (next) {
   next();
 });
 
+// Target the collections
 const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
-const User = mongoose.model('Users', userSchema); // Target the `Users` collection
+const User = mongoose.model('Users', userSchema);
 const Profile = mongoose.model('Profile', profileSchema);
 const Match = mongoose.model('Matches', matchSchema);
 const Chat = mongoose.model('Chats', chatSchema);
@@ -276,6 +277,7 @@ const Promotion = mongoose.model('Promotions', promotionSchema);
 // A cron job allows you to execute something on a schedule or a task to be executed sometime in the future.
 cron.schedule("0 0 * * *", async () => {
   try {
+    // set acceptDailyCount, and swipeDailyCount in Profile as 0 every midnight
     const result = await Profile.updateMany({}, { $set: {acceptDailyCount: 0, swipeDailyCount: 0}})
   } catch (error) {
     console.error('Error resetting count: ', error);
@@ -398,18 +400,14 @@ app.put('/api/reset-password', async (req, res) => {
     res.status(500).json({ message: 'Internal server error.' });
   }
 });
-
-// get profile user
+// get profile user ------------------------------------------------------------------------------------
 app.get('/api/get-profile/:userID', async (req, res) => {
   try {
     const userID = req.params.userID;
-
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-
     const profile = await Profile.findOne({userID});
-    
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
@@ -421,6 +419,7 @@ app.get('/api/get-profile/:userID', async (req, res) => {
     if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dob.getDate())) {
         age--;
     }
+    // add age to profile but not save to database
     const profileDict = profile.toObject();
     profileDict.age = age;
     res.status(200).json(profileDict);
@@ -428,18 +427,14 @@ app.get('/api/get-profile/:userID', async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
-// get other profile that match the user interest
+// get other profile that match the user interest the same style ------------------------------------------------------------------------------------
 app.get('/api/match-profile/:userID', async (req, res) => {
   try {
     const userID = req.params.userID;
-
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-
     const profile = await Profile.findOne({ userID });
-    
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
@@ -451,6 +446,7 @@ app.get('/api/match-profile/:userID', async (req, res) => {
       userID: {$nin:alreadyInMatch.concat(userID)}
     }
   );
+  // calculate age and add to each profile
   const matchedProfilesWithAge = matchedProfile.map(profile => {
     const currentDate = new Date();
     const dob = new Date(profile.dob);
@@ -461,70 +457,60 @@ app.get('/api/match-profile/:userID', async (req, res) => {
     }
     return { ...profile.toObject(), age };
   });
-
     res.status(200).json(matchedProfilesWithAge || { message: "No matching user found" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// send request match to other user ------------------------------------------------------------------------------------
 app.post('/api/like-profile/:userID', async (req, res) => {
   try {
     const userID = req.params.userID;
     const { otherUserID } = req.query;
-
     if (!userID || !otherUserID) {
       return res.status(400).json({ message: 'Missing userID/otherUserID' });
     }
-
     const isOtherUserFree = await Profile.findOne({ userID: otherUserID }).distinct('isFree');
     const match = new Match({
       userID1: userID,
       userID2: otherUserID,
       isMatch: isOtherUserFree == 'true' ? true : false
     });
-
     await match.save();
-
+    // if free automatically create chat
     if (isOtherUserFree == 'true') {
-      //create chat
       const chat = new Chat({
         matchID: match.matchID,
         all_messageIDs: []
       });
       await chat.save();
-
       return res.status(201).json({ message: 'Matched and Created chat' });
     }
-
     res.status(201).json({ message: 'Request Matched' });
-
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// skip profile and count swipeDailyCount to check limit
 app.put('/api/dislike-profile/:userID', async (req, res) => {
   try {
     const userID = req.params.userID
-
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-
     const profile = await Profile.findOne({ userID });
     if (!profile) {
       return res.status(404).json({ message: 'Profile not found' });
     }
+    // update swipeDailyCount
     profile.swipeDailyCount += 1;
     await profile.save();
-
     res.status(200).json({ message: 'Update swipe daily count success' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-
+//
 app.get('/api/matches-request/:userID', async (req, res) => {
   try {
     const userID = req.params.userID;
