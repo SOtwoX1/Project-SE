@@ -36,8 +36,8 @@ export default function Restaurant() {
   const go_to_profile = async () => {
     navigate("/profile");
   };
-  const go_to_pro_in_res = async (restaurantID, promo) => {
-    navigate(`/Promotion_restaurant?restaurantID=${restaurantID}&promo=${promo}`);
+  const go_to_pro_in_res = async (restaurantID) => {
+    navigate(`/Promotion_restaurant?restaurantID=${restaurantID}`);
   };
   const go_to_resNopro = async (restaurantID) => {
     navigate(`/NoPromotion_restaurant?restaurantID=${restaurantID}`);
@@ -51,6 +51,7 @@ export default function Restaurant() {
         try {
             const response = await axios.get('/api/get-all-restaurants');
             const fetchPromotions = response.data;
+            console.log(fetchPromotions);
             setPromotions(fetchPromotions);
         } catch (error) {
             console.error('Error fetching promotion:', error);
@@ -103,20 +104,17 @@ return (
     <div className="space-y-[37px] ">
       {
         filteredPromotions.map((promotion) => (
-            promotion.promo === 'true' ? (
-              <button key={promotion.restaurantID} onClick={() => go_to_pro_in_res(promotion.restaurantID, promotion.promo)} className="flex flex-col w-[308px] h-[90px] bg-[#D9D9D9] p-2 relative">
+            promotion.hasPromo === true ? (
+              <button key={promotion.restaurantID} onClick={() => go_to_pro_in_res(promotion.restaurantID)} className="flex flex-col w-[308px] h-[90px] bg-[#D9D9D9] p-2 relative">
                 <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
                     <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.name}</p>
                     <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.description}</p>
                     <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tags.join(', ')}</p>
                 </div>
                 <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
-                <div className="absolute right-[1px] transform translate-y-3 rotate-90 mt-1">
+                <div className="absolute right-[1px] transform translate-y-3 rotate-90 mt-1 content-center">
                   <p className="text-[#F56464] text-[14px] text-center font-bold">
                     Promotion
-                  </p>
-                  <p className="text-[#FFFFFF] text-[12px] text-center rounded ">
-                    ระยะเวลา{promotions.duration}
                   </p>
                 </div>
                 </button>
