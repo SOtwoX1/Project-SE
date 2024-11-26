@@ -13,14 +13,11 @@ const Match = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState(false);
-  const [profiles, setProfiles] = useState([
-    {userID: 'loading',
-      bio: "loading",
-      photo: ['']
-    }
-  ]);
+  const [profiles, setProfiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matchText, setMatchText] = useState('');
+  const [swipeDailyCount, setSwipeDailyCount] = useState(0);
+  const [isPremium, setIsPremium] = useState(false);
   const [currentProfile, setCurrentProfile] = useState(profiles[0]);
 
   async function pollProfile(username) {
@@ -36,43 +33,42 @@ const Match = () => {
     }
   };
 
-  async function changeStatus(status) {
+  useEffect(() => {
+    const LoginToken = localStorage.getItem("LoginToken");
+    const userData = JSON.parse(LoginToken);
+    setEmail(userData.email);
+    setUsername(userData.username);
     try {
-      console.log('change status');
-      const response = await axios.put(`/api/change-status/${username}?isFree=${!status}`);
+      fetchProfiles(userData.username);
+      fetchData(userData.username);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+}, []);
+
+  const fetchProfiles = async (userID) => {
+    try {
+      const response = await axios.get(`/api/match-profile/${userID}`);
+      const fetchProfiles = response.data;
+      setProfiles(fetchProfiles);
+      setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
+    } catch (error) {
+        console.error('Error fetching match profile:', error);
+    }
+  };
+  const fetchData = async (userID) => {
+    try {
+      console.log('get status, SwipeDailyCount');
+      const response = await axios.get(`/api/get-profile/${userID}`);
       console.log(response.data.isFree);
-      setStatus(!status);
-      
+      setStatus(response.data.isFree);
+      setSwipeDailyCount(response.data.swipeDailyCount);
+      console.log('fetching ', response.data.isPremium);
+      setIsPremium(response.data.isPremium);
     } catch (error) {
       console.error('Error fetching match profile:', error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-        const LoginToken = localStorage.getItem("LoginToken");
-        const userData = JSON.parse(LoginToken);
-        setEmail(userData.email);
-        setUsername(userData.username);
-        try {
-            const response = await axios.get(`/api/match-profile/${userData.username}`);
-            const fetchProfiles = response.data;
-            setProfiles(fetchProfiles);
-            setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
-        } catch (error) {
-            console.error('Error fetching match profile:', error);
-        }
-        try {
-          console.log('get status');
-          const response = await axios.get(`/api/get-profile/${username}`);
-          console.log(response.data.isFree);
-          setStatus(response.data.isFree);
-        } catch (error) {
-          console.error('Error fetching match profile:', error);
-        }
-    };
-    fetchData();
-}, []);
 
   const sliderSettings = {
     dots: true,
@@ -82,10 +78,10 @@ const Match = () => {
     slidesToScroll: 1,
     arrows: true,
   };
-  const handleLike = async (otherUserID) => {
+  const handleLike = async () => {
     try {
       console.log('Like profile clicked');
-      const response = await axios.post(`/api/like-profile/${username}?otherUserID=${otherUserID}`, { userID: currentProfile.userID });
+      const response = await axios.post(`/api/like-profile/${username}?otherUserID=${currentProfile.userID}`);
       setMatchText(`${response.data.message}! 🎉`);
       console.log('matchText:', 'Matched! 🎉');
       setTimeout(() => {
@@ -97,19 +93,41 @@ const Match = () => {
     }
   };
 
-  const handleDislike = async (otherUserID) => {
-    try {
-      console.log('Dislike clicked');
-      await axios.put(`/api/dislike-profile/${username}?otherUserID=${otherUserID}`, { userID: currentProfile.userID });
-      showNextProfile();
-    } catch (error) {
-      console.error('Error disliking profile:', error);
+  const handleDislike = async () => {
+    if (isPremium || swipeDailyCount < 5) {
+      try {
+        console.log('Dislike clicked');
+        if (currentProfile !== undefined) {
+          await axios.put(`/api/dislike-profile/${username}?otherUserID=${currentProfile.userID}`);
+          showNextProfile();
+          setSwipeDailyCount(swipeDailyCount + 1);
+        }
+      } catch (error) {
+        console.error('Error disliking profile:', error);
+      }
+    } else if (swipeDailyCount >= 5 && currentProfile !== undefined) {
+      setMatchText('The daily swipe limit! 🚫');
+        setTimeout(() => {
+          setMatchText('');
+        }, 2000);
+    } else {
+      console.log(isPremium);
+      console.log('test else');
     }
   };
 
-  const handleStatus = () => {
-    changeStatus(status)
-    console.log(status ? 'ว่าง':'ไม่ว่าง');
+  const handleStatus = async () => {
+    console.log('Status clicked');
+    changeStatus(status);
+  };
+  async function changeStatus(status) {
+    try {
+      await axios.put(`/api/change-status/${username}?isFree=${!status}`);
+      setStatus(!status);
+      console.log(!status ? 'ว่าง':'ไม่ว่าง');
+    } catch (error) {
+      console.error('Error changing status:', error);
+    }
   };
 
   const showNextProfile = async () => {
@@ -144,9 +162,12 @@ const Match = () => {
             justifyContent: 'center',
           }}
         >
-          <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+          
             {/* Profile Image Slider */}
-            <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
+              {
+              currentProfile !== undefined ?
+              (<Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+              <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
               {currentProfile.photo.map(img => (
                 <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center"
                 onClick={() => handleImageClick(currentProfile.userID)}>
@@ -163,17 +184,25 @@ const Match = () => {
                   />
                 </Box>
               ))}
-            </Slider>
-
-            {/* Profile Details */}
+              </Slider>
+              {/* Profile Details */}
             <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
               <Typography variant="h6">{`${currentProfile.userID}, ${currentProfile.age}`}</Typography>
               <Typography variant="body2" color="textSecondary">
                 {currentProfile.bio}
               </Typography>
             </CardContent>
-          </Box>
-
+            </Box>
+          )
+            :
+            <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+              <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
+                <Typography variant="h6">No profile that match</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  please wait for new profile that match with you and try again later
+                </Typography>
+              </CardContent>
+            </Box>}
           {/* Match Text */}
           {matchText && (
             <Typography
@@ -196,10 +225,10 @@ const Match = () => {
 
           {/* Buttons */}
           <div style={{ display: 'flex', justifyContent: 'space-around', padding: '5px 0' }}>
-            <Button onClick={() => handleLike(currentProfile.userID)} style={{ color: 'red' }} aria-label="Like">
+            <Button onClick={() => handleLike()} style={{ color: 'red' }} aria-label="Like">
               <img src="src/client/img/Frame 13.png" alt="Like" style={{ width: '84px', height: '84px' }} />
             </Button>
-            <Button onClick={() => handleDislike(currentProfile.userID)} style={{ color: 'gray' }} aria-label="Dislike">
+            <Button onClick={() => handleDislike()} style={{ color: 'gray' }} aria-label="Dislike">
               <img src="src/client/img/Frame 14.png" alt="Dislike" style={{ width: '84px', height: '84px' }} />
             </Button>
             <Button className='h-[84px] w-[84px]' onClick={handleStatus} style={{ color: 'green' }} aria-label="Free">
