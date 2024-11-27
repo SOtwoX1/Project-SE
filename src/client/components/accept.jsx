@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-scroll";
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 import 'flowbite';
@@ -7,29 +6,29 @@ import axios from "axios";
 
 export default function Accept() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [userID, setUserID] = useState("");
   const [acceptRequests, setAcceptRequests] = useState([]);
   
   useEffect(() => {
+    // Get user data from local storage
     const LoginToken = localStorage.getItem("LoginToken");
     const userData = JSON.parse(LoginToken);
-    setEmail(userData.email);
-    setUsername(userData.username);
+    setUserID(userData.username);
     try {
+      // Fetch match request
       fetchData(userData.username);
     } catch (error) {
       console.error('Error fetching match profile:', error);
       }
   }, []);
-
+  // Fetch match request
   const fetchData = async (userID) => {
     const response = await axios.get(`/api/matches-request/${userID}`);
     console.log("username: ", userID);
     console.log("response.data: ", response.data);
     setAcceptRequests(response.data);
   };
-
+  // Navigation to other pages
   const go_to_message = async () => {
     navigate("/message");
   };
@@ -45,6 +44,7 @@ export default function Accept() {
   const go_to_profile = async () => {
     navigate("/profile");
   };
+  // Accept and Denied match request
   const accept = async (userID, matchID) => {
     try {
       const response = await axios.put(`/api/accept-match/${userID}?matchID=${matchID}`);
@@ -63,7 +63,6 @@ export default function Accept() {
         text: 'There was an error accepting the match request.',
       });
     }
-
   };
   const denied = async (matchID) => {
     try {
@@ -83,9 +82,7 @@ export default function Accept() {
         text: 'There was an error denying the match request.',
       });
     }
-
   };
-
     return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
         <div 
@@ -123,7 +120,7 @@ export default function Accept() {
               </div>
             </div>
             <img
-              onClick={() => accept(username, profile.matchID)}
+              onClick={() => accept(userID, profile.matchID)}
               src="src/client/img/Group 19194.png"
               alt="Checkmark"
               className="w-[50px] h-[50px] text-green-500"
@@ -141,6 +138,7 @@ export default function Accept() {
           <div>ไม่มีคำขอ</div>}
       </div>
         </div>
+        {/* Menu */}
         <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">
                 <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/messege.png" alt="message icon" onClick={go_to_message} />
                 <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/Group 19123 (1).png" alt="accept icon" onClick={go_to_accept} />

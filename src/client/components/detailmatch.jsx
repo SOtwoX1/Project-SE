@@ -15,9 +15,9 @@ const DetailMatch = () => {
     photo: [''],
     tags: []
   });
-
   useEffect(() => {
     const fetchData = async () => {
+      // Get user ID from URL
       const params = new URLSearchParams(location.search);
       const userID = params.get('userID');
       try {
@@ -49,16 +49,15 @@ const DetailMatch = () => {
         className="bg-white w-[350px] h-[80px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]"
         style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
       >
-        
           <div className="flex flex-row items-center justify-center">
             <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
             <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="src/client/img/heart.png" alt="Heart" />
             <span className="text-[#E76F51] text-[40px] font-extrabold">KOO - KINN</span>
             <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
             <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
-          </div>
-        
+          </div> 
       </div>
+      {/* Back Button */}
       <div style={{paddingTop:'' }}>
         <button style={{ border: 'none', background: 'none' }}
         onClick={() => navigate(-1)}>
@@ -67,7 +66,6 @@ const DetailMatch = () => {
             alt="Button Image"
             style={{ width: '30px', height: '30px' }}
           />
-          
         </button>
         <span style={{ color: '#E76F51', fontSize: '20px', marginTop: '8px' }}>{userProfile.userID}</span>
       </div>
@@ -76,12 +74,10 @@ const DetailMatch = () => {
         style={{
           width: '100%',
           maxWidth: '375px',
-         
-          
           justifyContent: 'center',
         }}
       >
-        <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+        <Box display="flex" flexDirection="column" alignItems="center" padding="12px">
           {/* Profile Image Slider */}
           <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px'  }}>
             {userProfile.photo.map((img, index) => (
@@ -113,31 +109,22 @@ const DetailMatch = () => {
         </Box>
 
         {/* Lifestyle Buttons */}
-        <Box display="flex" justifyContent="space-around" padding="16px">
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: '#B7D55A',
-              borderRadius: '20px',
-              color: 'white',
-              width: '140px',
-              height: '40px',
-            }}
-          >
-            ร้านอาหารบุฟเฟต์
-          </Button>
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: '#B7D55A',
-              borderRadius: '20px',
-              color: 'white',
-              width: '140px',
-              height: '40px',
-            }}
-          >
-            ร้านอาหารท้องถิ่น
-          </Button>
+        <Box display="flex overflow-auto" justifyContent="space-around" padding="16px">
+          {userProfile.tags.map((tag, index) => (
+            <Button
+              key={index}
+              variant="contained"
+              style={{
+                backgroundColor: '#B7D55A',
+                borderRadius: '20px',
+                color: 'white',
+                width: '140px',
+                height: '40px',
+              }}
+            >
+              {tag}
+            </Button>
+          ))}
         </Box>
       </Card>
     </div>

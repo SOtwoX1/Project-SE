@@ -6,21 +6,22 @@ import axios from "axios";
 export default function Whothere() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [restaurantID, setRestaurantID] = useState("");
   const [whoThere, setWhoThere] = useState([]);
   useEffect(() => {
       const fetchData = async () => {
+        // Get user data from local storage
           const LoginToken = localStorage.getItem("LoginToken");
           const userData = JSON.parse(LoginToken);
-          setEmail(userData.email);
           setUsername(userData.username);
+          // Get restaurantID from URL
           const params = new URLSearchParams(location.search);
           const restaurantID = params.get('restaurantID');
           console.log('restaurantID', restaurantID);
           setRestaurantID(restaurantID);
           try {
+            // Fetch chilling
               const response = await axios.get(`/api/get-chilling/${restaurantID}`);
               const fetchChilling = response.data;
               setWhoThere(fetchChilling);
@@ -30,6 +31,7 @@ export default function Whothere() {
       };
       fetchData();
   }, []);
+  // Go to other page
   const go_to_message = async () => {
       navigate("/message");
   };
@@ -45,8 +47,10 @@ export default function Whothere() {
   const go_to_profile = async () => {
     navigate("/profile");
   };
+  // Send request to chill with user
   const requestMatch = async (userID, otherUserID, restaurantID) => {
     try {
+      // Post chilling
       const response = await axios.post(`/api/chilling-with-you/${userID}?otherUserID=${otherUserID}&restaurantID=${restaurantID}`);
       console.log(response.data);
       Swal.fire({ 
@@ -67,6 +71,7 @@ export default function Whothere() {
 
     return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
+        {/* Header */}
         <div 
           className="bg-white w-[375px] h-[717px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]" 
           style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
@@ -77,7 +82,7 @@ export default function Whothere() {
             <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
             <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
           </div>
-
+          {/* Back to restaurant */}
           <div style={{ width: '100%', display: 'flex', alignItems: 'center'}}>
   <div
     style={{
@@ -134,6 +139,7 @@ export default function Whothere() {
         }
       </div>
         </div>
+        {/* Menu */}
         <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">
                 <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/messege.png" alt="message icon" onClick={go_to_message} />
                 <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/accept.png" alt="accept icon" onClick={go_to_accept} />

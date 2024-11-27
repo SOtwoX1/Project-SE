@@ -6,7 +6,6 @@ import axios from "axios";
 export default function Nopromotion_restaurant(){
     const navigate = useNavigate();
     const location = useLocation();
-    const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [restaurantID, setRestaurantID] = useState("");
     const [restaurant, setRestaurant] = useState(
@@ -14,15 +13,17 @@ export default function Nopromotion_restaurant(){
     );
     useEffect(() => {
         const fetchData = async () => {
+            // Get user data from local storage
             const LoginToken = localStorage.getItem("LoginToken");
             const userData = JSON.parse(LoginToken);
-            setEmail(userData.email);
             setUsername(userData.username);
+            //  Get restaurantID from URL
             const params = new URLSearchParams(location.search);
             const restaurantID = params.get('restaurantID');
             console.log('restaurantID', restaurantID);
             setRestaurantID(restaurantID);
             try {
+                // Fetch restaurant
                 const response = await axios.get(`/api/get-restaurant/${restaurantID}`);
                 const fetchRestaurant = response.data.restaurant;
                 setRestaurant(fetchRestaurant);
@@ -32,6 +33,7 @@ export default function Nopromotion_restaurant(){
         };
         fetchData();
     }, []);
+    // Go to other page
     const go_to_message = async () => {
         navigate("/message");
     };
@@ -50,8 +52,10 @@ export default function Nopromotion_restaurant(){
     const go_to_Whothere = async () => {
       navigate(`/Whothere?restaurantID=${restaurantID}`);
     };
+    // Chilling at restaurant
     const pin_rest = async () => {
         try {
+            // Post chilling
             const response = await axios.post(`/api/chilling-at/${restaurantID}?userID=${username}`);
             console.log(response.data);
             Swal.fire({ 
@@ -72,6 +76,7 @@ export default function Nopromotion_restaurant(){
     }
     return (
       <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center ">
+          {/* Header */}
           <div 
               className="bg-white w-[375px] h-[717px] rounded-b-[50px]  font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px] p-3" 
               style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
@@ -82,8 +87,10 @@ export default function Nopromotion_restaurant(){
                     <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
                     <img className="w-[55px] h-[55px] " src="src/client/img/pizza.png" alt="Pizza" />
                 </div>
+                {/* Header restaurant */}
                 <div className="flex flex-col w-full justify-start divide-y divide-gray-300">
                     <div className="flex items-center h-[65px]">
+                        {/* Back button */}
                         <button onClick={() => navigate(-1)} className="ml-2" >
                             <svg class="w-[42px] h-[42px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m15 19-7-7 7-7"/>
@@ -92,10 +99,10 @@ export default function Nopromotion_restaurant(){
                         <div className="flex flex-row space-x-1">
                             <p className="text-[15px] text-black">{restaurant.name}</p>
                         </div>
-                        
                     </div>
                     <div className="w-full"></div>    
                 </div>
+                {/* Restaurant detail */}
                 <div className="flex flex-col justify-between h-[530px]">
                     <div className="flex flex-col justify-center space-y-5 mt-5">
                         <img 
@@ -107,6 +114,7 @@ export default function Nopromotion_restaurant(){
                             <p className="text-[12px] text-black">บรรยายร้านอาหาร  {restaurant.description}</p>
                         </div>
                     </div>
+                    {/* Button */}
                     <div className="flex flex-row justify-between w-[320px]">
                         <button onClick={() => pin_rest()} className="bg-[#B7D55A] w-[75px] h-[75px] rounded-full">
                             <div className="relative flex flex-col space-y-1 ">
@@ -122,9 +130,8 @@ export default function Nopromotion_restaurant(){
                         </button>
                     </div>
                 </div>
-                
-                
             </div>
+            {/* Menu */}
             <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">
                 <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/messege.png" alt="message icon" onClick={go_to_message} />
                 <img className="w-[67px] h-[67px] cursor-pointer" src="src/client/img/accept.png" alt="accept icon" onClick={go_to_accept} />

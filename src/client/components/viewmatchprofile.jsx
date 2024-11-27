@@ -10,19 +10,18 @@ const Viewmatchprofile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userProfile, setUserProfile] = useState({
-    userID: 'undefined',
-    bio: '',
-    photo: [],
+    userID: 'loading',
+    bio: 'loading',
+    photo: [''],
     tags: []
   });
-
   useEffect(() => {
     const fetchData = async () => {
-      const LoginToken = localStorage.getItem("LoginToken");
-      const userData = JSON.parse(LoginToken);
+      // Get user ID from URL
+      const params = new URLSearchParams(location.search);
+      const userID = params.get('userID');
       try {
-        const response = await axios.get(`/api/get-profile/${userData.username}`);
-        console.log(response.data);
+        const response = await axios.get(`/api/get-profile/${userID}`);
         setUserProfile(response.data);
       } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -106,7 +105,7 @@ const Viewmatchprofile = () => {
           <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
             <Typography >อายุ: {userProfile.age}</Typography>
             <Typography >มหาวิทยาลัย {userProfile.address}</Typography>
-            <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tag}</Typography>
+            <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tags}</Typography>
             <Typography >เกี่ยวกับฉันจิงอะ: {userProfile.bio}</Typography>
             <Typography>Lifestyle</Typography>
           </Box>

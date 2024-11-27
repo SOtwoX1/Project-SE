@@ -6,23 +6,24 @@ import axios from "axios";
 function Chat() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
+    const [userID, setUserID] = useState("");
     const [matchID, setMatchID] = useState("");
     const [chatWithUser, setChatWithUser] = useState("");
     const [chats, setChats] = useState([]);
 
     useEffect(() => {
+        // Get userID from local storage
         const LoginToken = localStorage.getItem("LoginToken");
         const userData = JSON.parse(LoginToken);
-        setEmail(userData.email);
-        setUsername(userData.username);
+        setUserID(userData.username);
+        // Get matchID, chatWithUserID, and photo from URL query string
         const params = new URLSearchParams(location.search);
         const matchID = params.get('matchID');
         const chatWithUserID = params.get('chatWithUserID');
         const photo = params.get('photo');
         setMatchID(matchID);
         setChatWithUser({ userID: chatWithUserID , photo });
+        // Poll chats
         if (matchID && chatWithUserID) {
             pollChats(matchID, chatWithUserID);
         }
@@ -34,10 +35,9 @@ function Chat() {
                 pollChats(matchID, chatWithUser.userID);
             }
         }, 10000); // Poll every 10 seconds
-
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, [matchID, chatWithUser.userID]);
-
+    // Poll chats
     async function pollChats(matchID, userID) {
         try {
             console.log('poll chats ', matchID, userID);
@@ -49,23 +49,23 @@ function Chat() {
             console.error('Error poll chats:', error);
         }
     }
-
+    // Send message
     const sendMessage = async (e) => {
         try {
             e.preventDefault();
             const form = e.target;
             const formData = new FormData(form);
-            const formJson = Object.fromEntries(formData.entries());
+            const formJson = Object.fromEntries(formData.entries()); // Convert formData to JSON
             console.log(`sending ${formJson.message} to ${matchID}`);
-            const response = await axios.post(`/api/send-message/${username}?matchID=${matchID}&text=${formJson.message}`);
+            const response = await axios.post(`/api/send-message/${userID}?matchID=${matchID}&text=${formJson.message}`);
             console.log(response.data);
             form.reset(); // Clear the input field after sending the message
-            pollChats(matchID, username); // Poll chats after sending the message
+            pollChats(matchID, userID); // Poll chats after sending the message
         } catch (error) {
             console.error('Error sending chats:', error);
         }
     }
-
+    // Navigation to other pages
     const go_to_message = async () => {
         navigate("/message");
       };
@@ -81,12 +81,13 @@ function Chat() {
       const go_to_profile = async () => {
         navigate("/profile");
       };
-      const go_to_viewprofile = async () => {
-        navigate("/Viewmatchprofile");
+      const go_to_viewprofile = async (userID) => {
+        navigate("/Viewmatchprofile?userID=" + userID);
       };
 
     return (
         <div className="h-full w-full fixed overflow-hidden flex flex-col pb-[26px] bg-[#e9c46a]">
+            {/* Header */}
             <div
                 className="bg-white w-[375px] h-[717px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]" 
                 style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
@@ -97,6 +98,8 @@ function Chat() {
                   <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="../src/client/img/heart2.png" alt="Heart" />
                   <img className="w-[55px] h-[55px] ml-4" src="../src/client/img/pizza.png" alt="Pizza" />
             </div>
+
+            {/* Chat header */}
                 <div className="h-[600px] w-[375px] rounded-b-[50px] justify-items-center">
                     <div className="flex w-full">
                         <div className="pl-[17px]" onClick={() => navigate(-1)}>
@@ -106,17 +109,16 @@ function Chat() {
                         </div>
                         <div className="text-[20px] pr-[41px] w-full font-extrabold text-center"
                         style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
-                            <button onClick={go_to_viewprofile}>{chatWithUser.userID}</button>
-                            
+                            <button onClick={() => go_to_viewprofile(chatWithUser.userID)}>{chatWithUser.userID}</button>
                         </div>
                     </div>
                     
                     <div className="h-[571px] w-[341px] bg-[#fff3f3] border-[#d9d9d9] rounded-tr-[20px] rounded-b-[50px] overflow-auto">
-                        <div className="w-[341px] h-[495px] overflow-auto p-4">
+                        <div className="w-[341px] h-[495px] overflow-auto flex flex-col-reverse p-4">
                         {
                         chats.length !== 0 ?
                         chats.map(message => (
-                            (message.userID_sender === username)
+                            (message.userID_sender === userID)
                             ?
                             <div 
                             key={message._id}

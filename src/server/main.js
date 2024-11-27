@@ -491,8 +491,8 @@ app.post('/api/like-profile/:userID', async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
-// skip profile and count swipeDailyCount to check limit
-app.put('/api/dislike-profile/:userID', async (req, res) => {
+// update swipe daily count ------------------------------------------------------------------------------------
+app.put('/api/update-swipe-profile/:userID', async (req, res) => {
   try {
     const userID = req.params.userID
     if (!userID) {
@@ -514,7 +514,6 @@ app.put('/api/dislike-profile/:userID', async (req, res) => {
 app.get('/api/matches-request/:userID', async (req, res) => {
   try {
     const userID = req.params.userID;
-
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
@@ -701,7 +700,7 @@ app.get('/api/get-chat/:userID', async (req, res) => {
     // get all message from chat room
     const chatHistory = await Message.find({
       messageID: { $in: chatRoom.all_messageIDs }
-    })
+    }).sort( { messageID: -1 } ); // to start from the latest message
     if (!chatHistory) {
       res.status(404).json({ message: 'Not found message'});
     }

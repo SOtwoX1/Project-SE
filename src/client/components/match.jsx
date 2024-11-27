@@ -3,16 +3,13 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useNavigate } from "react-router-dom";
-import { Card, CardMedia, CardContent, Typography, Button, Collapse, Box } from '@mui/material';
+import { Card, CardContent, Typography, Button, Box } from '@mui/material';
 import Menu from './Menu';
 import axios from 'axios';
 
 const Match = () => {
-  
-  
   const navigate = useNavigate(); // สร้างตัวแปร navigate
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [userID, setUserID] = useState("");
   const [status, setStatus] = useState(false);
   const [profiles, setProfiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,7 +17,7 @@ const Match = () => {
   const [swipeDailyCount, setSwipeDailyCount] = useState(0);
   const [isPremium, setIsPremium] = useState(false);
   const [currentProfile, setCurrentProfile] = useState(profiles[0]);
-
+  // Poll profile that match the user
   async function pollProfile(username) {
     try {
       console.log('poll profiles');
@@ -33,20 +30,21 @@ const Match = () => {
       console.error('Error fetching match profile:', error);
     }
   };
-
   useEffect(() => {
+    // Get user data from local storage
     const LoginToken = localStorage.getItem("LoginToken");
     const userData = JSON.parse(LoginToken);
-    setEmail(userData.email);
-    setUsername(userData.username);
+    setUserID(userData.username);
     try {
+      // Fetch match profile
       fetchProfiles(userData.username);
+      // Fetch user profile like status, swipeDailyCount
       fetchData(userData.username);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
 }, []);
-
+  // Fetch match profile
   const fetchProfiles = async (userID) => {
     try {
       const response = await axios.get(`/api/match-profile/${userID}`);
@@ -57,6 +55,7 @@ const Match = () => {
         console.error('Error fetching match profile:', error);
     }
   };
+  // Fetch user profile like status, swipeDailyCount
   const fetchData = async (userID) => {
     try {
       console.log('get status, SwipeDailyCount');
@@ -79,72 +78,71 @@ const Match = () => {
     slidesToScroll: 1,
     arrows: true,
   };
+  // Like profile
   const handleLike = async () => {
-    try {
-      console.log('Like profile clicked');
-      const response = await axios.post(`/api/like-profile/${username}?otherUserID=${currentProfile.userID}`);
-      setMatchText(`${response.data.message}! 🎉`);
-      console.log('matchText:', 'Matched! 🎉');
-      setTimeout(() => {
-        setMatchText('');
-        showNextProfile();
-      }, 2000);
-    } catch (error) {
-      console.error('Error liking profile:', error);
-    }
-  };
-
-  const handleDislike = async () => {
+    // Check if user is premium or swipeDailyCount < 5
     if (isPremium || swipeDailyCount < 5) {
       try {
-        console.log('Dislike clicked');
+        console.log('Like profile clicked');
         if (currentProfile !== undefined) {
-          await axios.put(`/api/dislike-profile/${username}?otherUserID=${currentProfile.userID}`);
-          showNextProfile();
+          const response = await axios.post(`/api/like-profile/${userID}?otherUserID=${currentProfile.userID}`);
+          setMatchText(`${response.data.message}! 🎉`);
+          console.log('matchText:', 'Matched! 🎉');
+          setTimeout(() => {
+            setMatchText('');
+            showNextProfile();
+          }, 2000);
+          await axios.put(`/api/update-swipe-profile/${userID}?otherUserID=${currentProfile.userID}`);
           setSwipeDailyCount(swipeDailyCount + 1);
         }
       } catch (error) {
-        console.error('Error disliking profile:', error);
+        console.error('Error liking profile:', error);
       }
-    } else if (swipeDailyCount >= 5 && currentProfile !== undefined) {
+    } else if (swipeDailyCount >= 5 && currentProfile !== undefined) { // Check if swipeDailyCount >= 5
       setMatchText('The daily swipe limit! 🚫');
         setTimeout(() => {
           setMatchText('');
         }, 2000);
-    } else {
-      console.log(isPremium);
-      console.log('test else');
+    } else { // Check if currentProfile is undefined
+      console.log('Not enough swipe count but currentProfile is undefined');
     }
   };
-
+  // Skip profile
+  const handleDislike = async () => {
+    console.log('Dislike clicked');
+    showNextProfile();
+  };
+  // Change status
   const handleStatus = async () => {
     console.log('Status clicked');
     changeStatus(status);
   };
+  // Change status function
   async function changeStatus(status) {
     try {
-      await axios.put(`/api/change-status/${username}?isFree=${!status}`);
+      await axios.put(`/api/change-status/${userID}?isFree=${!status}`);
       setStatus(!status);
       console.log(!status ? 'ว่าง':'ไม่ว่าง');
     } catch (error) {
       console.error('Error changing status:', error);
     }
   };
-
+  // Show next profile function
   const showNextProfile = async () => {
     console.log("profiles.length: ", profiles.length);
     console.log("currentIndex: ", currentIndex);
+    // Check if have enough profile to show
     if (currentIndex < profiles.length - 1) {
         setCurrentIndex(currentIndex + 1);
         setCurrentProfile(profiles[currentIndex + 1]);
     } else {
         //when not have profile that matching any more poll new profile
-        await pollProfile(username);
+        await pollProfile(userID);
         setCurrentIndex(0);
         setCurrentProfile(profiles[0]);
     }
   };
-
+  // Show detail match profile
   const handleImageClick = (userID) => {
     navigate(`/detailmatch?userID=${userID}`); // ไปยังหน้า /profile-details
   };
@@ -216,9 +214,7 @@ const Match = () => {
                 fontWeight: 'bold',
                 zIndex:10,
                 fontSize:'20px',
-                
                 position: 'relative'
-                
               }}
             >
               {matchText}

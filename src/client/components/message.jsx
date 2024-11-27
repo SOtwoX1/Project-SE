@@ -5,14 +5,13 @@ import axios from "axios";
 
 function Message() {
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
+    const [userID, setUserID] = useState("");
     const [chats, setChats] = useState([]);
-
+    // On click go to chat
     const goToChatClick = (matchID, userID, photo) => {
       navigate(`/chat?matchID=${matchID}&chatWithUserID=${userID}&photo=${photo}`);
     }
-
+    // Poll all chat room that user have
     async function pollAllChat(username) {
         try {
           const response = await axios.get(`/api/get-all-chat/${username}`);
@@ -24,14 +23,14 @@ function Message() {
           console.error('Error fetching match profile:', error);
         }
       };
-
     useEffect(() => {
+      // Get user data from local storage
       const LoginToken = localStorage.getItem("LoginToken");
       const userData = JSON.parse(LoginToken);
-      setEmail(userData.email);
-      setUsername(userData.username);
+      setUserID(userData.username);
       pollAllChat(userData.username);
     }, []);
+    // Go to other page
     const go_to_message = async () => {
         navigate("/message");
     };
@@ -49,6 +48,7 @@ function Message() {
     };
     return (
         <div className="h-full w-full fixed overflow-hidden flex flex-col pb-[26px] bg-[#e9c46a]">
+            {/* Header */}
             <div
                 className="bg-white w-[375px] h-[717px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]" 
                 style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
@@ -59,6 +59,7 @@ function Message() {
                   <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
                   <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
             </div>
+            {/* :ist of chat room */}
                 <div className="h-[600px] w-[375px] rounded-b-[50px] overflow-auto">
                     {
                       chats.length !== 0 ?
@@ -77,11 +78,11 @@ function Message() {
                         </div>
                     ))
                     :
-                  <div></div>}
+                  <div>ไม่มีห้องแชท</div>}
                     <div className="pb-1"></div>
                 </div>
             </div>
-            
+            {/* Menu */}
             <div className="">
                 <div className="flex flex-row justify-between w-full max-w-[375px] mt-4 px-2">
                     <div className="w-[67px] h-[67px] rounded-full flex items-center justify-center bg-white border-2 border-[#F4A261] cursor-pointer ">
