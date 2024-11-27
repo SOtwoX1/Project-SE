@@ -122,22 +122,27 @@ const matchSchema = new mongoose.Schema({
   userID2: { type: String, required: true },
   isMatch: { type: Boolean, default: false },
   restaurantID: { type: String },
-  matchTime: { type: Date, default: Date.now }
+  matchTime: { type: Date, default: Date.now },
+  createdAt: { type: Date } // Add expiration time same as chat
 });
+matchSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
 const chatSchema = new mongoose.Schema({
   chatID: { type: String, AutoIncrement: true },
   matchID: { type: String, required: true },
   all_messageIDs: [String],
-  createdAt: { type: Date, default: Date.now, expires: '3d'  } // Add expiration time
+  createdAt: { type: Date, default: Date.now  }
 });
+chatSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
 const messageSchema = new mongoose.Schema({
   chatID: { type: String, required: true },
-  messageID: { type: String, required: true },
+  messageID: { type: String, required: false },
   userID_sender: { type: String, required: true },
   text: String,
   time_send: { type: Date, default: Date.now },
-  isRead: { type: Boolean, default: false }
+  isRead: { type: Boolean, default: false },
+  createdAt: { type: Date } // Add expiration time same as chat
 });
+messageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
 const restaurantSchema = new mongoose.Schema({
   restaurantID: { type: String, required: true },
   name: { type: String, required: true },
@@ -154,15 +159,16 @@ const chillingSchema = new mongoose.Schema({
   chillingID: { type: String, AutoIncrement: true },
   userID: { type: String, required: true },
   restaurantID: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now, expires: '3h' } // Add expiration time
+  createdAt: { type: Date, default: Date.now }
 });
+chillingSchema.index({ createdAt: 1 }, { expireAfterSeconds: 10800 }); // Add expiration time 3 hours.
 const promotionSchema = new mongoose.Schema({
   promoID: { type: String, AutoIncrement: true },
   restaurantID: { type: String, required: true },
-  discountEnd: { type: Date, default: Date.now, expires: '3h' }, // Add expiration time,
+  discountEnd: { type: Date, default: Date.now },
   description: { type: String }
 });
-
+promotionSchema.index({ discountEnd: 1 }, { expireAfterSeconds: 10800 }); // Add expiration time 3 hours.
 // Before saving the document to the collection, generate a new string ID in the format 'M001', 'MSG003'
 matchSchema.pre('save', async function (next) {
   // Only generate a new matchID if it's a new document
@@ -170,7 +176,6 @@ matchSchema.pre('save', async function (next) {
     try {
       // Find the last match by matchID (sorted in descending order)
       const lastMatch = await this.constructor.findOne().sort({ matchID: -1 });
-
       let newIDNumber;
       if (lastMatch && lastMatch.matchID) {
         // Extract the numeric part of the matchID, increment it, and format it
@@ -209,10 +214,11 @@ chatSchema.pre('save', async function (next) {
 messageSchema.pre('save', async function (next) {
   if (this.isNew) {
     try {
-      const lastMessage = await this.constructor.findOne().sort({ messageID: -1 });
+      const lastChat = await this.constructor.findOne().sort({ messageID: -1 });
+      console.log('Last chat:', lastChat);
       let newIDNumber;
-      if (lastMessage && lastMessage.messageID) {
-        const lastIDNumber = parseInt(lastMessage.messageID.slice(3), 10); // remove 'MSG' prefix
+      if (lastChat && lastChat.messageID) {
+        const lastIDNumber = parseInt(lastChat.messageID.slice(3), 10); // remove 'MSG' prefix
         newIDNumber = lastIDNumber + 1;
       } else {
         newIDNumber = 1;
@@ -247,7 +253,6 @@ promotionSchema.pre('save', async function (next) {
   if (this.isNew) {
     try {
       const lastPromotion = await this.constructor.findOne().sort({ promoID: -1 });
-
       let newIDNumber;
       if (lastPromotion && lastPromotion.promoID) {
         const lastIDNumber = parseInt(lastPromotion.promoID.slice(1), 10); // remove 'P' prefix
@@ -474,14 +479,16 @@ app.post('/api/like-profile/:userID', async (req, res) => {
     const match = new Match({
       userID1: userID,
       userID2: otherUserID,
-      isMatch: isOtherUserFree == 'true' ? true : false
+      isMatch: isOtherUserFree == 'true' ? true : false,
+      createdAt: isOtherUserFree == 'true' ? Date.now() : null
     });
     await match.save();
     // if free automatically create chat
     if (isOtherUserFree == 'true') {
       const chat = new Chat({
         matchID: match.matchID,
-        all_messageIDs: []
+        all_messageIDs: [],
+        createdAt: match.createdAt
       });
       await chat.save();
       return res.status(201).json({ message: 'Matched and Created chat' });
@@ -582,6 +589,7 @@ app.put('/api/accept-match/:userID', async (req, res) => {
     }
     // update isMatch to true
     match.isMatch = true;
+    match.createdAt = Date.now();
     await match.save();
     const profile = await Profile.findOne({userID});
     if (!profile) {
@@ -593,7 +601,8 @@ app.put('/api/accept-match/:userID', async (req, res) => {
     // create chat
     const chat = new Chat({
       matchID: match.matchID,
-      all_messageIDs: []
+      all_messageIDs: [],
+      createdAt: match.createdAt
     });
     await chat.save();
     res.status(200).json({ message: 'Match accepted' });
@@ -724,7 +733,8 @@ app.post('/api/send-message/:userID', async (req, res) => {
     const newMessage = new Message({
       chatID: chatRoom.chatID,
       userID_sender: userID,
-      text
+      text,
+      createdAt: chatRoom.createdAt
     });
     await newMessage.save();
     // add messageID to chat collection
