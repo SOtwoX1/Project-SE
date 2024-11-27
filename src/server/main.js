@@ -510,7 +510,7 @@ app.put('/api/dislike-profile/:userID', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-//
+// get all match request from other user ------------------------------------------------------------------------------------
 app.get('/api/matches-request/:userID', async (req, res) => {
   try {
     const userID = req.params.userID;
@@ -526,6 +526,7 @@ app.get('/api/matches-request/:userID', async (req, res) => {
       }
       },
       {
+        // join with profiles collection
       $lookup: {
         from: 'profiles',
         localField: 'userID1',
@@ -537,6 +538,7 @@ app.get('/api/matches-request/:userID', async (req, res) => {
       $unwind: '$profile'
       },
       {
+        // join with restaurants collection
       $lookup: {
         from: 'restaurants',
         localField: 'restaurantID',
@@ -551,6 +553,7 @@ app.get('/api/matches-request/:userID', async (req, res) => {
       }
       },
       {
+        // project the fields to return
       $project: {
         matchID: 1,
         userID: '$profile.userID',
@@ -561,81 +564,51 @@ app.get('/api/matches-request/:userID', async (req, res) => {
       }
       }
     ]);
-
     res.status(200).json(matchRequests);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// accept match request from other user change isMatch to true and create chat ------------------------------------------------------------------------------------
 app.put('/api/accept-match/:userID', async (req, res) => {
   try {
     const userID = req.params.userID;
     const { matchID } = req.query;
-
     if (!userID || !matchID) {
       return res.status(400).json({ message: 'Missing userID/matchID' });
     }
-
     const match = await Match.findOne({ matchID });
     if (!match) {
       return res.status(404).json({ message: 'Match not found' });
     }
+    // update isMatch to true
     match.isMatch = true;
     await match.save();
-
     const profile = await Profile.findOne({userID});
-    
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
+    // update acceptDailyCount
     profile.acceptDailyCount += 1;
     await profile.save();
-    
+    // create chat
     const chat = new Chat({
       matchID: match.matchID,
       all_messageIDs: []
     });
     await chat.save();
-
     res.status(200).json({ message: 'Match accepted' });
-
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
-app.post('api/create-chat/:userID', async (req, res) => {
-  try {
-    const userID = req.params.userID;
-    const { matchID } = req.query;
-
-    if (!userID || !matchID) {
-      return res.status(400).json({ message: 'Missing userID/matchID' });
-    }
-
-    const chat = new Chat({
-      matchID,
-      all_messageIDs: []
-    });
-
-    await chat.save();
-
-    res.status(201).json({ message: 'Chat created' });
-
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-  }
-});
-
+// get all chat room that user is in ------------------------------------------------------------------------------------
 app.get('/api/get-all-chat/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
-
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-
   const matchRooms = await Match.aggregate([
       {
           $match: {
@@ -651,6 +624,7 @@ app.get('/api/get-all-chat/:userID', async (req, res) => {
           }
       },
       {
+        // join with chat collection to get user's chat rooms
           $lookup: {
               from: 'profiles',
               let: { userID1: '$userID1', userID2: '$userID2' },
@@ -676,6 +650,7 @@ app.get('/api/get-all-chat/:userID', async (req, res) => {
           }
       },
       {
+        // filter out the user's own profile
           $addFields: {
               otherUserProfile: {
                   $filter: {
@@ -690,6 +665,7 @@ app.get('/api/get-all-chat/:userID', async (req, res) => {
           $unwind: '$otherUserProfile'
       },
       {
+        // project the fields to return
           $project: {
               _id: 1,
               matchID: 1,
@@ -702,31 +678,27 @@ app.get('/api/get-all-chat/:userID', async (req, res) => {
     if (!matchRooms) {
       res.status(404).json({ message: 'Not found'});
     }
-
     res.status(200).json(matchRooms);
-
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// get chat history from chat room ------------------------------------------------------------------------------------
 app.get('/api/get-chat/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
     const matchID = req.query.matchID;
-
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
     if (!matchID) {
       return res.status(400).json({ message: 'Missing matchID' });
     }
-
     const chatRoom = await Chat.findOne({ matchID });
-
     if (!chatRoom) {
       res.status(404).json({ message: 'Not found chat'});
     }
+    // get all message from chat room
     const chatHistory = await Message.find({
       messageID: { $in: chatRoom.all_messageIDs }
     })
@@ -734,71 +706,57 @@ app.get('/api/get-chat/:userID', async (req, res) => {
       res.status(404).json({ message: 'Not found message'});
     }
     res.status(200).json(chatHistory);    
-
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// send message to chat room ------------------------------------------------------------------------------------
 app.post('/api/send-message/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
     const { matchID, text } = req.query;
-
     if (!userID || !matchID || !text) {
       return res.status(400).json({ message: 'Missing userID/matchID/text' });
     }
-
     const chatRoom = await Chat.findOne({ matchID });
-
     if (!chatRoom) {
       res.status(404).json({ message: 'Not found'});
     }
-
     const newMessage = new Message({
       chatID: chatRoom.chatID,
       userID_sender: userID,
       text
     });
-
     await newMessage.save();
-
+    // add messageID to chat collection
     chatRoom.all_messageIDs.push(newMessage.messageID);
     await chatRoom.save();
-
     res.status(200).json({ message: 'Message sent' });
-
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// change status to free or not free for matching ------------------------------------------------------------------------------------
 app.put('/api/change-status/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
     const { isFree } = req.query;
-
     if (!userID || !isFree) {
       return res.status(400).json({ message: 'Missing userID or isFree' });
     }
-
     const profile = await Profile.findOne({ userID });
-
     if (!profile) {
       return res.status(404).json({ message: 'Profile not found' });
     }
-
     // Update the profile status
     profile.isFree = isFree;
-
     await profile.save();
-
     res.status(200).json({ message: 'isFree set successfully', isFree });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-
+// get all restaurant ------------------------------------------------------------------------------------
 app.get('/api/get-all-restaurants', async (req, res) => {
   try {
     const restaurants = await Restaurant.find();
@@ -807,23 +765,24 @@ app.get('/api/get-all-restaurants', async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+// get restaurant by id with promotion detail ------------------------------------------------------------------------------------
 app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
   try {
     const { restaurantID } = req.params;
-
     if (!restaurantID) {
       return res.status(400).json({ message: 'Missing restaurantID' });
     }
-
     const restaurant = await Restaurant.findOne({ restaurantID });
-
     if (!restaurant) {
       return res.status(404).json({ message: 'Restaurant not found' });
     }
+    // check if restaurant has promotion
     if (!restaurant.hasPromo) {
+      // no promotion
       res.status(200).json({restaurant, promotion: false});
     }
     else {
+      // get promotion detail
       const promotion = await Promotion.find({ restaurantID });
       res.status(200).json({restaurant, promotion});
     }
@@ -831,17 +790,17 @@ app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// get all chilling at restaurant ------------------------------------------------------------------------------------
 app.get('/api/get-chilling/:restaurantID', async (req, res) => {
   try {
     const { restaurantID } = req.params;
-
     if (!restaurantID) {
       return res.status(400).json({ message: 'Missing restaurantID' });
     }
     const chillings = await Chilling.aggregate([
       { $match: { restaurantID } },
       {
+        // join with profiles collection
         $lookup: {
           from: 'profiles',
           localField: 'userID',
@@ -851,6 +810,7 @@ app.get('/api/get-chilling/:restaurantID', async (req, res) => {
       },
       { $unwind: '$profile' },
       {
+        // project the fields to return
         $project: {
           chillingID: 1,
           userID: 1,
@@ -862,100 +822,88 @@ app.get('/api/get-chilling/:restaurantID', async (req, res) => {
         }
       }
     ]);
-
     res.status(200).json(chillings);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// create chilling at restaurant ------------------------------------------------------------------------------------
 app.post('/api/chilling-at/:restaurantID', async (req, res) => {
   try {
     const { restaurantID } = req.params;
     const { userID } = req.query;
-
     if (!restaurantID || !userID) {
       return res.status(400).json({ message: 'Missing restaurantID or userID' });
     }
-
     // Check if the user has a chilling at another restaurant
     const existingChilling = await Chilling.findOne({ userID });
     if (existingChilling) {
       await Chilling.deleteOne({ userID });
     }
-
     // Create a new chilling at the specified restaurant
     const newChilling = new Chilling({
       userID,
       restaurantID
     });
-
     await newChilling.save();
-
     res.status(201).json({ message: 'Chilling created successfully' });
   } catch (error) {
     console.error('Error creating chilling:', error);
     res.status(500).json({ message: 'Internal server error.' });
   }
 });
-
+// request match(chilling) with other user ------------------------------------------------------------------------------------
 app.post('/api/chilling-with-you/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
     const { otherUserID, restaurantID } = req.query;
-
     if (!userID || !otherUserID) {
       return res.status(400).json({ message: 'Missing userID or otherUserID' });
     }
     if (userID === otherUserID) {
       return res.status(200).json({ message: "you can't chilling with youself"});
     }
-
+    // Check if the user already has a match with the other user
     const existingMatch = await Match.findOne({
       $or: [
         { userID1: userID, userID2: otherUserID },
         { userID1: otherUserID, userID2: userID }
       ]
     });
-
     if (existingMatch) {
+      // Match already exists
       return res.status(200).json({ message: 'Match already exists' });
     }
+    // Create a new match request
     const match = new Match({
       userID1: userID,
       userID2: otherUserID,
       restaurantID: restaurantID
     });
-
     await match.save();
-
     res.status(201).json({ message: `${userID} want to chilling with ${otherUserID}` });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-
+// denied match request ------------------------------------------------------------------------------------
 app.delete('/api/denied-match/:matchID', async (req, res) => {
   try {
     const { matchID } = req.params;
-
     if (!matchID) {
       return res.status(400).json({ message: 'Missing matchID' });
     }
-
     const match = await Match.findOne({ matchID });
     if (!match) {
       return res.status(404).json({ message: 'Match not found' });
     }
-
+    // Delete the match
     await Match.deleteOne({ matchID });
-
     res.status(200).json({ message: 'Match denied and deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-
 // set gernder interest use by username from users = userid from profiles ------------------------------------------------------------------------------------
 app.put('/api/set-gender/:username', async (req, res) => {
   const { username } = req.params; // Extract username from the URL
