@@ -107,28 +107,31 @@ return (
       {
         filteredPromotions.map((promotion) => (
             promotion.hasPromo === true ? (
-              <button key={promotion.restaurantID} onClick={() => go_to_pro_in_res(promotion.restaurantID)} className="flex flex-col w-[308px] h-[90px] bg-[#D9D9D9] p-2 relative">
-                <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
-                    <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.name}</p>
-                    <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.description}</p>
-                    <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tags.join(', ')}</p>
+              <button key={promotion.restaurantID} onClick={() => go_to_pro_in_res(promotion.restaurantID)} className="flex flex-col w-[308px] h-auto  bg-[#D9D9D9] p-2 relative">
+                <div className="flex flex-row justify-center items-center ">
+                    <div className="flex flex-col justify-start w-[234px] h-auto max-h-[88px] overflow-auto bg-[#FFFFFF]">
+                        <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.name}</p>
+                        <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.description}</p>
+                        <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tags.join(', ')}</p>
+                    </div>
+                    <div className=" absolute bottom-[0] left-[81%] h-[88px] h-full border-l border-dashed border-[#FFFFFF]"></div>
+                    <div className="h-full w-[80px] transform rotate-90">
+                        <p className="text-[#F56464] text-[14px] text-center font-bold">
+                          Promotion
+                        </p>
+                    </div>
                 </div>
-                <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
-                <div className="absolute right-[1px] transform translate-y-3 rotate-90 mt-1 content-center">
-                  <p className="text-[#F56464] text-[14px] text-center font-bold">
-                    Promotion
-                  </p>
-                </div>
+                
                 </button>
           ) : (
             /* If the restaurant doesn't have promotion */
-            <button key={promotion.restaurantID} onClick={() => go_to_resNopro(promotion.restaurantID)} className="flex flex-col w-[308px] h-[90px] bg-[#D9D9D9] p-2 relative">
-              <div className="flex flex-col justify-center w-[234px] h-[77px] bg-[#FFFFFF] ">
+            <button key={promotion.restaurantID} onClick={() => go_to_resNopro(promotion.restaurantID)} className="flex flex-col w-[308px] h-auto bg-[#D9D9D9] p-2 relative">
+              <div className="flex flex-col justify-start w-[234px] h-auto max-h-[88px] bg-[#FFFFFF] overflow-auto">
                   <p className="text-black text-xs text-left pl-1">ชื่อร้าน :{promotion.name}</p>
                   <p className="text-black text-xs text-left pl-1">กล่าวแนะนำร้านอาหาร :{promotion.description}</p>
                   <p className="text-black text-xs text-left pl-1">ประเภทร้านอาหาร :{promotion.tags}</p>
               </div>
-              <div className=" absolute bottom-[1%] left-[81%] h-[88px] border-l border-dashed border-[#FFFFFF]"></div>
+              <div className=" absolute bottom-[1%] left-[81%] h-full border-l border-dashed border-[#FFFFFF]"></div>
             </button>
           )
         ))}
