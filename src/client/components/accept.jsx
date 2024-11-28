@@ -8,6 +8,7 @@ export default function Accept() {
   const navigate = useNavigate();
   const [userID, setUserID] = useState("");
   const [acceptRequests, setAcceptRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     // Get user data from local storage
@@ -27,6 +28,7 @@ export default function Accept() {
     console.log("username: ", userID);
     console.log("response.data: ", response.data);
     setAcceptRequests(response.data);
+    setLoading(false);
   };
   // Navigation to other pages
   const go_to_message = async () => {
@@ -99,43 +101,50 @@ export default function Accept() {
           <div style={{ width: '100%', display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
       </div>
         {/* List */}
-      <div className=" flex flex-col items-center">
-        {acceptRequests.length !== 0 ?
-        acceptRequests.map(profile => (
-          <div className="flex content-center">
-          <div
-            key={profile._id}
-            className="bg-gray-200 rounded-full w-[300px] p-4 flex flex-row items-center justify-between mt-4"
-          >
-            <div className="flex flex-row items-center">
-              <img
-                src={profile.photo[0]}
-                alt={`Profile ${profile.userID}`}
-                className="w-[50px] h-[50px] rounded-full mr-4"
-              />
-              <div className="w-[150px]">
-                <p className="text-[18px] text-gray-600">{profile.userID}, {profile.age}</p>
-                <p className="text-[14px] text-gray-600">{profile.restaurant ? "ร้าน" + profile.restaurant : ""}</p>
-                <p className="text-[14px] text-gray-600 truncate hover:text-clip hover:text-wrap">แนวที่ชอบ: {profile.tags.length === 0 ? profile.tags : profile.tags.join(', ')}</p>
+      <div className="h-full flex flex-col items-center">
+        {
+          loading ?
+          <div className="flex flex-col items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500"></div>
+            Loading
+          </div>
+          :
+          acceptRequests.length !== 0 ?
+          acceptRequests.map(profile => (
+            <div className="flex content-center">
+            <div
+              key={profile._id}
+              className="bg-gray-200 rounded-full w-[300px] p-4 flex flex-row items-center justify-between mt-4"
+            >
+              <div className="flex flex-row items-center">
+                <img
+                  src={profile.photo[0]}
+                  alt={`Profile ${profile.userID}`}
+                  className="w-[50px] h-[50px] rounded-full mr-4"
+                />
+                <div className="w-[150px]">
+                  <p className="text-[18px] text-gray-600">{profile.userID}, {profile.age}</p>
+                  <p className="text-[14px] text-gray-600">{profile.restaurant ? "ร้าน" + profile.restaurant : ""}</p>
+                  <p className="text-[14px] text-gray-600 truncate hover:text-clip hover:text-wrap">แนวที่ชอบ: {profile.tags.length === 0 ? profile.tags : profile.tags.join(', ')}</p>
+                </div>
               </div>
+              <img
+                onClick={() => accept(userID, profile.matchID)}
+                src="src/client/img/Group 19194.png"
+                alt="Checkmark"
+                className="w-[50px] h-[50px] text-green-500"
+              />
             </div>
-            <img
-              onClick={() => accept(userID, profile.matchID)}
-              src="src/client/img/Group 19194.png"
-              alt="Checkmark"
-              className="w-[50px] h-[50px] text-green-500"
-            />
-          </div>
-          <svg
-          onClick={() => denied(profile.matchID)}
-          className="w-5 pt-4"
-          xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
-            <path d="M6 4H18V21H6z" opacity=".3"></path><path d="M11 18H9V7h2V18zM15 18h-2V7h2V18zM4 3H20V5H4z"></path><path d="M17 5L14 2 10 2 7 5z"></path><path d="M17,22H7c-1.1,0-2-0.9-2-2V3h14v17C19,21.1,18.1,22,17,22z M7,5v15h10V5H7z"></path>
-          </svg>
-          </div>
-          
-        )):
-          <div>ไม่มีคำขอ</div>}
+            <svg
+            onClick={() => denied(profile.matchID)}
+            className="w-5 pt-4"
+            xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
+              <path d="M6 4H18V21H6z" opacity=".3"></path><path d="M11 18H9V7h2V18zM15 18h-2V7h2V18zM4 3H20V5H4z"></path><path d="M17 5L14 2 10 2 7 5z"></path><path d="M17,22H7c-1.1,0-2-0.9-2-2V3h14v17C19,21.1,18.1,22,17,22z M7,5v15h10V5H7z"></path>
+            </svg>
+            </div>
+
+          )):
+            <div className="h-full justify-self-center content-center">ไม่มีคำขอ</div>}
       </div>
         </div>
         {/* Menu */}

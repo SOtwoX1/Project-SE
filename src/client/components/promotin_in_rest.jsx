@@ -9,7 +9,7 @@ export default function Nopromotion_restaurant(){
     const [username, setUsername] = useState("");
     const [restaurantID, setRestaurantID] = useState("");
     const [restaurant, setRestaurant] = useState(
-      {restaurantID:0, name:"ชื่อร้านอาหาร", description:"คำแนะนำร้าน", tags:["ประเภทร้านอาหาร"],promo:false,time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1", "asdf"]}
+      {restaurantID:0, name:"", description:"", tags:[""],time:"00:00",photo:["https://via.placeholder.com/300x250?text=Image+1", ""]}
     );
     const [promo, setPromo] = useState([{
         _id: 0, promoID: "P000", restaurantID: "R002", discountEnd: "", description: "ลด 100%"
@@ -96,7 +96,7 @@ export default function Nopromotion_restaurant(){
                         <div className="flex items-center h-[65px]">
                             <button onClick={() => navigate(-1)} className="ml-2" >
                                 <svg class="w-[42px] h-[42px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m15 19-7-7 7-7"/>
+                                <path stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" stroke-width="1" d="m15 19-7-7 7-7"/>
                                 </svg>
                             </button>
                             <div className="flex flex-row space-x-1">

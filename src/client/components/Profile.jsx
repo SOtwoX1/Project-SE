@@ -51,8 +51,8 @@ export default function Profile() {
   const go_to_setting = () => navigate("/Setting-Profile");
   const go_to_Edit_pro = () => navigate("/Edit-Profile");
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  //if (loading) return <div>Loading...</div>;
+  //if (error) return <div>{error}</div>;
 
   // Extract profile data
   const { name, photo, username: profileUsername } = profile || {};
@@ -67,6 +67,7 @@ export default function Profile() {
 
   return (
     <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center">
+      {/* Header */}
       <div
         className="bg-white w-[375px] h-[717px] rounded-b-[50px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]"
         style={{ fontFamily: "Abhaya Libre, sans-serif" }}
@@ -94,29 +95,42 @@ export default function Profile() {
             alt="Pizza"
           />
         </div>
-        <div className="bg-yellow-400flex flex-col items-center mt-6">
-          <img
-            className="w-[200px] h-[200px] rounded-full border-[#E9C46A]"
-            src={photo && photo[0] ? photo[0] : "src/client/img/pure.png"}
-            alt="Profile"
-          />
-        </div>
-        <div className="text-center mt-4 text-[30px] font-bold text-black">{name}</div>
-        <div className="flex flex-row justify-center mt-6 space-x-4">
-          <button
-            onClick={go_to_Edit_pro}
-            className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium"
-          >
-            Edit Profile
-          </button>
-          <button
-            onClick={go_to_setting}
-            className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium"
-          >
-            Setting
-          </button>
-        </div>
-        
+        {/* Profile Section */}
+        {
+          loading ?
+            <div className="flex flex-col items-center justify-center h-[349px] text-[#E76F51]"
+              style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500"></div>
+              Loading
+            </div>
+            : error ?
+              <div className="h-[349px] justify-self-center content-center">{error}</div>
+              :
+              <div className="flex flex-col items-center">
+                <div className="bg-yellow-400flex flex-col items-center mt-6">
+                  <img
+                    className="w-[200px] h-[200px] rounded-full border-[#E9C46A]"
+                    src={photo && photo[0] ? photo[0] : "src/client/img/pure.png"}
+                    alt="Profile"
+                  />
+                </div>
+                <div className="text-center mt-4 text-[30px] font-bold text-black">{name}</div>
+                <div className="flex flex-row justify-center mt-6 space-x-4">
+                  <button
+                    onClick={go_to_Edit_pro}
+                    className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium"
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={go_to_setting}
+                    className="bg-gray-300 w-[130px] h-[40px] text-[14px] text-black font-medium"
+                  >
+                    Setting
+                  </button>
+                </div>
+              </div>}
+
 
         {/* Scrollable Image Section */}
         <div className="bg-gray-200 w-[346px] h-[161px] mt-6 overflow-x-auto flex items-center justify-start space-x-4">

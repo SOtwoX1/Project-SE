@@ -15,6 +15,7 @@ const DetailMatch = () => {
     photo: [''],
     tags: []
   });
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       // Get user ID from URL
@@ -23,6 +24,7 @@ const DetailMatch = () => {
       try {
         const response = await axios.get(`/api/get-profile/${userID}`);
         setUserProfile(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching user profile:', error);
       }
@@ -41,7 +43,7 @@ const DetailMatch = () => {
 
   return (
     <div
-      className="fixed overflow-hidden  items-center justify-center"
+      className="h-[812px] w-[375px] fixed overflow-hidden  items-center justify-center"
       style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
     >
       {/* Header */}
@@ -49,84 +51,93 @@ const DetailMatch = () => {
         className="bg-white w-[350px] h-[80px] text-[45px] font-extrabold text-[#E76F51] flex flex-col items-center pt-[8px]"
         style={{ fontFamily: 'Abhaya Libre, sans-serif' }}
       >
-          <div className="flex flex-row items-center justify-center">
-            <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
-            <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="src/client/img/heart.png" alt="Heart" />
-            <span className="text-[#E76F51] text-[40px] font-extrabold">KOO - KINN</span>
-            <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
-            <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
-          </div> 
+        <div className="flex flex-row items-center justify-center">
+          <img className="w-[55px] h-[55px] mr-4" src="src/client/img/French Fries.png" alt="French Fries" />
+          <img className="w-[22px] h-[27px]  mt-12 absolute left-[20%]" src="src/client/img/heart.png" alt="Heart" />
+          <span className="text-[#E76F51] text-[40px] font-extrabold">KOO - KINN</span>
+          <img className="w-[22px] h-[27px] mt-[-40px] absolute right-[20%]" src="src/client/img/heart2.png" alt="Heart" />
+          <img className="w-[55px] h-[55px] ml-4" src="src/client/img/pizza.png" alt="Pizza" />
+        </div>
       </div>
       {/* Back Button */}
-      <div style={{paddingTop:'' }}>
+      <div style={{ paddingTop: '' }}>
         <button style={{ border: 'none', background: 'none' }}
-        onClick={() => navigate(-1)}>
-            <img
+          onClick={() => navigate(-1)}>
+          <img
             src="src/client/img/Back.png"
             alt="Button Image"
             style={{ width: '30px', height: '30px' }}
           />
         </button>
-        <span style={{ color: '#E76F51', fontSize: '20px', marginTop: '8px' }}>{userProfile.userID}</span>
+        <span style={{ color: '#E76F51', fontSize: '20px', marginTop: '8px' }}>{loading ? '' : userProfile.userID}</span>
       </div>
-      {/* Card Section */}
-      <Card
-        style={{
-          width: '100%',
-          maxWidth: '375px',
-          justifyContent: 'center',
-        }}
-      >
-        <Box display="flex" flexDirection="column" alignItems="center" padding="12px">
-          {/* Profile Image Slider */}
-          <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px'  }}>
-            {userProfile.photo.map((img, index) => (
-              img == null ? null :
-              <Box key={index} display="flex" justifyContent="center">
-                <img
-                  src={img}
-                  alt={`Profile ${index + 1}`}
-                  style={{
-                    width: '100%',
-                    maxWidth: '350px',
-                    height: '250px',
-                    objectFit: 'cover',
-                    borderRadius: '16px',
-                  }}
-                />
+      {
+        loading ?
+          <div className="flex flex-col items-center justify-center h-full text-[#E76F51]"
+            style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500"></div>
+            Loading
+          </div>
+          :
+          /* Card Section */
+          <Card
+            style={{
+              width: '100%',
+              maxWidth: '375px',
+              justifyContent: 'center',
+            }}
+          >
+            <Box display="flex" flexDirection="column" alignItems="center" padding="12px">
+
+              {/* Profile Image Slider */}
+              <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
+                {userProfile.photo.map((img, index) => (
+                  img == null ? null :
+                    <Box key={index} display="flex" justifyContent="center">
+                      <img
+                        src={img}
+                        alt={`Profile ${index + 1}`}
+                        style={{
+                          width: '100%',
+                          maxWidth: '350px',
+                          height: '250px',
+                          objectFit: 'cover',
+                          borderRadius: '16px',
+                        }}
+                      />
+                    </Box>
+                ))}
+              </Slider>
+
+              {/* Fields */}
+              <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px" className="divide-y divide-gray-300">
+                <Typography >อายุ: {userProfile.age}</Typography>
+                <Typography >มหาวิทยาลัย {userProfile.address}</Typography>
+                <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tags.join(', ')}</Typography>
+                <Typography >เกี่ยวกับฉันจิงอะ: {userProfile.bio}</Typography>
+                <Typography>Lifestyle</Typography>
               </Box>
-            ))}
-          </Slider>
+            </Box>
 
-          {/* Fields */}
-          <Box display="flex" flexDirection="column" gap={2} width="100%" marginTop="16px"className="divide-y divide-gray-300">
-            <Typography >อายุ: {userProfile.age}</Typography>
-            <Typography >มหาวิทยาลัย {userProfile.address}</Typography>
-            <Typography >แนวร้านอาหารที่ชอบ: {userProfile.tags.join(', ')}</Typography>
-            <Typography >เกี่ยวกับฉันจิงอะ: {userProfile.bio}</Typography>
-            <Typography>Lifestyle</Typography>
-          </Box>
-        </Box>
-
-        {/* Lifestyle Buttons */}
-        <Box display="flex overflow-auto" justifyContent="space-around" padding="16px">
-          {userProfile.tags.map((tag, index) => (
-            <Button
-              key={index}
-              variant="contained"
-              style={{
-                backgroundColor: '#B7D55A',
-                borderRadius: '20px',
-                color: 'white',
-                width: '140px',
-                height: '40px',
-              }}
-            >
-              {tag}
-            </Button>
-          ))}
-        </Box>
-      </Card>
+            {/* Lifestyle Buttons */}
+            <Box display="flex overflow-auto" justifyContent="space-around" padding="16px">
+              {userProfile.tags.map((tag, index) => (
+                <Button
+                  key={index}
+                  variant="contained"
+                  style={{
+                    backgroundColor: '#B7D55A',
+                    borderRadius: '20px',
+                    color: 'white',
+                    width: '140px',
+                    height: '40px',
+                  }}
+                >
+                  {tag}
+                </Button>
+              ))}
+            </Box>
+          </Card>}
     </div>
   );
 };

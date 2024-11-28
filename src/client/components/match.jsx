@@ -17,6 +17,7 @@ const Match = () => {
   const [swipeDailyCount, setSwipeDailyCount] = useState(0);
   const [isPremium, setIsPremium] = useState(false);
   const [currentProfile, setCurrentProfile] = useState(profiles[0]);
+  const [loading, setLoading] = useState(true);
   // Poll profile that match the user
   async function pollProfile(username) {
     try {
@@ -43,7 +44,7 @@ const Match = () => {
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
-}, []);
+  }, []);
   // Fetch match profile
   const fetchProfiles = async (userID) => {
     try {
@@ -51,8 +52,9 @@ const Match = () => {
       const fetchProfiles = response.data;
       setProfiles(fetchProfiles);
       setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
+      setLoading(false);
     } catch (error) {
-        console.error('Error fetching match profile:', error);
+      console.error('Error fetching match profile:', error);
     }
   };
   // Fetch user profile like status, swipeDailyCount
@@ -100,9 +102,9 @@ const Match = () => {
       }
     } else if (swipeDailyCount >= 5 && currentProfile !== undefined) { // Check if swipeDailyCount >= 5
       setMatchText('The daily swipe limit! 🚫');
-        setTimeout(() => {
-          setMatchText('');
-        }, 2000);
+      setTimeout(() => {
+        setMatchText('');
+      }, 2000);
     } else { // Check if currentProfile is undefined
       console.log('Not enough swipe count but currentProfile is undefined');
     }
@@ -122,7 +124,7 @@ const Match = () => {
     try {
       await axios.put(`/api/change-status/${userID}?isFree=${!status}`);
       setStatus(!status);
-      console.log(!status ? 'ว่าง':'ไม่ว่าง');
+      console.log(!status ? 'ว่าง' : 'ไม่ว่าง');
     } catch (error) {
       console.error('Error changing status:', error);
     }
@@ -133,13 +135,13 @@ const Match = () => {
     console.log("currentIndex: ", currentIndex);
     // Check if have enough profile to show
     if (currentIndex < profiles.length - 1) {
-        setCurrentIndex(currentIndex + 1);
-        setCurrentProfile(profiles[currentIndex + 1]);
+      setCurrentIndex(currentIndex + 1);
+      setCurrentProfile(profiles[currentIndex + 1]);
     } else {
-        //when not have profile that matching any more poll new profile
-        await pollProfile(userID);
-        setCurrentIndex(0);
-        setCurrentProfile(profiles[0]);
+      //when not have profile that matching any more poll new profile
+      await pollProfile(userID);
+      setCurrentIndex(0);
+      setCurrentProfile(profiles[0]);
     }
   };
   // Show detail match profile
@@ -161,48 +163,59 @@ const Match = () => {
             justifyContent: 'center',
           }}
         >
-          
-            {/* Profile Image Slider */}
-              {
+
+          {/* Profile Image Slider */}
+          {
+            loading ?
+              <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+                <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
+                  <div className="flex flex-col items-center justify-center h-full text-[#E76F51]"
+                  style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500"></div>
+                    Loading
+                  </div>
+                </CardContent>
+              </Box>
+              :
               currentProfile !== undefined ?
-              (<Box display="flex" flexDirection="column" alignItems="center" padding="36px">
-              <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
-              {currentProfile.photo.map(img => (
-                img == null ? null :
-                <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center"
-                onClick={() => handleImageClick(currentProfile.userID)}>
-                  <img
-                    src={img}
-                    alt={`Profile ${currentProfile.photo.findIndex(photo => photo === img) + 1}`}
-                    style={{
-                      width: '100%',
-                      maxWidth: '313px',
-                      height: '336px',
-                      objectFit: 'cover',
-                      borderRadius: '16px',
-                    }}
-                  />
+                (<Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+                  <Slider {...sliderSettings} style={{ width: '100%', borderRadius: '16px' }}>
+                    {currentProfile.photo.map(img => (
+                      img == null ? null :
+                        <Box key={currentProfile.photo.findIndex(photo => photo === img)} display="flex" justifyContent="center"
+                          onClick={() => handleImageClick(currentProfile.userID)}>
+                          <img
+                            src={img}
+                            alt={`Profile ${currentProfile.photo.findIndex(photo => photo === img) + 1}`}
+                            style={{
+                              width: '100%',
+                              maxWidth: '313px',
+                              height: '336px',
+                              objectFit: 'cover',
+                              borderRadius: '16px',
+                            }}
+                          />
+                        </Box>
+                    ))}
+                  </Slider>
+                  {/* Profile Details */}
+                  <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
+                    <Typography variant="h6">{`${currentProfile.userID}, ${currentProfile.age}`}</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {currentProfile.bio}
+                    </Typography>
+                  </CardContent>
                 </Box>
-              ))}
-              </Slider>
-              {/* Profile Details */}
-            <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
-              <Typography variant="h6">{`${currentProfile.userID}, ${currentProfile.age}`}</Typography>
-              <Typography variant="body2" color="textSecondary">
-                {currentProfile.bio}
-              </Typography>
-            </CardContent>
-            </Box>
-          )
-            :
-            <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
-              <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
-                <Typography variant="h6">No profile that match</Typography>
-                <Typography variant="body2" color="textSecondary">
-                  please wait for new profile that match with you and try again later
-                </Typography>
-              </CardContent>
-            </Box>}
+                )
+                :
+                <Box display="flex" flexDirection="column" alignItems="center" padding="36px">
+                  <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
+                    <Typography variant="h6">No profile that match</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      please wait for new profile that match with you and try again later
+                    </Typography>
+                  </CardContent>
+                </Box>}
           {/* Match Text */}
           {matchText && (
             <Typography
@@ -212,8 +225,8 @@ const Match = () => {
                 textAlign: 'center',
                 marginTop: '10px',
                 fontWeight: 'bold',
-                zIndex:10,
-                fontSize:'20px',
+                zIndex: 10,
+                fontSize: '20px',
                 position: 'relative'
               }}
             >
@@ -230,9 +243,9 @@ const Match = () => {
               <img src="src/client/img/Frame 14.png" alt="Dislike" style={{ width: '84px', height: '84px' }} />
             </Button>
             <Button className='h-[84px] w-[84px]' onClick={handleStatus} style={{ color: 'green' }} aria-label="Free">
-              <div className={`h-[64px] w-[64px] ${status?'bg-[#b7d55a]':'bg-[#d82d4b]'} text-white content-center rounded-full drop-shadow-xl`}>{status ? 'ว่าง':'ไม่ว่าง'}</div>
-            {//<img src='src/client/img/Component 1.png' alt="Free" style={{ width: '84px', height: '84px' }} />
-}
+              <div className={`h-[64px] w-[64px] ${status ? 'bg-[#b7d55a]' : 'bg-[#d82d4b]'} text-white content-center rounded-full drop-shadow-xl`}>{status ? 'ว่าง' : 'ไม่ว่าง'}</div>
+              {//<img src='src/client/img/Component 1.png' alt="Free" style={{ width: '84px', height: '84px' }} />
+              }
             </Button>
           </div>
         </Card>

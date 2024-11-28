@@ -10,6 +10,8 @@ function Chat() {
     const [matchID, setMatchID] = useState("");
     const [chatWithUser, setChatWithUser] = useState("");
     const [chats, setChats] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         // Get userID from local storage
@@ -45,8 +47,10 @@ function Chat() {
             const fetchChats = response.data;
             console.log(response.data);
             setChats(fetchChats);
+            setLoading(false);
         } catch (error) {
             console.error('Error poll chats:', error);
+            setError("Failed to load chats");
         }
     }
     // Send message
@@ -109,13 +113,24 @@ function Chat() {
                         </div>
                         <div className="text-[20px] pr-[41px] w-full font-extrabold text-center"
                         style={{ fontFamily: 'Abhaya Libre, sans-serif' }}>
-                            <button onClick={() => go_to_viewprofile(chatWithUser.userID)}>{chatWithUser.userID}</button>
+                            <button onClick={() => go_to_viewprofile(chatWithUser.userID)}>{loading || error ? "" : chatWithUser.userID}</button>
                         </div>
                     </div>
                     
                     <div className="h-[571px] w-[341px] bg-[#fff3f3] border-[#d9d9d9] rounded-tr-[20px] rounded-b-[50px] overflow-auto">
                         <div className="w-[341px] h-[495px] overflow-auto flex flex-col-reverse p-4">
                         {
+                        loading ?
+                        <div className="flex flex-col items-center justify-center h-full">
+                            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>
+                            <p className="text-gray-700 mt-4">Loading...</p>
+                        </div>
+                        :
+                        error ?
+                        <div className="flex flex-col items-center justify-center h-full">
+                            <p className="text-gray-700 mt-4">{error}</p>
+                        </div>
+                        :
                         chats.length !== 0 ?
                         chats.map(message => (
                             (message.userID_sender === userID)
