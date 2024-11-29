@@ -120,7 +120,7 @@ const DetailMatch = () => {
             </Box>
 
             {/* Lifestyle Buttons */}
-            <Box display="flex overflow-auto" justifyContent="space-around" padding="16px">
+            <Box display="flex" flexWrap="wrap" gap={2} justifyContent="space-between" padding="10px">
               {userProfile.tags.map((tag, index) => (
                 <Button
                   key={index}
@@ -131,6 +131,7 @@ const DetailMatch = () => {
                     color: 'white',
                     width: '140px',
                     height: '40px',
+                    padding:'10px',
                   }}
                 >
                   {tag}
