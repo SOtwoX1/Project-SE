@@ -120,7 +120,7 @@ const DetailMatch = () => {
             </Box>
 
             {/* Lifestyle Buttons */}
-            <Box display="flex" flexWrap="wrap" gap={2} justifyContent="space-between" padding="10px">
+            <Box display="flex" flexWrap="wrap" gap={2} justifyContent="space-between" padding="30px">
               {userProfile.tags.map((tag, index) => (
                 <Button
                   key={index}

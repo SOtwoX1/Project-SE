@@ -138,7 +138,7 @@ const Preview = () => {
         </Box>
 
         {/* Lifestyle Buttons */}
-        <Box display="flex" flexWrap="wrap" gap={2} justifyContent="space-around" padding="16px" >
+        <Box display="flex" flexWrap="wrap" gap={2} justifyContent="space-around" padding="30px" >
           <Button
             variant="contained"
             style={{
