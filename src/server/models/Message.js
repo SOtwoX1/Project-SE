@@ -32,4 +32,6 @@ messageSchema.pre('save', async function (next) {
     next();
 });
 
-export default Message = model('Messages', messageSchema);
+const Message = model('Messages', messageSchema);
+
+export default Message;

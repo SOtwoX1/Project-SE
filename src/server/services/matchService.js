@@ -1,16 +1,13 @@
-import Match from "../models/Match";
-import Profile from "../models/profile";
-import Chat from "../models/Chat";
-import { calAge } from "./profileService";
+import Match from "../models/Match.js";
+import Profile from "../models/profile.js";
+import Chat from "../models/Chat.js";
+import { calAge } from "./profileService.js";
 
 // get other profile that match the user interest the same style
-export const getMatchProfile = async (userID) => {
+export const getMatchProfile = async (req, res) => {
     try {
-        const match = await Match.findOne({ userID });
-        if (!match) {
-            return res.status(404).json({ message: "Match not found" });
-        }
-        const profile = await Profile.findOne({ userID: match.matchID });
+        const { userID } = req.params;
+        const profile = await Profile.findOne({ userID });
         if (!profile) {
             return res.status(404).json({ message: "Profile not found" });
         }
@@ -32,8 +29,10 @@ export const getMatchProfile = async (userID) => {
 };
 
 // send request to match other user
-export const sendMatchRequest = async (userID, otherUserID) => {
+export const sendMatchRequest = async (req, res) => {
     try {
+        const { userID } = req.params;
+        const { otherUserID } = req.query;
         if (!userID || !otherUserID) {
             return res.status(400).json({ message: 'Missing userID/otherUserID' });
         }
@@ -62,8 +61,9 @@ export const sendMatchRequest = async (userID, otherUserID) => {
 };
 
 // get all match request
-export const getAllMatchRequest = async (userID) => {
+export const getAllMatchRequest = async (req, res) => {
     try {
+        const { userID } = req.params;
         if (!userID) {
             return res.status(400).json({ message: 'Missing userID' });
         }
@@ -120,8 +120,10 @@ export const getAllMatchRequest = async (userID) => {
 };
 
 // accept match request from other user change isMatch to true and create chat
-export const acceptMatchRequest = async (userID, matchID) => {
+export const acceptMatchRequest = async (req, res) => {
     try {
+        const { userID } = req.params;
+        const { matchID } = req.query;
         if (!userID || !matchID) {
             return res.status(400).json({ message: 'Missing userID/matchID' });
         }
@@ -157,8 +159,9 @@ export const acceptMatchRequest = async (userID, matchID) => {
 }
 
 // decline match request from other user
-export const declineMatchRequest = async (matchID) => {
+export const declineMatchRequest = async (req, res) => {
     try {
+        const { matchID } = req.params;
         if (!matchID) {
             return res.status(400).json({ message: 'Missing matchID' });
         }

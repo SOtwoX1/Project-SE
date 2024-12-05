@@ -7,4 +7,6 @@ const userSchema = new Schema({
     createdAt: { type: Date, default: Date.now }, // Optional: Track user registration time
 });
 
-export default User = model('Users', userSchema);
+const User = model('Users', userSchema);
+
+export default User;

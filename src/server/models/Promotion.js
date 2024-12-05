@@ -28,4 +28,6 @@ promotionSchema.pre('save', async function (next) {
     next();
 });
 
-export default Promotion = model('Promotions', promotionSchema);
+const Promotion = model('Promotions', promotionSchema);
+
+export default Promotion;

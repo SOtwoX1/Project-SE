@@ -28,4 +28,6 @@ chatSchema.pre('save', async function (next) {
   next();
 });
 
-export default Chat = model('Chats', chatSchema);
+const Chat = model('Chats', chatSchema);
+
+export default Chat;

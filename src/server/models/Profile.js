@@ -24,4 +24,6 @@ const profileSchema = new Schema({
     isPremium: { type: Boolean, default: false },
 });
 
-export default Profile = model('Profiles', profileSchema);
+const Profile = model('Profiles', profileSchema);
+
+export default Profile;

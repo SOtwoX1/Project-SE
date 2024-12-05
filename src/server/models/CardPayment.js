@@ -9,4 +9,6 @@ const cardpaymentSchema = new Schema({
     cvv: String
   });
   
-export default CardPayment = model('CardPayment', cardpaymentSchema);
+const CardPayment = model('CardPayment', cardpaymentSchema);
+
+export default CardPayment;

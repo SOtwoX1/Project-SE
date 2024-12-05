@@ -35,4 +35,7 @@ matchSchema.pre('save', async function (next) {
     }
     next();
 });
-export default Match = model('Matches', matchSchema);
+
+const Match = model('Matches', matchSchema);
+
+export default Match;

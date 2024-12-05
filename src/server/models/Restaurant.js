@@ -13,4 +13,6 @@ const restaurantSchema = new Schema({
     hasPromo: { type: Boolean, default: false }
 });
 
-export default Restaurant = model('Restaurants', restaurantSchema);
+const Restaurant = model('Restaurants', restaurantSchema);
+
+export default Restaurant;

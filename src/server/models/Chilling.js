@@ -29,4 +29,6 @@ chillingSchema.pre('save', async function (next) {
     next();
 });
 
-export default Chilling = model('Chilling', chillingSchema);
+const Chilling = model('Chilling', chillingSchema)
+
+export default Chilling;
