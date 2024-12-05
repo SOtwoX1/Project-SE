@@ -98,6 +98,7 @@ const profileSchema = new mongoose.Schema({
   gender: String,
   hobby: String,
   tags: [String],
+  isPremium : { type: Boolean, default: false },
   swipeDailyCount: { type: Number, default: 0 }, // counter to track daily swipe limit for free users
   acceptDailyCount: { type: Number, default: 0 },
   location: {
@@ -155,6 +156,15 @@ const restaurantSchema = new mongoose.Schema({
   description: { type: String },
   hasPromo: { type: Boolean, default: false }
 });
+// Apply the auto-increment plugin
+restaurantSchema.plugin(autoIncrement.plugin, {
+  model: 'Restaurant',
+  field: 'restaurantID',
+  startAt: 1, // Start the auto-increment at 1
+  incrementBy: 1, // Increment by 1 for each new entry
+  format: 'R%03d' // Format as 'R001', 'R002', etc.
+});
+
 const chillingSchema = new mongoose.Schema({
   chillingID: { type: String, AutoIncrement: true },
   userID: { type: String, required: true },
@@ -617,134 +627,129 @@ app.get('/api/get-all-chat/:userID', async (req, res) => {
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-  const matchRooms = await Match.aggregate([
+    const matchRooms = await Match.aggregate([
       {
-          $match: {
-              $and: [
-                  {
-                      $or: [
-                          { userID1: userID },
-                          { userID2: userID }
-                      ]
-                  },
-                  { isMatch: true }
-              ]
-          }
+        $match: {
+          $and: [
+            { $or: [{ userID1: userID }, { userID2: userID }] },
+            { isMatch: true },
+          ],
+        },
       },
       {
-        // join with chat collection to get user's chat rooms
-          $lookup: {
-              from: 'profiles',
-              let: { userID1: '$userID1', userID2: '$userID2' },
-              pipeline: [
-                  {
-                      $match: {
-                          $expr: {
-                              $or: [
-                                  { $eq: ['$userID', '$$userID1'] },
-                                  { $eq: ['$userID', '$$userID2'] }
-                              ]
-                          }
-                      }
-                  },
-                  {
-                      $project: {
-                          userID: 1,
-                          photo: 1
-                      }
-                  }
-              ],
-              as: 'profiles'
-          }
+        $lookup: {
+          from: 'profiles',
+          let: { userID1: '$userID1', userID2: '$userID2' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $or: [{ $eq: ['$userID', '$$userID1'] }, { $eq: ['$userID', '$$userID2'] }],
+                },
+              },
+            },
+            { $project: { userID: 1, photo: 1 } },
+          ],
+          as: 'profiles',
+        },
       },
       {
-        // filter out the user's own profile
-          $addFields: {
-              otherUserProfile: {
-                  $filter: {
-                      input: '$profiles',
-                      as: 'profile',
-                      cond: { $ne: ['$$profile.userID', userID] }
-                  }
-              }
-          }
+        $addFields: {
+          otherUserProfile: {
+            $filter: {
+              input: '$profiles',
+              as: 'profile',
+              cond: { $ne: ['$$profile.userID', userID] },
+            },
+          },
+        },
       },
+      { $unwind: '$otherUserProfile' },
       {
-          $unwind: '$otherUserProfile'
+        $project: {
+          _id: 1,
+          matchID: 1,
+          userID: '$otherUserProfile.userID',
+          lastContent: 1,
+          photo: '$otherUserProfile.photo',
+        },
       },
-      {
-        // project the fields to return
-          $project: {
-              _id: 1,
-              matchID: 1,
-              userID: '$otherUserProfile.userID',
-              lastContent: 1,
-              photo: "$otherUserProfile.photo"
-          }
-      }
-]);
-    if (!matchRooms) {
-      res.status(404).json({ message: 'Not found'});
+    ]);
+
+    if (!matchRooms.length) {
+      return res.status(404).json({ message: 'No chat rooms found' });
     }
+
     res.status(200).json(matchRooms);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 });
+
 // get chat history from chat room ------------------------------------------------------------------------------------
 app.get('/api/get-chat/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
-    const matchID = req.query.matchID;
+    const { matchID } = req.query;
+
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
     if (!matchID) {
       return res.status(400).json({ message: 'Missing matchID' });
     }
+
     const chatRoom = await Chat.findOne({ matchID });
     if (!chatRoom) {
-      res.status(404).json({ message: 'Not found chat'});
+      return res.status(404).json({ message: 'Chat room not found' });
     }
-    // get all message from chat room
+
     const chatHistory = await Message.find({
-      messageID: { $in: chatRoom.all_messageIDs }
-    }).sort( { messageID: -1 } ); // to start from the latest message
-    if (!chatHistory) {
-      res.status(404).json({ message: 'Not found message'});
+      messageID: { $in: chatRoom.all_messageIDs },
+    }).sort({ messageID: -1 });
+
+    if (!chatHistory.length) {
+      return res.status(404).json({ message: 'No messages found' });
     }
-    res.status(200).json(chatHistory);    
+
+    res.status(200).json(chatHistory);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 });
+
 // send message to chat room ------------------------------------------------------------------------------------
 app.post('/api/send-message/:userID', async (req, res) => {
   try {
     const { userID } = req.params;
     const { matchID, text } = req.query;
+
     if (!userID || !matchID || !text) {
       return res.status(400).json({ message: 'Missing userID/matchID/text' });
     }
+
     const chatRoom = await Chat.findOne({ matchID });
     if (!chatRoom) {
-      res.status(404).json({ message: 'Not found'});
+      return res.status(404).json({ message: 'Chat room not found' });
     }
+
     const newMessage = new Message({
       chatID: chatRoom.chatID,
       userID_sender: userID,
       text,
-      createdAt: chatRoom.createdAt
+      createdAt: new Date(),
     });
     await newMessage.save();
-    // add messageID to chat collection
+
     chatRoom.all_messageIDs.push(newMessage.messageID);
     await chatRoom.save();
-    res.status(200).json({ message: 'Message sent' });
+
+    res.status(200).json({ message: 'Message sent successfully' });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 });
+
 // change status to free or not free for matching ------------------------------------------------------------------------------------
 app.put('/api/change-status/:userID', async (req, res) => {
   try {
@@ -1149,6 +1154,113 @@ app.put('/api/update-dataprofile', async (req, res) => {
     profile.gender = gender;
     await profile.save();
     res.status(200).json({ message: 'Data updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+//---------------------------------------------------------------------------------------------------
+// update payment id by username
+app.put('/api/set-ispremium', async (req, res) => {
+  const { username } = req.body; // Extract username from the request body
+
+  try {
+      // Find the user by username
+      const user = await User.findOne({ username });
+      if (!user) {
+          return res.status(404).json({ message: `User with username '${username}' not found.` });
+      }
+
+      // Find the profile associated with the user
+      const profile = await Profile.findOne({ userID: username }); // Using user._id to find the profile
+      if (!profile) {
+          return res.status(404).json({ message: `Profile for user '${username}' not found.` });
+      }
+
+      // Update the isPremium field
+      profile.isPremium = true; // Corrected the boolean value to 'true'
+      await profile.save();
+
+      // Respond with success message
+      res.status(200).json({ message: 'User profile updated successfully to Premium' });
+
+  } catch (error) {
+      console.error('Error updating user profile:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+//---------------------------------------------------------------------------------------------------
+// admin api
+// get data profile all user
+app.get('/api/get-data-profile', async (req, res) => {
+  try {
+    const profiles = await Profile.find();
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// get data User all user
+app.get('/api/get-data-user', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// get data restaurant all user
+app.get('/api/get-data-restaurant', async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
+    res.status(200).json(restaurants);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+//---------------------------------------------------------------------------------------------------
+// post data restaurant
+// API routes
+app.get('/api/get-data-restaurant', async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
+    res.status(200).json(restaurants);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.post('/api/post-data-restaurant', async (req, res) => {
+  const { name, tags, location, photo, description, hasPromo } = req.body;
+  try {
+    const newRestaurant = new Restaurant({
+      name,
+      tags,
+      location,
+      photo,
+      description,
+      hasPromo,
+    });
+    await newRestaurant.save();
+    res.status(201).json({ message: 'Restaurant created successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.delete('/api/delete-data-restaurant/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Restaurant.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Restaurant deleted successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });

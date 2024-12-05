@@ -96,7 +96,7 @@ export default function Show_me() {
                         </button>
                     </div>
                     <div className="flex justify-between text-[10px] items-center h-[65px]">
-                        <p className="text-black p-12">You will only see your selected in discovery.</p>
+                        <p className="text-[#D9D9D9] p-12">You will only see your selected in discovery.</p>
                     </div>
                 </div>
             </div>

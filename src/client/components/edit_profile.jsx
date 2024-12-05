@@ -213,91 +213,91 @@ export default function Edit_pro() {
                 </div>
                 <div className="px-6 py-4">
                     {/* Bio Field */}
-                    <div className="m-2 w-full h-auto flex">
-                        <span className="text-s text-[#8391A1] m-2 ml-2">Bio: </span>
+                    <div className="m-2 w-full h-auto">
+                        <div className="text-s text-[black] m-2 ml-2">Can you share a little about yourself ?</div>
                         <input
                             id="bio"
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
                             type="text"
-                            className="w-250 h-72 text-[#8391A1] mt-1 ml-2 border border-gray-300 rounded-3xl"
+                            className="w-72 h-20 text-[#8391A1] mt-1 ml-2 bg-gray-300 border border-gray-300 rounded-3xl"
                             placeholder="Bio"
                         />
                     </div>
 
                     {/* Name Field */}
                     <div className="m-2 w-full h-auto flex">
-                        <span className="text-s text-[#8391A1] m-2 ml-2">Name: </span>
+                        <span className="text-s text-[b] m-2 ml-2">Name: </span>
                         <input
                             id="name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             type="text"
-                            className="w-250 h-8 text-[#8391A1] mt-1 ml-2 border border-gray-300 rounded-3xl"
+                            className="w-56 h-8 text-[#8391A1] mt-1 ml-2 bg-gray-300 border border-gray-300 rounded-3xl"
                             placeholder="Name"
                         />
                     </div>
 
                     {/* Address Field */}
                     <div className="m-2 w-full h-auto flex">
-                        <span className="text-s text-[#8391A1] m-2 ml-2">Address: </span>
+                        <span className="text-s text-[b] m-2 ml-2">Address: </span>
                         <input
                             id="address"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             type="text"
-                            className="w-250 h-8 text-[#8391A1] mt-1 ml-2 border border-gray-300 rounded-3xl"
+                            className="w-52 h-8 text-[#8391A1] mt-1 ml-2 bg-gray-300 border border-gray-300 rounded-3xl"
                             placeholder="Address"
                         />
                     </div>
 
                     {/* Date of Birth Field */}
                     <div className="m-2 w-full h-auto flex">
-                        <span className="text-s text-[#8391A1] m-2 ml-2">Date of Birth: </span>
+                        <span className="text-s text-[b] m-2 ml-2">Date of Birth: </span>
                         <input
                             id="dob"
                             value={dob}
                             onChange={(e) => setDob(e.target.value)}
                             type="date"
-                            className="w-250 h-8 text-[#8391A1] mt-1 ml-2 border border-gray-300 rounded-3xl"
+                            className="w-44 h-8 text-[#8391A1] mt-1 ml-2  bg-gray-300 border border-gray-300 rounded-3xl"
                         />
                     </div>
 
                     {/* Education Field */}
                     <div className="m-2 w-full h-auto flex">
-                        <span className="text-s text-[#8391A1] m-2 ml-2">Education: </span>
+                        <span className="text-s text-[b] m-2 ml-2">Education: </span>
                         <input
                             id="education"
                             value={education}
                             onChange={(e) => setEducation(e.target.value)}
                             type="text"
-                            className="w-250 h-8 text-[#8391A1] mt-1 ml-2 border border-gray-300 rounded-3xl"
+                            className="w-48 h-8 text-[#8391A1] mt-1 ml-2 bg-gray-300 border border-gray-300 rounded-3xl"
                             placeholder="Education"
                         />
                     </div>
 
                     {/* Job Field */}
                     <div className="m-2 w-full h-auto flex">
-                        <span className="text-s text-[#8391A1] m-2 ml-2">Job: </span>
+                        <span className="text-s text-[b] m-2 ml-2">Job: </span>
                         <input
                             id="job"
                             value={job}
                             onChange={(e) => setJob(e.target.value)}
                             type="text"
-                            className="w-250 h-8 text-[#8391A1] mt-1 ml-2 border border-gray-300 rounded-3xl"
+                            className="w-60 h-8 text-[black] mt-1 ml-2 bg-gray-300 border border-gray-300 rounded-3xl"
                             placeholder="Job"
                         />
                     </div>
 
                     {/* Hobby Field */}
                     <div className="m-2 w-full h-auto flex">
-                        <span className="text-s text-[#8391A1] m-2 ml-2">Hobby: </span>
+                        <span className="text-s text-[black] m-2 ml-2">Hobby: </span>
                         <input
                             id="hobby"
                             value={hobby}
                             onChange={(e) => setHobby(e.target.value)}
                             type="text"
-                            className="w-250 h-8 text-[#8391A1] mt-1 ml-2 border border-gray-300 rounded-3xl"
+                            className="w-250 h-8 text-[#8391A1] mt-1 ml-2 border bg-gray-300 border-gray-300 rounded-3xl"
                             placeholder="Hobby"
                         />
                     </div>

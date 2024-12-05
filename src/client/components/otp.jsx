@@ -10,7 +10,7 @@ export default function VerifyLetter() {
 
   // Generate a random 4-letter code
   function generateCode() {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const letters = "123456789";
     return Array(4)
       .fill("")
       .map(() => letters[Math.floor(Math.random() * letters.length)])
@@ -79,9 +79,9 @@ export default function VerifyLetter() {
 
         <form className="flex flex-col justify-center space-y-[32px]">
           <div className="flex flex-col w-[331px] h-[97px] space-y-[10px]">
-            <p className="text-3xl font-semibold">4-Letter Verification</p>
-            <p className="text-[#8391A1]">Enter the verification code below:</p>
-            <p className="text-lg font-bold text-[#E76F51]">{generatedCode}</p>
+            <p className="text-3xl font-semibold">OTP Verification</p>
+            <p className="text-[#8391A1]">Enter the verification code we just sent on your email address.</p>
+            <p className="text-lg font-bold text-[#E76F51]"> Code : {generatedCode} </p>
           </div>
 
           <div className="flex flex-row space-x-[12.75px]">

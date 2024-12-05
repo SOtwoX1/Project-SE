@@ -102,7 +102,7 @@ export default function Setting_pro() {
                         </svg>
                     </button>
                     <p className="text-xl text-black ">PROFILE</p>
-                    <p className="pl-44 text-xl text-[#D9D9D9] ">{username}</p>
+                    {/* <p className="pl-44 text-xl text-[#D9D9D9] ">{username}</p> */}
                 </div>
                 <div className="flex justify-between text-xl  items-center h-[65px]">
                     <p className="text-black p-12">Email</p>

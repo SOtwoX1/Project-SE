@@ -245,8 +245,8 @@ export default function Personal_info() {
             </div>
             <button
                 onClick={go_to_add_photo}
-                className="border-none outline-none bg-[#E76F51] text-white py-[5px] px-[15px] rounded-xl mt-[50px]">
-                NEXT
+                className="border-none outline-none bg-[#E9C46A] text-white py-[5px] px-[15px] rounded-xl mt-[50px]">
+                CONTINUE
             </button>
         </div>
     );

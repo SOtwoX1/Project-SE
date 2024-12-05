@@ -82,13 +82,12 @@ const Match = () => {
   };
   // Like profile
   const handleLike = async () => {
-    // Check if user is premium or swipeDailyCount < 5
     if (isPremium || swipeDailyCount < 5) {
       try {
         console.log('Like profile clicked');
         if (currentProfile !== undefined) {
           const response = await axios.post(`/api/like-profile/${userID}?otherUserID=${currentProfile.userID}`);
-          setMatchText(`${response.data.message}! 🎉`);
+          setMatchText(<span style={{ color: '#F4A261' }}>{`${response.data.message}! 🎉`}</span>);
           console.log('matchText:', 'Matched! 🎉');
           setTimeout(() => {
             setMatchText('');
@@ -100,15 +99,16 @@ const Match = () => {
       } catch (error) {
         console.error('Error liking profile:', error);
       }
-    } else if (swipeDailyCount >= 5 && currentProfile !== undefined) { // Check if swipeDailyCount >= 5
-      setMatchText('The daily swipe limit! 🚫');
+    } else if (swipeDailyCount >= 5 && currentProfile !== undefined) {
+      setMatchText(<span style={{ color: '#F4A261' }}>The daily swipe limit! 🚫</span>);
       setTimeout(() => {
         setMatchText('');
       }, 2000);
-    } else { // Check if currentProfile is undefined
+    } else {
       console.log('Not enough swipe count but currentProfile is undefined');
     }
   };
+  
   // Skip profile
   const handleDislike = async () => {
     console.log('Dislike clicked');
