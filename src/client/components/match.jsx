@@ -18,10 +18,10 @@ const Match = () => {
   const [isPremium, setIsPremium] = useState(false);
   const [currentProfile, setCurrentProfile] = useState(profiles[0]);
   const [loading, setLoading] = useState(true);
-  // Poll profile that match the user
-  async function pollProfile(username) {
+  // Pull profile that match the user
+  async function pullProfile(username) {
     try {
-      console.log('poll profiles');
+      console.log('pull profiles');
       const response = await axios.get(`/api/match-profile/${username}`);
       const fetchProfiles = response.data;
       console.log(response.data);
@@ -138,8 +138,8 @@ const Match = () => {
       setCurrentIndex(currentIndex + 1);
       setCurrentProfile(profiles[currentIndex + 1]);
     } else {
-      //when not have profile that matching any more poll new profile
-      await pollProfile(userID);
+      //when not have profile that matching any more pull new profile
+      await pullProfile(userID);
       setCurrentIndex(0);
       setCurrentProfile(profiles[0]);
     }
