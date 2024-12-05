@@ -2,7 +2,7 @@
 
 ## Description
 
-Project-Koo-Kin เติมให้หน่อย
+Project-Koo-Kin
 ## Technologies Used
 ### การใช้ git ทำใน dev เเล้วค่อย pull request to main ** สำคัญ
    git init
