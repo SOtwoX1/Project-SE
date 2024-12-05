@@ -144,8 +144,9 @@ const messageSchema = new mongoose.Schema({
   createdAt: { type: Date } // Add expiration time same as chat
 });
 messageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
+
 const restaurantSchema = new mongoose.Schema({
-  restaurantID: { type: String, required: true },
+  restaurantID: { type: String, AutoIncrement: true },
   name: { type: String, required: true },
   tags: [String],
   location: {
@@ -155,14 +156,6 @@ const restaurantSchema = new mongoose.Schema({
   photo: [String],
   description: { type: String },
   hasPromo: { type: Boolean, default: false }
-});
-// Apply the auto-increment plugin
-restaurantSchema.plugin(autoIncrement.plugin, {
-  model: 'Restaurant',
-  field: 'restaurantID',
-  startAt: 1, // Start the auto-increment at 1
-  incrementBy: 1, // Increment by 1 for each new entry
-  format: 'R%03d' // Format as 'R001', 'R002', etc.
 });
 
 const chillingSchema = new mongoose.Schema({
@@ -1238,28 +1231,33 @@ app.get('/api/get-data-restaurant', async (req, res) => {
 });
 
 app.post('/api/post-data-restaurant', async (req, res) => {
-  const { name, tags, location, photo, description, hasPromo } = req.body;
+  const { restaurantID, name, tags, location, photo, description, hasPromo } = req.body;
   try {
     const newRestaurant = new Restaurant({
+      restaurantID,
       name,
       tags,
-      location,
+      location: {
+        latitude: location.latitude,
+        longitude: location.longitude
+      },
       photo,
       description,
-      hasPromo,
+      hasPromo
     });
     await newRestaurant.save();
-    res.status(201).json({ message: 'Restaurant created successfully' });
+    res.status(201).json(newRestaurant);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-app.delete('/api/delete-data-restaurant/:id', async (req, res) => {
-  const { id } = req.params;
+app.delete('/api/delete-restaurant', async (req, res) => {
+  const { restaurantID} = req.body;
+
   try {
-    await Restaurant.findByIdAndDelete(id);
+    await Restaurant.deleteOne({ restaurantID });
     res.status(200).json({ message: 'Restaurant deleted successfully' });
   } catch (error) {
     console.error(error);

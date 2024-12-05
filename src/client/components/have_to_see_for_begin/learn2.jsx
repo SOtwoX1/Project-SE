@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 // Component to show confirmation modal
+
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
     if (!isOpen) return null;
 
@@ -38,15 +40,21 @@ const UsersProfilesList = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
     const [usernameToDelete, setUsernameToDelete] = useState('');
-    
-    const [restaurants, setRestaurants] = useState([]);
-    const [name, setName] = useState('');
-    const [tags, setTags] = useState('');
-    const [location, setLocation] = useState({ latitude: '', longitude: '' });
-    const [photo, setPhoto] = useState('');
-    const [description, setDescription] = useState('');
-    const [hasPromo, setHasPromo] = useState(false);
 
+    const [restaurantData, setRestaurantData] = useState({
+        restaurantID: '',
+        name: '',
+        tags: '',
+        latitude: '',
+        longitude: '',
+        photo: '',
+        description: '',
+        hasPromo: false,
+    });
+
+    const [restaurants, setRestaurants] = useState([]);
+
+    const navigate = useNavigate();
     // Fetch users and profiles data from the backend
     useEffect(() => {
         const fetchData = async () => {
@@ -76,6 +84,14 @@ const UsersProfilesList = () => {
         fetchRestaurants();
     }, []);
 
+    const fetchRestaurants = async () => {
+        try {
+            const response = await axios.get('/api/get-data-restaurant');
+            setRestaurants(response.data);
+        } catch (error) {
+            console.error('Error fetching restaurants:', error);
+        }
+    };
     // Handle delete account request
     const handleDeleteAccount = async () => {
         setLoading(true);
@@ -104,33 +120,61 @@ const UsersProfilesList = () => {
     };
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setRestaurantData({
+            ...restaurantData,
+            [name]: type === 'checkbox' ? checked : value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const newRestaurant = {
-            name,
-            tags: tags.split(','),
-            location,
-            photo: [photo],
-            description,
-            hasPromo,
-        };
-
-        axios.post('/api/post-data-restaurant', newRestaurant)
-            .then((response) => {
-                setRestaurants([...restaurants, response.data]);
-                clearForm();
-            })
-            .catch((error) => console.error('Error posting restaurant:', error));
+        try {
+            setLoading(true);
+            const response = await axios.post('/api/post-data-restaurant', {
+                restaurantID: restaurantData.restaurantID,
+                name: restaurantData.name,
+                tags: restaurantData.tags.split(','),
+                location: {
+                    latitude: parseFloat(restaurantData.latitude),
+                    longitude: parseFloat(restaurantData.longitude),
+                },
+                photo: restaurantData.photo.split(','),
+                description: restaurantData.description,
+                hasPromo: restaurantData.hasPromo,
+            });
+            console.log('Restaurant created:', response.data);
+            fetchRestaurants(); // Refresh the restaurant list
+            setRestaurantData({
+                restaurantID: '',
+                name: '',
+                tags: '',
+                latitude: '',
+                longitude: '',
+                photo: '',
+                description: '',
+                hasPromo: false,
+            });
+            setLoading(false);
+            alert('Restaurant added successfully');
+        } catch (error) {
+            console.error('Error submitting data:', error);
+            setLoading(false);
+            alert('Failed to submit restaurant data');
+        }
     };
 
     // Delete restaurant by ID
-    const handleDelete = (id) => {
-        axios.delete(`/api/delete-data-restaurant/${id}`)
-            .then(() => {
-                setRestaurants(restaurants.filter((restaurant) => restaurant._id !== id));
-            })
-            .catch((error) => console.error('Error deleting restaurant:', error));
+    const handleDelete = async (restaurantID) => {
+        try {
+            await axios.delete('/api/delete-restaurant', { data: { restaurantID } });
+            fetchRestaurants(); // Refresh the restaurant list after deletion
+            alert('Restaurant deleted successfully');
+        } catch (error) {
+            console.error('Error deleting restaurant:', error);
+            alert('Failed to delete restaurant');
+        }
     };
 
     // Clear the form after submission
@@ -142,6 +186,11 @@ const UsersProfilesList = () => {
         setDescription('');
         setHasPromo(false);
     };
+
+    const go_to_login = () => {
+        navigate("/home-login-register");
+        localStorage.removeItem("LoginToken");
+    }
 
     return (
         <div className="max-w-full mx-auto p-4 bg-white shadow-md rounded-lg">
@@ -195,118 +244,141 @@ const UsersProfilesList = () => {
             </div>
 
             {/* Add Restaurant Form */}
-            <div className="container mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-5">Restaurant Management</h1>
-
-                {/* Form for adding new restaurant */}
-                <form onSubmit={handleSubmit} className="mb-5">
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Name</label>
-                        <input
-                            type="text"
-                            className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Tags</label>
-                        <input
-                            type="text"
-                            className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                            value={tags}
-                            onChange={(e) => setTags(e.target.value)}
-                            placeholder="Comma separated tags"
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Location (Latitude, Longitude)</label>
-                        <div className="flex gap-2">
+            <div className="App mt-8">
+                <div className="max-w-4xl mx-auto p-8 border rounded-lg shadow-lg bg-white mb-8">
+                    <h2 className="text-2xl font-bold mb-6">Add New Restaurant</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="flex flex-col">
+                            <label className="text-lg font-medium">Restaurant ID</label>
                             <input
-                                type="number"
-                                className="mt-1 block w-1/2 border border-gray-300 rounded-lg p-2"
-                                placeholder="Latitude"
-                                value={location.latitude}
-                                onChange={(e) => setLocation({ ...location, latitude: e.target.value })}
-                                required
-                            />
-                            <input
-                                type="number"
-                                className="mt-1 block w-1/2 border border-gray-300 rounded-lg p-2"
-                                placeholder="Longitude"
-                                value={location.longitude}
-                                onChange={(e) => setLocation({ ...location, longitude: e.target.value })}
+                                type="text"
+                                name="restaurantID"
+                                value={restaurantData.restaurantID}
+                                onChange={handleChange}
+                                className="p-2 border rounded"
                                 required
                             />
                         </div>
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Photo URL</label>
-                        <input
-                            type="text"
-                            className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                            value={photo}
-                            onChange={(e) => setPhoto(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea
-                            className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="inline-flex items-center">
+                        <div className="flex flex-col">
+                            <label className="text-lg font-medium">Restaurant Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={restaurantData.name}
+                                onChange={handleChange}
+                                className="p-2 border rounded"
+                                required
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-lg font-medium">Tags (comma separated)</label>
+                            <input
+                                type="text"
+                                name="tags"
+                                value={restaurantData.tags}
+                                onChange={handleChange}
+                                className="p-2 border rounded"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-lg font-medium">Latitude</label>
+                            <input
+                                type="text"
+                                name="latitude"
+                                value={restaurantData.latitude}
+                                onChange={handleChange}
+                                className="p-2 border rounded"
+                                required
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-lg font-medium">Longitude</label>
+                            <input
+                                type="text"
+                                name="longitude"
+                                value={restaurantData.longitude}
+                                onChange={handleChange}
+                                className="p-2 border rounded"
+                                required
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-lg font-medium">Photos (comma separated)</label>
+                            <input
+                                type="text"
+                                name="photo"
+                                value={restaurantData.photo}
+                                onChange={handleChange}
+                                className="p-2 border rounded"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-lg font-medium">Description</label>
+                            <textarea
+                                name="description"
+                                value={restaurantData.description}
+                                onChange={handleChange}
+                                className="p-2 border rounded"
+                                required
+                            />
+                        </div>
+                        <div className="flex items-center space-x-2">
                             <input
                                 type="checkbox"
-                                className="form-checkbox"
-                                checked={hasPromo}
-                                onChange={() => setHasPromo(!hasPromo)}
+                                name="hasPromo"
+                                checked={restaurantData.hasPromo}
+                                onChange={handleChange}
+                                className="h-5 w-5"
                             />
-                            <span className="ml-2 text-sm text-gray-700">Has Promo?</span>
-                        </label>
-                    </div>
-
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded-lg">Add Restaurant</button>
-                </form>
-
-                {/* List of restaurants */}
-                <div>
-                    <h2 className="text-2xl font-bold mb-3">Restaurant List</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {restaurants.map((restaurant) => (
-                            <div key={restaurant._id} className="border border-gray-300 p-5 rounded-lg shadow-md">
-                                <h3 className="font-bold text-xl mb-2">{restaurant.name}</h3>
-                                <p className="text-sm text-gray-700 mb-2">{restaurant.description}</p>
-                                <div className="mb-2">
-                                    <span className="font-medium">Location:</span> Latitude {restaurant.location.latitude}, Longitude {restaurant.location.longitude}
-                                </div>
-                                <div className="mb-2">
-                                    <span className="font-medium">Tags:</span> {restaurant.tags.join(', ')}
-                                </div>
-                                {restaurant.photo.length > 0 && (
-                                    <img src={restaurant.photo[0]} alt={restaurant.name} className="w-full h-48 object-cover rounded-lg mb-3" />
-                                )}
-                                <div className="flex justify-between items-center">
-                                    <button
-                                        onClick={() => handleDelete(restaurant._id)}
-                                        className="bg-red-500 text-white p-2 rounded-lg"
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                            <label className="text-lg font-medium">Has Promotion?</label>
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+                            disabled={loading}
+                        >
+                            {loading ? 'Submitting...' : 'Submit Restaurant'}
+                        </button>
+                    </form>
                 </div>
+
+                <div className="max-w-4xl mx-auto p-8 border rounded-lg shadow-lg bg-white">
+                    <h2 className="text-2xl font-bold mb-6">Restaurants List</h2>
+                    <ul>
+                        {restaurants.map((restaurant) => (
+                            <li key={restaurant.restaurantID} className="flex justify-between items-center border-b py-3">
+                                <div className="flex items-center space-x-4">
+                                    {/* Display the first photo from the photo array */}
+                                    {restaurant.photo && restaurant.photo[0] && (
+                                        <img
+                                            src={restaurant.photo[0]}
+                                            alt={restaurant.name}
+                                            className="w-16 h-16 object-cover rounded-full"
+                                        />
+                                    )}
+                                    <div>
+                                        <h3 className="text-xl font-medium">{restaurant.name}</h3>
+                                        <p className="text-gray-600">{restaurant.description}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => handleDelete(restaurant.restaurantID)}
+                                    className="border border-red-500 text-black px-4 py-2 rounded-lg hover:bg-red-700"
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="text-center pt-[25px]">
+                    <button
+                        onClick={go_to_login}
+                        className="w-[331px] h-[39px] rounded-lg bg-red text-xl text-white">
+                        Logout
+                    </button>
+                </div>
+
             </div>
             {/* Confirmation Modal */}
             <ConfirmationModal

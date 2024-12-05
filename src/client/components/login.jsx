@@ -26,37 +26,47 @@ export default function Login() {
     const handleLogin = async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
         console.log(email, password);
-
+      
         try {
           const response = await axios.post('http://localhost:3000/api/login', {
             email,
             password,
           });
-
+      
           console.log('Success', response.data.message);
           localStorage.setItem("LoginToken", 
-            JSON.stringify({ email: email,
-                username: response.data.username
-            }));
-
+            JSON.stringify({ email: email, username: response.data.username })
+          );
+      
+          // Check if the role is admin
           if (response.status === 200) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Login successful',
-            });
-            navigate("/Profile");
+            if (response.data.username === 'GO2') {
+              console.log('User is an admin');
+              Swal.fire({
+                icon: 'success',
+                title: 'Welcome, Admin',
+                timer: 5000,
+              })
+              window.location.href = '/nextpage'; // Redirect to /nextpage if user is an admin
+            } else {
+              Swal.fire({
+                icon: 'success',
+                title: 'Login successful',
+              });
+              navigate("/Profile"); // Redirect to Profile if user is not an admin
+            }
           }
         } catch (error) {
-            console.error(error);
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              // need to up new line please check
-              text: "Something went wrong   !!!!" + "Please Check your email or password",
-              timer: 5000,
-            });
+          console.error(error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong! Please check your email or password.",
+            timer: 5000,
+          });
         }
       };
+      
 
     return (
         <div className="h-full fixed overflow-hidden flex flex-col pb-[26px]">
