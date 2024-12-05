@@ -25,31 +25,31 @@ function Chat() {
         const photo = params.get('photo');
         setMatchID(matchID);
         setChatWithUser({ userID: chatWithUserID , photo });
-        // Poll chats
+        // Pull chats
         if (matchID && chatWithUserID) {
-            pollChats(matchID, chatWithUserID);
+            pullChats(matchID, chatWithUserID);
         }
     }, [location.search]);
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (matchID && chatWithUser.userID) {
-                pollChats(matchID, chatWithUser.userID);
+                pullChats(matchID, chatWithUser.userID);
             }
-        }, 10000); // Poll every 10 seconds
+        }, 10000); // Pull every 10 seconds
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, [matchID, chatWithUser.userID]);
-    // Poll chats
-    async function pollChats(matchID, userID) {
+    // Pull chats
+    async function pullChats(matchID, userID) {
         try {
-            console.log('poll chats ', matchID, userID);
+            console.log('pull chats ', matchID, userID);
             const response = await axios.get(`/api/get-chat/${userID}?matchID=${matchID}`);
             const fetchChats = response.data;
             console.log(response.data);
             setChats(fetchChats);
             setLoading(false);
         } catch (error) {
-            console.error('Error poll chats:', error);
+            console.error('Error pull chats:', error);
             setError("Failed to load chats");
         }
     }
@@ -64,7 +64,7 @@ function Chat() {
             const response = await axios.post(`/api/send-message/${userID}?matchID=${matchID}&text=${formJson.message}`);
             console.log(response.data);
             form.reset(); // Clear the input field after sending the message
-            pollChats(matchID, userID); // Poll chats after sending the message
+            pullChats(matchID, userID); // Pull chats after sending the message
         } catch (error) {
             console.error('Error sending chats:', error);
         }
