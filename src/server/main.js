@@ -79,7 +79,7 @@ mongoose
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Define a Mongoose Schema and Model for the Collections
-const userSchema =  mongoose.Schema({
+const userSchema = mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -87,8 +87,8 @@ const userSchema =  mongoose.Schema({
 });
 const profileSchema = new mongoose.Schema({
   userID: { type: String, required: true },
-  name: { type: String},
-  address : String,
+  name: { type: String },
+  address: String,
   dob: String,
   photo: [String],
   bio: String,
@@ -105,19 +105,19 @@ const profileSchema = new mongoose.Schema({
     longitude: Number
   },
   //Users can set their status as free or not free for matching. If set to free, they can be automatically matched with other available users.
-  isFree: { type: Boolean, default: false }, 
+  isFree: { type: Boolean, default: false },
   isPremium: { type: Boolean, default: false },
 });
 const cardpaymentSchema = new mongoose.Schema({
   userID: String,
-  CardID: {type:String, AutoIncrement: true}, 
+  CardID: { type: String, AutoIncrement: true },
   holderName: String,
   cardNumber: String,
   MMYY: Date,
   cvv: String
 });
 const matchSchema = new mongoose.Schema({
-  matchID: { type: String, AutoIncrement: true }, 
+  matchID: { type: String, AutoIncrement: true },
   userID1: { type: String, required: true },
   userID2: { type: String, required: true },
   isMatch: { type: Boolean, default: false },
@@ -130,7 +130,7 @@ const chatSchema = new mongoose.Schema({
   chatID: { type: String, AutoIncrement: true },
   matchID: { type: String, required: true },
   all_messageIDs: [String],
-  createdAt: { type: Date, default: Date.now  }
+  createdAt: { type: Date, default: Date.now }
 });
 chatSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
 const messageSchema = new mongoose.Schema({
@@ -283,7 +283,7 @@ const Promotion = mongoose.model('Promotions', promotionSchema);
 cron.schedule("0 0 * * *", async () => {
   try {
     // set acceptDailyCount, and swipeDailyCount in Profile as 0 every midnight
-    const result = await Profile.updateMany({}, { $set: {acceptDailyCount: 0, swipeDailyCount: 0}})
+    const result = await Profile.updateMany({}, { $set: { acceptDailyCount: 0, swipeDailyCount: 0 } })
   } catch (error) {
     console.error('Error resetting count: ', error);
   }
@@ -340,7 +340,7 @@ app.post('/api/login', async (req, res) => {
     }
 
     // If credentials are correct
-    res.status(200).json({ message: 'Login successful' , username: user.username});
+    res.status(200).json({ message: 'Login successful', username: user.username });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error.' });
@@ -380,7 +380,7 @@ app.post('/api/forgot-password', async (req, res) => {
 
 // set password ------------------------------------------------------------------------------------
 app.put('/api/reset-password', async (req, res) => {
-  const { email , password } = req.body;
+  const { email, password } = req.body;
 
   // Validate input
   if (!email) {
@@ -412,7 +412,7 @@ app.get('/api/get-profile/:userID', async (req, res) => {
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-    const profile = await Profile.findOne({userID});
+    const profile = await Profile.findOne({ userID });
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
@@ -422,7 +422,7 @@ app.get('/api/get-profile/:userID', async (req, res) => {
     let age = currentDate.getUTCFullYear() - dob.getUTCFullYear();
     const monthDifference = currentDate.getMonth() - dob.getMonth();
     if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dob.getDate())) {
-        age--;
+      age--;
     }
     // add age to profile but not save to database
     const profileDict = profile.toObject();
@@ -444,24 +444,24 @@ app.get('/api/match-profile/:userID', async (req, res) => {
       return res.status(404).json({ message: "Profile not found" });
     }
     const tags = profile.tags;
-    const alreadyInMatch = (await Match.find({userID2: userID}).distinct('userID1')).concat((await Match.find({userID1: userID}).distinct('userID2')));
+    const alreadyInMatch = (await Match.find({ userID2: userID }).distinct('userID1')).concat((await Match.find({ userID1: userID }).distinct('userID2')));
     const matchedProfile = await Profile.find(
       {
-      tags: { $in: tags},
-      userID: {$nin:alreadyInMatch.concat(userID)}
-    }
-  );
-  // calculate age and add to each profile
-  const matchedProfilesWithAge = matchedProfile.map(profile => {
-    const currentDate = new Date();
-    const dob = new Date(profile.dob);
-    let age = currentDate.getUTCFullYear() - dob.getUTCFullYear();
-    const monthDifference = currentDate.getMonth() - dob.getMonth();
-    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dob.getDate())) {
-      age--;
-    }
-    return { ...profile.toObject(), age };
-  });
+        tags: { $in: tags },
+        userID: { $nin: alreadyInMatch.concat(userID) }
+      }
+    );
+    // calculate age and add to each profile
+    const matchedProfilesWithAge = matchedProfile.map(profile => {
+      const currentDate = new Date();
+      const dob = new Date(profile.dob);
+      let age = currentDate.getUTCFullYear() - dob.getUTCFullYear();
+      const monthDifference = currentDate.getMonth() - dob.getMonth();
+      if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dob.getDate())) {
+        age--;
+      }
+      return { ...profile.toObject(), age };
+    });
     res.status(200).json(matchedProfilesWithAge || { message: "No matching user found" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
@@ -526,48 +526,48 @@ app.get('/api/matches-request/:userID', async (req, res) => {
     }
     const matchRequests = await Match.aggregate([
       {
-      $match: {
-        userID2: userID,
-        isMatch: false
-      }
+        $match: {
+          userID2: userID,
+          isMatch: false
+        }
       },
       {
         // join with profiles collection
-      $lookup: {
-        from: 'profiles',
-        localField: 'userID1',
-        foreignField: 'userID',
-        as: 'profile'
-      }
+        $lookup: {
+          from: 'profiles',
+          localField: 'userID1',
+          foreignField: 'userID',
+          as: 'profile'
+        }
       },
       {
-      $unwind: '$profile'
+        $unwind: '$profile'
       },
       {
         // join with restaurants collection
-      $lookup: {
-        from: 'restaurants',
-        localField: 'restaurantID',
-        foreignField: 'restaurantID',
-        as: 'restaurant'
-      }
+        $lookup: {
+          from: 'restaurants',
+          localField: 'restaurantID',
+          foreignField: 'restaurantID',
+          as: 'restaurant'
+        }
       },
       {
-      $unwind: {
-        path: '$restaurant',
-        preserveNullAndEmptyArrays: true
-      }
+        $unwind: {
+          path: '$restaurant',
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         // project the fields to return
-      $project: {
-        matchID: 1,
-        userID: '$profile.userID',
-        photo: '$profile.photo',
-        tags: '$profile.tags',
-        restaurantName: { $ifNull: ['$restaurant.name', null] },
-        restaurantID: { $ifNull: ['$restaurant.restaurantID', null]}
-      }
+        $project: {
+          matchID: 1,
+          userID: '$profile.userID',
+          photo: '$profile.photo',
+          tags: '$profile.tags',
+          restaurantName: { $ifNull: ['$restaurant.name', null] },
+          restaurantID: { $ifNull: ['$restaurant.restaurantID', null] }
+        }
       }
     ]);
     res.status(200).json(matchRequests);
@@ -591,9 +591,13 @@ app.put('/api/accept-match/:userID', async (req, res) => {
     match.isMatch = true;
     match.createdAt = Date.now();
     await match.save();
-    const profile = await Profile.findOne({userID});
+    const profile = await Profile.findOne({ userID });
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
+    }
+    // check if user has enough accept daily count
+    if (!profile.isPremium && profile.acceptDailyCount >= 1) {
+      return res.status(200).json({ message: 'Not enough accept daily count' });
     }
     // update acceptDailyCount
     profile.acceptDailyCount += 1;
@@ -617,74 +621,74 @@ app.get('/api/get-all-chat/:userID', async (req, res) => {
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-  const matchRooms = await Match.aggregate([
+    const matchRooms = await Match.aggregate([
       {
-          $match: {
-              $and: [
-                  {
-                      $or: [
-                          { userID1: userID },
-                          { userID2: userID }
-                      ]
-                  },
-                  { isMatch: true }
+        $match: {
+          $and: [
+            {
+              $or: [
+                { userID1: userID },
+                { userID2: userID }
               ]
-          }
+            },
+            { isMatch: true }
+          ]
+        }
       },
       {
         // join with chat collection to get user's chat rooms
-          $lookup: {
-              from: 'profiles',
-              let: { userID1: '$userID1', userID2: '$userID2' },
-              pipeline: [
-                  {
-                      $match: {
-                          $expr: {
-                              $or: [
-                                  { $eq: ['$userID', '$$userID1'] },
-                                  { $eq: ['$userID', '$$userID2'] }
-                              ]
-                          }
-                      }
-                  },
-                  {
-                      $project: {
-                          userID: 1,
-                          photo: 1
-                      }
-                  }
-              ],
-              as: 'profiles'
-          }
+        $lookup: {
+          from: 'profiles',
+          let: { userID1: '$userID1', userID2: '$userID2' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $or: [
+                    { $eq: ['$userID', '$$userID1'] },
+                    { $eq: ['$userID', '$$userID2'] }
+                  ]
+                }
+              }
+            },
+            {
+              $project: {
+                userID: 1,
+                photo: 1
+              }
+            }
+          ],
+          as: 'profiles'
+        }
       },
       {
         // filter out the user's own profile
-          $addFields: {
-              otherUserProfile: {
-                  $filter: {
-                      input: '$profiles',
-                      as: 'profile',
-                      cond: { $ne: ['$$profile.userID', userID] }
-                  }
-              }
+        $addFields: {
+          otherUserProfile: {
+            $filter: {
+              input: '$profiles',
+              as: 'profile',
+              cond: { $ne: ['$$profile.userID', userID] }
+            }
           }
+        }
       },
       {
-          $unwind: '$otherUserProfile'
+        $unwind: '$otherUserProfile'
       },
       {
         // project the fields to return
-          $project: {
-              _id: 1,
-              matchID: 1,
-              userID: '$otherUserProfile.userID',
-              lastContent: 1,
-              photo: "$otherUserProfile.photo"
-          }
+        $project: {
+          _id: 1,
+          matchID: 1,
+          userID: '$otherUserProfile.userID',
+          lastContent: 1,
+          photo: "$otherUserProfile.photo"
+        }
       }
-]);
+    ]);
     if (!matchRooms) {
-      res.status(404).json({ message: 'Not found'});
+      res.status(404).json({ message: 'Not found' });
     }
     res.status(200).json(matchRooms);
   } catch (error) {
@@ -704,16 +708,16 @@ app.get('/api/get-chat/:userID', async (req, res) => {
     }
     const chatRoom = await Chat.findOne({ matchID });
     if (!chatRoom) {
-      res.status(404).json({ message: 'Not found chat'});
+      res.status(404).json({ message: 'Not found chat' });
     }
     // get all message from chat room
     const chatHistory = await Message.find({
       messageID: { $in: chatRoom.all_messageIDs }
-    }).sort( { messageID: -1 } ); // to start from the latest message
+    }).sort({ messageID: -1 }); // to start from the latest message
     if (!chatHistory) {
-      res.status(404).json({ message: 'Not found message'});
+      res.status(404).json({ message: 'Not found message' });
     }
-    res.status(200).json(chatHistory);    
+    res.status(200).json(chatHistory);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
@@ -728,7 +732,7 @@ app.post('/api/send-message/:userID', async (req, res) => {
     }
     const chatRoom = await Chat.findOne({ matchID });
     if (!chatRoom) {
-      res.status(404).json({ message: 'Not found'});
+      res.status(404).json({ message: 'Not found' });
     }
     const newMessage = new Message({
       chatID: chatRoom.chatID,
@@ -788,12 +792,12 @@ app.get('/api/get-restaurant/:restaurantID', async (req, res) => {
     // check if restaurant has promotion
     if (!restaurant.hasPromo) {
       // no promotion
-      res.status(200).json({restaurant, promotion: false});
+      res.status(200).json({ restaurant, promotion: false });
     }
     else {
       // get promotion detail
       const promotion = await Promotion.find({ restaurantID });
-      res.status(200).json({restaurant, promotion});
+      res.status(200).json({ restaurant, promotion });
     }
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
@@ -870,7 +874,7 @@ app.post('/api/chilling-with-you/:userID', async (req, res) => {
       return res.status(400).json({ message: 'Missing userID or otherUserID' });
     }
     if (userID === otherUserID) {
-      return res.status(200).json({ message: "you can't chilling with youself"});
+      return res.status(200).json({ message: "you can't chilling with youself" });
     }
     // Check if the user already has a match with the other user
     const existingMatch = await Match.findOne({
@@ -919,32 +923,32 @@ app.put('/api/set-gender/:username', async (req, res) => {
   const { gender } = req.body; // Extract gender from the request body
 
   try {
-      // Find the user by username
-      const user = await User.findOne({ username });
-      if (!user) {
-          return res.status(404).json({ message: `User with username '${username}' not found.` });
-      }
+    // Find the user by username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: `User with username '${username}' not found.` });
+    }
 
-      // Find the profile associated with the user
-      const profile = await Profile.findOne({ userID: username }); // Assuming user._id is stored in the profile
-      if (!profile) {
-          return res.status(404).json({ message: `Profile for user '${username}' not found.` });
-      }
+    // Find the profile associated with the user
+    const profile = await Profile.findOne({ userID: username }); // Assuming user._id is stored in the profile
+    if (!profile) {
+      return res.status(404).json({ message: `Profile for user '${username}' not found.` });
+    }
 
-      // Update the gender interest
-      profile.genderinterest = gender;
-      await profile.save();
+    // Update the gender interest
+    profile.genderinterest = gender;
+    await profile.save();
 
-      res.status(200).json({ message: 'Gender interest set successfully', gender });
+    res.status(200).json({ message: 'Gender interest set successfully', gender });
   } catch (error) {
-      console.error('Error updating gender interest:', error);
-      res.status(500).json({ message: 'Internal server error.' });
+    console.error('Error updating gender interest:', error);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 });
-  
+
 // set password ------------------------------------------------------------------------------------
 app.put('/api/setting/reset-password', async (req, res) => {
-  const { email ,newpassword ,password } = req.body;
+  const { email, newpassword, password } = req.body;
 
   // Validate input
   if (!email) {
@@ -1119,12 +1123,12 @@ app.get('/api/get-data', async (req, res) => {
   const { username } = req.query;  // Use query parameter for username
   try {
     const profile = await Profile.findOne({ userID: username });
-    if (!profile) { 
+    if (!profile) {
       return res.status(404).json({ message: 'Profile not found' });
     }
     res.status(200).json(profile);
   } catch (error) {
-    console.error(error); 
+    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });

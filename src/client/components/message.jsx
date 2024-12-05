@@ -12,8 +12,8 @@ function Message() {
   const goToChatClick = (matchID, userID, photo) => {
     navigate(`/chat?matchID=${matchID}&chatWithUserID=${userID}&photo=${photo}`);
   }
-  // Poll all chat room that user have
-  async function pollAllChat(username) {
+  // Pull all chat room that user have
+  async function pullAllChat(username) {
     try {
       const response = await axios.get(`/api/get-all-chat/${username}`);
       console.log("username: ", username);
@@ -29,7 +29,7 @@ function Message() {
     const LoginToken = localStorage.getItem("LoginToken");
     const userData = JSON.parse(LoginToken);
     setUserID(userData.username);
-    pollAllChat(userData.username);
+    pullAllChat(userData.username);
   }, []);
   // Go to other page
   const go_to_message = async () => {
