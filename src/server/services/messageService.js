@@ -13,12 +13,7 @@ export const getAllChatRoom = async (req, res) => {
       {
         $match: {
           $and: [
-            {
-              $or: [
-                { userID1: userID },
-                { userID2: userID }
-              ]
-            },
+            { $or: [{ userID1: userID }, { userID2: userID }] },
             { isMatch: true }
           ]
         }
@@ -32,10 +27,7 @@ export const getAllChatRoom = async (req, res) => {
             {
               $match: {
                 $expr: {
-                  $or: [
-                    { $eq: ['$userID', '$$userID1'] },
-                    { $eq: ['$userID', '$$userID2'] }
-                  ]
+                  $or: [{ $eq: ['$userID', '$$userID1'] }, { $eq: ['$userID', '$$userID2'] }]
                 }
               }
             },
@@ -78,9 +70,10 @@ export const getAllChatRoom = async (req, res) => {
     if (!matchRooms) {
       res.status(404).json({ message: 'Not found' });
     }
+
     res.status(200).json(matchRooms);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 }
 
@@ -89,14 +82,19 @@ export const getChatHistory = async (req, res) => {
   try {
     const { userID } = req.params;
     const { matchID } = req.query;
+
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
     if (!matchID) {
       return res.status(400).json({ message: 'Missing matchID' });
     }
+
     const chatRoom = await Chat.findOne({ matchID });
     if (!chatRoom) {
       res.status(404).json({ message: 'Not found chat' });
     }
-    // get all message from chat room
+
     const chatHistory = await Message.find({
       messageID: { $in: chatRoom.all_messageIDs }
     }).sort({ messageID: -1 }); // to start from the latest message
@@ -105,7 +103,7 @@ export const getChatHistory = async (req, res) => {
     }
     res.status(200).json(chatHistory);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 }
 
@@ -114,25 +112,29 @@ export const sendMessage = async (req, res) => {
   try {
     const { userID } = req.params;
     const { matchID, text } = req.query;
+
     if (!userID || !matchID || !text) {
       return res.status(400).json({ message: 'Missing userID/matchID/text' });
     }
+
     const chatRoom = await Chat.findOne({ matchID });
     if (!chatRoom) {
       res.status(404).json({ message: 'Not found' });
     }
+
     const newMessage = new Message({
       chatID: chatRoom.chatID,
       userID_sender: userID,
       text,
-      createdAt: chatRoom.createdAt
+      createdAt: new Date(),
     });
     await newMessage.save();
-    // add messageID to chat collection
+
     chatRoom.all_messageIDs.push(newMessage.messageID);
     await chatRoom.save();
-    res.status(200).json({ message: 'Message sent' });
+
+    res.status(200).json({ message: 'Message sent successfully' });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 }

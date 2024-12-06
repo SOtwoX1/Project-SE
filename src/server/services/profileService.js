@@ -15,17 +15,17 @@ export const calAge = (dob) => {
 // Get user profile by ID
 export const getUserProfile = async (req, res) => {
   try {
-    const { userID } = req.params;
+    const userID = req.params.userID;
     if (!userID) {
       return res.status(400).json({ message: 'Missing userID' });
     }
-    const profile = await Profile.findOne({ userID: userID });
+    const profile = await Profile.findOne({ userID });
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
     // add age to profile but not save to database
     const profileDict = profile.toObject();
-    profileDict.age = calAge(profileDict.dob);
+    profileDict.age = age;
     res.status(200).json(profileDict);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
@@ -35,7 +35,10 @@ export const getUserProfile = async (req, res) => {
 // update swipe daily count
 export const updateSwipe = async (req, res) => {
   try {
-    const { userID } = req.params;
+    const userID = req.params.userID
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing userID' });
+    }
     const profile = await Profile.findOne({ userID });
     if (!profile) {
       return res.status(404).json({ message: 'Profile not found' });
@@ -54,7 +57,13 @@ export const changeStatus = async (req, res) => {
   try {
     const { userID } = req.params;
     const { isFree } = req.query;
+
+    if (!userID || !isFree) {
+      return res.status(400).json({ message: 'Missing userID or isFree' });
+    }
+
     const profile = await Profile.findOne({ userID });
+
     if (!profile) {
       return res.status(404).json({ message: 'Profile not found' });
     }

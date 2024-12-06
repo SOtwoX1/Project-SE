@@ -7,6 +7,9 @@ import { calAge } from "./profileService.js";
 export const getMatchProfile = async (req, res) => {
     try {
         const { userID } = req.params;
+        if (!userID) {
+            return res.status(400).json({ message: 'Missing userID' });
+        }
         const profile = await Profile.findOne({ userID });
         if (!profile) {
             return res.status(404).json({ message: "Profile not found" });
@@ -139,6 +142,7 @@ export const acceptMatchRequest = async (req, res) => {
         if (!profile) {
             return res.status(404).json({ message: "Profile not found" });
         }
+        // check if user has enough accept daily count
         if (!profile.isPremium && profile.acceptDailyCount >= 1) {
             return res.status(200).json({ message: 'Not enough accept daily count' });
         }
@@ -171,8 +175,8 @@ export const declineMatchRequest = async (req, res) => {
         }
         // Delete the match
         await Match.deleteOne({ matchID });
-        res.status(200).json({ message: 'Match declined' });
+        res.status(200).json({ message: 'Match denied and deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: 'Server error', error });
     }
 }

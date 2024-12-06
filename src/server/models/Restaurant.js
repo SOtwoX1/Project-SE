@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const restaurantSchema = new Schema({
-    restaurantID: { type: String, required: true },
+    restaurantID: { type: String, AutoIncrement: true },
     name: { type: String, required: true },
     tags: [String],
     location: {

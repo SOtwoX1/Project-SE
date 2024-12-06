@@ -6,7 +6,6 @@ import Promotion from "../models/Promotion.js";
 // get all restaurant
 export const getAllRestaurant = async (req, res) => {
     try {
-        console.log('asdf');
         const restaurants = await Restaurant.find();
         res.status(200).json(restaurants);
     } catch (error) {
@@ -18,10 +17,13 @@ export const getAllRestaurant = async (req, res) => {
 export const getRestaurantByID = async (req, res) => {
     try {
         const { restaurantID } = req.params;
+
         if (!restaurantID) {
             return res.status(400).json({ message: 'Missing restaurantID' });
         }
+
         const restaurant = await Restaurant.findOne({ restaurantID });
+
         if (!restaurant) {
             return res.status(404).json({ message: 'Restaurant not found' });
         }
@@ -83,6 +85,7 @@ export const postChillingAt = async (req, res) => {
     try {
         const { restaurantID } = req.params;
         const { userID } = req.query;
+
         if (!restaurantID || !userID) {
             return res.status(400).json({ message: 'Missing restaurantID or userID' });
         }
@@ -96,10 +99,12 @@ export const postChillingAt = async (req, res) => {
             userID,
             restaurantID
         });
+
         await newChilling.save();
         res.status(201).json({ message: 'Chilling created successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        console.error('Error creating chilling:', error);
+        res.status(500).json({ message: 'Internal server error.' });
     }
 }
 
@@ -108,13 +113,15 @@ export const postChillingWithYou = async (req, res) => {
     try {
         const { userID } = req.query;
         const { otherUserID, restaurantID } = req.query;
-        if (!userID || !otherUserID || !restaurantID) {
-            return res.status(400).json({ message: 'Missing userID or otherUserID or restaurantID' });
+
+        if (!userID || !otherUserID) {
+            return res.status(400).json({ message: 'Missing userID or otherUserID' });
         }
+
         if (userID === otherUserID) {
-            return res.status(400).json({ message: 'Cannot chilling with yourself' });
+            return res.status(200).json({ message: "you can't chilling with youself" });
         }
-        // Check if the user has a chilling at another restaurant
+        // Check if the user already has a match with the other user
         const existingMatch = await Match.findOne({
             $or: [
                 { userID1: userID, userID2: otherUserID },
@@ -129,11 +136,11 @@ export const postChillingWithYou = async (req, res) => {
         const match = new Match({
             userID1: userID,
             userID2: otherUserID,
-            restaurantID
+            restaurantID: restaurantID
         });
         await match.save();
         res.status(201).json({ message: `${userID} want to chilling with ${otherUserID}` });
     } catch (error) {
-        res.status(500).json({ message: 'server error', error });
+        res.status(500).json({ message: 'Server error', error });
     }
 }

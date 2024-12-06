@@ -13,6 +13,7 @@ const profileSchema = new Schema({
     gender: String,
     hobby: String,
     tags: [String],
+    isPremium: { type: Boolean, default: false },
     swipeDailyCount: { type: Number, default: 0 }, // counter to track daily swipe limit for free users
     acceptDailyCount: { type: Number, default: 0 },
     location: {
