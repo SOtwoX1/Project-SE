@@ -112,7 +112,7 @@ export const sendMessage = async (req, res) => {
   try {
     const { userID } = req.params;
     const { matchID, text } = req.query;
-
+    console.log(userID, matchID, text);
     if (!userID || !matchID || !text) {
       return res.status(400).json({ message: 'Missing userID/matchID/text' });
     }

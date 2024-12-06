@@ -10,6 +10,6 @@ router.get('/get-all-chat/:userID', getAllChatRoom);
 router.get('/get-chat/:userID', getChatHistory);
 
 // Send a message
-router.post('/send-message/:userUD', sendMessage);
+router.post('/send-message/:userID', sendMessage);
 
 export default router;

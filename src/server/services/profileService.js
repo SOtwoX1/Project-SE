@@ -26,7 +26,7 @@ export const getUserProfile = async (req, res) => {
     }
     // add age to profile but not save to database
     const profileDict = profile.toObject();
-    profileDict.age = age;
+    profileDict.age = calAge(profile.dob);
     res.status(200).json(profileDict);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
