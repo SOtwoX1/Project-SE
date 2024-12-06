@@ -1278,6 +1278,7 @@ app.delete('/api/delete-restaurant', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+//---------------------------------------------------------------------------------------------------
 
 ViteExpress.listen(app, 3000, () =>
   console.log("Server is listening on port 3000..."),

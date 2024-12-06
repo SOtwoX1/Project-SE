@@ -16,9 +16,11 @@ Register ID
     Register
     Setting-Profile
     Upload Photo
+    Sleep    2sgi
     Logout
 PassLogin
     Valid Login
+    Sleep    2s
     Delete Account
 *** Keywords ***
 
@@ -97,7 +99,7 @@ Upload Photo
 
 Logout
     Sleep    2s
-    Click Element   //*[@id="root"]/div/div[1]/div[4]/button[2]
+    Click Element   //*[@id="root"]/div/div[1]/div[2]/div[3]/button[2]
     Capture Page Screenshot     logout/logout-test.png
     Sleep    2s
     Click Element   //*[@id="root"]/div/div[2]/div[7]/button
@@ -106,7 +108,7 @@ Logout
 
 Delete Account
     Sleep    2s
-    Click Element   //*[@id="root"]/div/div[1]/div[4]/button[2]
+    Click Element   //*[@id="root"]/div/div[1]/div[2]/div[3]/button[2]
     Sleep    2s
     Click Element   //*[@id="root"]/div/div[3]/div[3]/button
     Capture Page Screenshot     delete/delete-test.png
