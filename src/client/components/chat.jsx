@@ -41,7 +41,7 @@ if (!LoginToken) {
             if (matchID && chatWithUser.userID) {
                 pullChats(matchID, chatWithUser.userID);
             }
-        }, 10000); // Pull every 10 seconds
+        }, 1000); // Pull every 1 seconds
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, [matchID, chatWithUser.userID]);
     // Pull chats
