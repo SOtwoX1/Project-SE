@@ -71,7 +71,7 @@ export default function Nopromotion_restaurant(){
                     title : "text-[#FF0000] text-xl",
                     html : "text-white",
                     popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
-                    confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
+                    confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-400 m-auto bg-[#F4A261]"
                 }
                 });
         } catch (error) {

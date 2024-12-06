@@ -131,7 +131,6 @@ export default function Profile() {
                 </div>
               </div>}
 
-
         {/* Scrollable Image Section */}
         <div className="bg-gray-200 w-[346px] h-[161px] mt-6 overflow-x-auto flex items-center justify-start space-x-4">
           <div className="snap-start">

@@ -107,7 +107,7 @@ export default function Edit() {
           </div>
           <div className="w-full m-0 text-[20px] text-black bg-gray-300 border-t border-b border-black text-center py-1.5">
             <button onClick={handleSubmit} className="w-full">
-              Edit
+              Perview
             </button>
           </div>
         </div>

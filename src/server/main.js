@@ -35,10 +35,6 @@ app.use(bodyParser.json());
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-ViteExpress.listen(app, 3000, () =>
-  console.log("Server is listening on port 3000..."),
-);
-
 
 // jwt-----------------------------------------------------------------------------------------
 function authenticateToken(req, res, next) {
@@ -91,6 +87,217 @@ mongoose
   .connect(mongoURI)
   .then(() => console.log('MongoDB connected successfully to DatingApp!'))
   .catch((err) => console.error('MongoDB connection error:', err));
+
+// Define a Mongoose Schema and Model for the Collections
+const userSchema = mongoose.Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }, // Optional: Track user registration time
+});
+const profileSchema = new mongoose.Schema({
+  userID: { type: String, required: true },
+  name: { type: String },
+  address: String,
+  dob: String,
+  photo: [String],
+  bio: String,
+  education: String,
+  job: String,
+  genderinterest: String,
+  gender: String,
+  hobby: String,
+  tags: [String],
+  swipeDailyCount: { type: Number, default: 0 }, // counter to track daily swipe limit for free users
+  acceptDailyCount: { type: Number, default: 0 },
+  location: {
+    latitude: Number,
+    longitude: Number
+  },
+  //Users can set their status as free or not free for matching. If set to free, they can be automatically matched with other available users.
+  isFree: { type: Boolean, default: false },
+  isPremium: { type: Boolean, default: false },
+});
+const cardpaymentSchema = new mongoose.Schema({
+  userID: String,
+  CardID: { type: String, AutoIncrement: true },
+  holderName: String,
+  cardNumber: String,
+  MMYY: Date,
+  cvv: String
+});
+const matchSchema = new mongoose.Schema({
+  matchID: { type: String, AutoIncrement: true },
+  userID1: { type: String, required: true },
+  userID2: { type: String, required: true },
+  isMatch: { type: Boolean, default: false },
+  restaurantID: { type: String },
+  matchTime: { type: Date, default: Date.now },
+  createdAt: { type: Date } // Add expiration time same as chat
+});
+matchSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
+const chatSchema = new mongoose.Schema({
+  chatID: { type: String, AutoIncrement: true },
+  matchID: { type: String, required: true },
+  all_messageIDs: [String],
+  createdAt: { type: Date, default: Date.now }
+});
+chatSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
+const messageSchema = new mongoose.Schema({
+  chatID: { type: String, required: true },
+  messageID: { type: String, required: false },
+  userID_sender: { type: String, required: true },
+  text: String,
+  time_send: { type: Date, default: Date.now },
+  isRead: { type: Boolean, default: false },
+  createdAt: { type: Date } // Add expiration time same as chat
+});
+messageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
+const restaurantSchema = new mongoose.Schema({
+  restaurantID: { type: String, required: true },
+  name: { type: String, required: true },
+  tags: [String],
+  location: {
+    latitude: Number,
+    longitude: Number
+  },
+  photo: [String],
+  description: { type: String },
+  hasPromo: { type: Boolean, default: false }
+});
+const chillingSchema = new mongoose.Schema({
+  chillingID: { type: String, AutoIncrement: true },
+  userID: { type: String, required: true },
+  restaurantID: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+chillingSchema.index({ createdAt: 1 }, { expireAfterSeconds: 10800 }); // Add expiration time 3 hours.
+const promotionSchema = new mongoose.Schema({
+  promoID: { type: String, AutoIncrement: true },
+  restaurantID: { type: String, required: true },
+  discountEnd: { type: Date, default: Date.now },
+  description: { type: String }
+});
+promotionSchema.index({ discountEnd: 1 }, { expireAfterSeconds: 10800 }); // Add expiration time 3 hours.
+// Before saving the document to the collection, generate a new string ID in the format 'M001', 'MSG003'
+matchSchema.pre('save', async function (next) {
+  // Only generate a new matchID if it's a new document
+  if (this.isNew) {
+    try {
+      // Find the last match by matchID (sorted in descending order)
+      const lastMatch = await this.constructor.findOne().sort({ matchID: -1 });
+      let newIDNumber;
+      if (lastMatch && lastMatch.matchID) {
+        // Extract the numeric part of the matchID, increment it, and format it
+        const lastIDNumber = parseInt(lastMatch.matchID.slice(1), 10); // remove 'M' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        // Start at 1 if there are no previous matches
+        newIDNumber = 1;
+      }
+      // Set the new matchID with 'm' prefix and zero-padding to 3 digits
+      this.matchID = `M${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
+chatSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastChat = await this.constructor.findOne().sort({ chatID: -1 });
+      let newIDNumber;
+      if (lastChat && lastChat.chatID) {
+        const lastIDNumber = parseInt(lastChat.chatID.slice(1), 10); // remove 'C' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.chatID = `C${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
+messageSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastChat = await this.constructor.findOne().sort({ messageID: -1 });
+      console.log('Last chat:', lastChat);
+      let newIDNumber;
+      if (lastChat && lastChat.messageID) {
+        const lastIDNumber = parseInt(lastChat.messageID.slice(3), 10); // remove 'MSG' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.messageID = `MSG${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
+chillingSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastChilling = await this.constructor.findOne().sort({ chillingID: -1 });
+
+      let newIDNumber;
+      if (lastChilling && lastChilling.chillingID) {
+        const lastIDNumber = parseInt(lastChilling.chillingID.slice(3), 10); // remove 'CHL' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.chillingID = `CHL${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
+promotionSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastPromotion = await this.constructor.findOne().sort({ promoID: -1 });
+      let newIDNumber;
+      if (lastPromotion && lastPromotion.promoID) {
+        const lastIDNumber = parseInt(lastPromotion.promoID.slice(1), 10); // remove 'P' prefix
+        newIDNumber = lastIDNumber + 1;
+      } else {
+        newIDNumber = 1;
+      }
+      this.promoID = `P${newIDNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
+
+// Target the collections
+const CardPayment = mongoose.model('CardPayment', cardpaymentSchema);
+const User = mongoose.model('Users', userSchema);
+const Profile = mongoose.model('Profile', profileSchema);
+const Match = mongoose.model('Matches', matchSchema);
+const Chat = mongoose.model('Chats', chatSchema);
+const Message = mongoose.model('Messages', messageSchema);
+const Restaurant = mongoose.model('Restaurants', restaurantSchema);
+const Chilling = mongoose.model('Chilling', chillingSchema);
+const Promotion = mongoose.model('Promotions', promotionSchema);
+
+// A cron job allows you to execute something on a schedule or a task to be executed sometime in the future.
+cron.schedule("0 0 * * *", async () => {
+  try {
+    // set acceptDailyCount, and swipeDailyCount in Profile as 0 every midnight
+    const result = await Profile.updateMany({}, { $set: { acceptDailyCount: 0, swipeDailyCount: 0 } })
+  } catch (error) {
+    console.error('Error resetting count: ', error);
+  }
+});
 
 // POST Route for User Registration
 
@@ -456,3 +663,119 @@ app.put('/api/update-dataprofile', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+//---------------------------------------------------------------------------------------------------
+// update payment id by username
+app.put('/api/set-ispremium', async (req, res) => {
+  const { username } = req.body; // Extract username from the request body
+
+  try {
+      // Find the user by username
+      const user = await User.findOne({ username });
+      if (!user) {
+          return res.status(404).json({ message: `User with username '${username}' not found.` });
+      }
+
+      // Find the profile associated with the user
+      const profile = await Profile.findOne({ userID: username }); // Using user._id to find the profile
+      if (!profile) {
+          return res.status(404).json({ message: `Profile for user '${username}' not found.` });
+      }
+
+      // Update the isPremium field
+      profile.isPremium = true; // Corrected the boolean value to 'true'
+      await profile.save();
+
+      // Respond with success message
+      res.status(200).json({ message: 'User profile updated successfully to Premium' });
+
+  } catch (error) {
+      console.error('Error updating user profile:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+//---------------------------------------------------------------------------------------------------
+// admin api
+// get data profile all user
+app.get('/api/get-data-profile', async (req, res) => {
+  try {
+    const profiles = await Profile.find();
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// get data User all user
+app.get('/api/get-data-user', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// get data restaurant all user
+app.get('/api/get-data-restaurant', async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
+    res.status(200).json(restaurants);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+//---------------------------------------------------------------------------------------------------
+// post data restaurant
+// API routes
+app.get('/api/get-data-restaurant', async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
+    res.status(200).json(restaurants);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.post('/api/post-data-restaurant', async (req, res) => {
+  const { restaurantID, name, tags, location, photo, description, hasPromo } = req.body;
+  try {
+    const newRestaurant = new Restaurant({
+      restaurantID,
+      name,
+      tags,
+      location: {
+        latitude: location.latitude,
+        longitude: location.longitude
+      },
+      photo,
+      description,
+      hasPromo
+    });
+    await newRestaurant.save();
+    res.status(201).json(newRestaurant);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.delete('/api/delete-restaurant', async (req, res) => {
+  const { restaurantID} = req.body;
+
+  try {
+    await Restaurant.deleteOne({ restaurantID });
+    res.status(200).json({ message: 'Restaurant deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+ViteExpress.listen(app, 3000, () =>
+  console.log("Server is listening on port 3000..."),
+);

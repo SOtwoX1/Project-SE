@@ -13,6 +13,11 @@ function Chat() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const LoginToken = localStorage.getItem("LoginToken");
+if (!LoginToken) {
+    console.error("Token not found or expired");
+}
+
     useEffect(() => {
         // Get userID from local storage
         const LoginToken = localStorage.getItem("LoginToken");
@@ -157,7 +162,7 @@ function Chat() {
                             <div 
                             key={message._id}
                             className="flex items-start gap-2 w-full pb-1">
-                                <img className="w-8 h-8 rounded-full" src={"../" + chatWithUser.photo} alt={chatWithUser.userID + " image"} />
+                                <img className="w-8 h-8 rounded-full" src={"../" + chatWithUser.photo[0]} alt={chatWithUser.userID + " image"} />
                                 <div className="flex flex-col w-fit max-w-[230px] leading-1.5 p-2 bg-[#FE8947] rounded-e-xl rounded-es-xl">
                                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
                                     <span className="text-xs text-gray-200 -mt-3">

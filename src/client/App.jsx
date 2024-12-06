@@ -3,7 +3,7 @@ import HomeLoginAndRegister from './components/HomeLoginAndRegis';
 import Login from "./components/login";
 import Register from "./components/regis";
 import Learn from "./components/have_to_see_for_begin/learn";
-import Image from "./components/have_to_see_for_begin/learn2";
+import UsersProfilesList from "./components/have_to_see_for_begin/learn2"
 import Forgetpass from "./components/forget_pass"
 import VerifyLetter from "./components/otp"
 import Cnr from "./components/create_new_pass"
@@ -25,7 +25,7 @@ import Manage_Payment_Account from "./components/manage_payment_acc";
 import Success_MPA from "./components/sucess_MPA";
 import Edit from "./components/edit";
 import Preview from "./components/preview";
-import Mypackage from "./components/mypackage";
+import Mypackage from "./components/Mypackage";
 import NewEdit_pro from "./components/newedit_pro";
 import Promotion_restaurant from "./components/promotin_in_rest";
 import Nopromotion_restaurant from "./components/nopromotion_rest";
@@ -41,7 +41,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/learn" element={<Learn />} />
-        <Route path="/nextpage" element={<Image />} /> 
+        <Route path="/nextpage" element={<UsersProfilesList />} /> 
         <Route path="/home-login-register" element={<HomeLoginAndRegister />} /> 
         <Route path="/Login" element={<Login />} /> 
         <Route path="/Regis" element={<Register />} /> 

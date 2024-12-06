@@ -64,16 +64,18 @@ export default function Nopromotion_restaurant(){
                     You are chilling at <br>
                     ${restaurant.name}`,
                 customClass: {
-                    title : "text-[#FF0000] text-xl",
-                    html : "text-white",
-                    popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm" ,
-                    confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23.px] border border-gray-800 m-auto"
-                }
-                });
+                    title: "text-[#FF0000] text-xl",
+                    html: "text-white",
+                    popup: "w-[208px] h-[170px] bg-[#E9C46A] text-white text-sm",
+                    confirmButton: "text-white text-sm text-center rounded-3xl w-[60px] h-[23px] border border-gray-800 m-auto bg-[#F4A261]"
+                },
+                buttonsStyling: false, // Required for custom class styles to apply
+            });
         } catch (error) {
             console.error('Error posting chilling:', error);
         }
-    }
+    };
+    
     return (
       <div className="bg-[#E9C46A] h-[812px] fixed overflow-hidden flex flex-col items-center ">
           {/* Header */}
