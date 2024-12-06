@@ -135,14 +135,14 @@ const matchSchema = new mongoose.Schema({
   matchTime: { type: Date, default: Date.now },
   createdAt: { type: Date } // Add expiration time same as chat
 });
-matchSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
+matchSchema.index({ createdAt: 1 }, { expireAfterSeconds: 180 }); // Add expiration time 3 days
 const chatSchema = new mongoose.Schema({
   chatID: { type: String, AutoIncrement: true },
   matchID: { type: String, required: true },
   all_messageIDs: [String],
   createdAt: { type: Date, default: Date.now }
 });
-chatSchema.index({ createdAt: 1 }, { expireAfterSeconds: 259200 }); // Add expiration time 3 days
+chatSchema.index({ createdAt: 1 }, { expireAfterSeconds: 180 }); // Add expiration time 3 days
 const messageSchema = new mongoose.Schema({
   chatID: { type: String, required: true },
   messageID: { type: String, required: false },
@@ -225,7 +225,6 @@ messageSchema.pre('save', async function (next) {
   if (this.isNew) {
     try {
       const lastChat = await this.constructor.findOne().sort({ messageID: -1 });
-      console.log('Last chat:', lastChat);
       let newIDNumber;
       if (lastChat && lastChat.messageID) {
         const lastIDNumber = parseInt(lastChat.messageID.slice(3), 10); // remove 'MSG' prefix

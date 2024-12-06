@@ -16,7 +16,7 @@ export default function Restaurant() {
   // Filter restaurant by search term
   const filteredPromotions = promotions.filter((promotion) =>
     promotion.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    promotion.tags.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    promotion.tags.join(", ").toLowerCase().includes(searchTerm.toLowerCase()) ||
     promotion.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
   // Go to other page

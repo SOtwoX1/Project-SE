@@ -200,7 +200,7 @@ const Match = () => {
                   </Slider>
                   {/* Profile Details */}
                   <CardContent style={{ textAlign: 'center', zIndex: 2 }}>
-                    <Typography variant="h6">{`${currentProfile.userID}, ${currentProfile.age}`}</Typography>
+                    <Typography variant="h6">{`${currentProfile.name}, ${currentProfile.age}`}</Typography>
                     <Typography variant="body2" color="textSecondary">
                       {currentProfile.bio}
                     </Typography>
