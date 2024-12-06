@@ -1,276 +1,589 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.1.1 (Python 3.11.9 on win32)" generated="2024-12-06T03:53:56.535580" rpa="false" schemaversion="5">
+<robot generator="Robot 7.1.1 (Python 3.11.9 on win32)" generated="2024-12-06T11:36:53.481957" rpa="false" schemaversion="5">
 <suite id="s1" name="Project-SE" source="D:\Project-SE">
 <suite id="s1-s1" name="Src" source="D:\Project-SE\src">
 <suite id="s1-s1-s1" name="Test" source="D:\Project-SE\src\Test">
 <suite id="s1-s1-s1-s1" name="Logintest" source="D:\Project-SE\src\Test\logintest.robot">
-<test id="s1-s1-s1-s1-t1" name="Register ID" line="15">
-<kw name="Register">
+<test id="s1-s1-s1-s1-t1" name="NOPassLogin" line="13">
+<kw name="Invalid Login">
 <kw name="Open Browser" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:53:57.671886" level="INFO">Opening browser 'edge' to base url 'http://localhost:3000/home-login-register'.</msg>
+<msg time="2024-12-06T11:36:57.609096" level="INFO">Opening browser 'edge' to base url 'http://localhost:3000/home-login-register'.</msg>
 <arg>${BASE_URL}</arg>
 <arg>edge</arg>
 <doc>Opens a new browser instance to the optional ``url``.</doc>
-<status status="PASS" start="2024-12-06T03:53:57.671886" elapsed="3.939531"/>
+<status status="PASS" start="2024-12-06T11:36:57.607858" elapsed="4.757714"/>
+</kw>
+<kw name="Set Window Size" owner="SeleniumLibrary">
+<arg>width=340</arg>
+<arg>height=1000</arg>
+<doc>Sets current windows size to given ``width`` and ``height``.</doc>
+<status status="PASS" start="2024-12-06T11:37:02.367991" elapsed="0.406911"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:02.777490" level="INFO">Clicking element '//*[@id="root"]/div/div[2]/button[1]'.</msg>
+<arg>//*[@id="root"]/div/div[2]/button[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:37:02.776415" elapsed="0.281281"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:03.060729" level="INFO">Typing text 'siratee2@example.com' into text field '//*[@id="root"]/div/div[1]/form/div[2]/input[1]'.</msg>
+<arg>//*[@id="root"]/div/div[1]/form/div[2]/input[1]</arg>
+<arg>${INVALID_USERNAME}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:37:03.058711" elapsed="0.426984"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:03.487119" level="INFO">Typing text '123' into text field '//*[@id="root"]/div/div[1]/form/div[2]/input[2]'.</msg>
+<arg>//*[@id="root"]/div/div[1]/form/div[2]/input[2]</arg>
+<arg>${INVALID_PASSWORD}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:37:03.485695" elapsed="0.247504"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:03.874862" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="login/login-test-2.png"&gt;&lt;img src="login/login-test-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>login/login-test-2.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:37:03.733199" elapsed="0.142682"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:03.879084" level="INFO">Clicking button '//*[@id="root"]/div/div[1]/form/button'.</msg>
+<arg>//*[@id="root"]/div/div[1]/form/button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:37:03.877005" elapsed="0.305686"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:37:07.186010" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:37:04.183732" elapsed="3.003389"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:07.306494" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="login/login-fail-test.png"&gt;&lt;img src="login/login-fail-test.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>login/login-fail-test.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:37:07.188204" elapsed="0.119289"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2024-12-06T11:37:07.308767" elapsed="2.483163"/>
+</kw>
+<tag>Login</tag>
+<tag>Negative</tag>
+<status status="PASS" start="2024-12-06T11:36:57.604422" elapsed="12.188877"/>
+</kw>
+<status status="PASS" start="2024-12-06T11:36:57.599715" elapsed="12.195214"/>
+</test>
+<test id="s1-s1-s1-s1-t2" name="Register ID" line="15">
+<kw name="Register">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:09.805428" level="INFO">Opening browser 'edge' to base url 'http://localhost:3000/home-login-register'.</msg>
+<arg>${BASE_URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2024-12-06T11:37:09.803130" elapsed="3.997811"/>
 </kw>
 <kw name="Set Window Size" owner="SeleniumLibrary">
 <arg>width=300</arg>
 <arg>height=1000</arg>
 <doc>Sets current windows size to given ``width`` and ``height``.</doc>
-<status status="PASS" start="2024-12-06T03:54:01.612417" elapsed="0.395851"/>
+<status status="PASS" start="2024-12-06T11:37:13.801873" elapsed="0.405500"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:02.010787" level="INFO">Clicking element '//*[@id="root"]/div/div[2]/button[2]'.</msg>
+<msg time="2024-12-06T11:37:14.208461" level="INFO">Clicking element '//*[@id="root"]/div/div[2]/button[2]'.</msg>
 <arg>//*[@id="root"]/div/div[2]/button[2]</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:02.009786" elapsed="0.164561"/>
+<status status="PASS" start="2024-12-06T11:37:14.207373" elapsed="0.300289"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
-<msg time="2024-12-06T03:54:04.175981" level="INFO">Slept 2 seconds.</msg>
+<msg time="2024-12-06T11:37:16.510714" level="INFO">Slept 2 seconds.</msg>
 <arg>2s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2024-12-06T03:54:02.174347" elapsed="2.001634"/>
+<status status="PASS" start="2024-12-06T11:37:14.508892" elapsed="2.004131"/>
 </kw>
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:04.175981" level="INFO">Typing text 'Pear' into text field '//*[@id="username"]'.</msg>
+<msg time="2024-12-06T11:37:16.520032" level="INFO">Typing text 'Pear' into text field '//*[@id="username"]'.</msg>
 <arg>//*[@id="username"]</arg>
 <arg>Pear</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:04.175981" elapsed="0.073162"/>
+<status status="PASS" start="2024-12-06T11:37:16.515031" elapsed="0.407889"/>
 </kw>
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:04.251147" level="INFO">Typing text '6vLpK@example.com' into text field '//*[@id="email"]'.</msg>
+<msg time="2024-12-06T11:37:16.925156" level="INFO">Typing text '6vLpK@example.com' into text field '//*[@id="email"]'.</msg>
 <arg>//*[@id="email"]</arg>
 <arg>6vLpK@example.com</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:04.250143" elapsed="0.098180"/>
+<status status="PASS" start="2024-12-06T11:37:16.923920" elapsed="0.496388"/>
 </kw>
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:04.349431" level="INFO">Typing text '123' into text field '//*[@id="password"]'.</msg>
+<msg time="2024-12-06T11:37:17.422327" level="INFO">Typing text '123' into text field '//*[@id="password"]'.</msg>
 <arg>//*[@id="password"]</arg>
 <arg>123</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:04.348323" elapsed="0.065935"/>
+<status status="PASS" start="2024-12-06T11:37:17.420308" elapsed="0.245312"/>
 </kw>
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:04.415667" level="INFO">Typing text '123' into text field '//*[@id="confirmPassword"]'.</msg>
+<msg time="2024-12-06T11:37:17.667755" level="INFO">Typing text '123' into text field '//*[@id="confirmPassword"]'.</msg>
 <arg>//*[@id="confirmPassword"]</arg>
 <arg>123</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:04.415667" elapsed="0.067703"/>
+<status status="PASS" start="2024-12-06T11:37:17.666754" elapsed="0.257260"/>
 </kw>
 <kw name="Capture Page Screenshot" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:04.535230" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="register/register-test.png"&gt;&lt;img src="register/register-test.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-12-06T11:37:18.080901" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="register/register-test.png"&gt;&lt;img src="register/register-test.png" width="800px"&gt;&lt;/a&gt;</msg>
 <arg>register/register-test.png</arg>
 <doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
-<status status="PASS" start="2024-12-06T03:54:04.483370" elapsed="0.051860"/>
+<status status="PASS" start="2024-12-06T11:37:17.925083" elapsed="0.157477"/>
 </kw>
 <kw name="Click Button" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:04.536736" level="INFO">Clicking button '//*[@id="root"]/div/div[1]/form/button'.</msg>
+<msg time="2024-12-06T11:37:18.084181" level="INFO">Clicking button '//*[@id="root"]/div/div[1]/form/button'.</msg>
 <arg>//*[@id="root"]/div/div[1]/form/button</arg>
 <doc>Clicks the button identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:04.535230" elapsed="0.100680"/>
+<status status="PASS" start="2024-12-06T11:37:18.083075" elapsed="0.258784"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
-<msg time="2024-12-06T03:54:06.637802" level="INFO">Slept 2 seconds.</msg>
+<msg time="2024-12-06T11:37:20.344888" level="INFO">Slept 2 seconds.</msg>
 <arg>2s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2024-12-06T03:54:04.635910" elapsed="2.001892"/>
+<status status="PASS" start="2024-12-06T11:37:18.343065" elapsed="2.002921"/>
 </kw>
 <kw name="Capture Page Screenshot" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:06.678517" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="register/register-test-success.png"&gt;&lt;img src="register/register-test-success.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-12-06T11:37:20.475621" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="register/register-test-success.png"&gt;&lt;img src="register/register-test-success.png" width="800px"&gt;&lt;/a&gt;</msg>
 <arg>register/register-test-success.png</arg>
 <doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
-<status status="PASS" start="2024-12-06T03:54:06.637802" elapsed="0.042029"/>
+<status status="PASS" start="2024-12-06T11:37:20.347048" elapsed="0.130573"/>
 </kw>
 <kw name="Reload Page" owner="SeleniumLibrary">
 <doc>Simulates user reloading page.</doc>
-<status status="PASS" start="2024-12-06T03:54:06.679831" elapsed="0.255780"/>
+<status status="PASS" start="2024-12-06T11:37:20.477621" elapsed="0.854249"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
-<msg time="2024-12-06T03:54:08.937132" level="INFO">Slept 2 seconds.</msg>
+<msg time="2024-12-06T11:37:23.334599" level="INFO">Slept 2 seconds.</msg>
 <arg>2s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2024-12-06T03:54:06.935611" elapsed="2.001521"/>
+<status status="PASS" start="2024-12-06T11:37:21.333133" elapsed="2.002687"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:08.938148" level="INFO">Clicking element '//*[@id="root"]/div/div[2]/button'.</msg>
+<msg time="2024-12-06T11:37:23.338078" level="INFO">Clicking element '//*[@id="root"]/div/div[2]/button'.</msg>
 <arg>//*[@id="root"]/div/div[2]/button</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:08.937132" elapsed="0.060664"/>
+<status status="PASS" start="2024-12-06T11:37:23.337066" elapsed="0.261244"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
-<msg time="2024-12-06T03:54:10.999120" level="INFO">Slept 2 seconds.</msg>
+<msg time="2024-12-06T11:37:25.600759" level="INFO">Slept 2 seconds.</msg>
 <arg>2s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2024-12-06T03:54:08.997796" elapsed="2.001324"/>
+<status status="PASS" start="2024-12-06T11:37:23.599362" elapsed="2.002843"/>
 </kw>
 <kw name="Capture Page Screenshot" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.034651" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="register/register-test-setting.png"&gt;&lt;img src="register/register-test-setting.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-12-06T11:37:25.744184" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="register/register-test-setting.png"&gt;&lt;img src="register/register-test-setting.png" width="800px"&gt;&lt;/a&gt;</msg>
 <arg>register/register-test-setting.png</arg>
 <doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
-<status status="PASS" start="2024-12-06T03:54:10.999120" elapsed="0.035531"/>
+<status status="PASS" start="2024-12-06T11:37:25.602205" elapsed="0.143271"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.035700" level="INFO">Clicking element '//*[@id="root"]/div/div/div[4]/button'.</msg>
+<msg time="2024-12-06T11:37:25.748903" level="INFO">Clicking element '//*[@id="root"]/div/div/div[4]/button'.</msg>
 <arg>//*[@id="root"]/div/div/div[4]/button</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.035700" elapsed="0.209817"/>
+<status status="PASS" start="2024-12-06T11:37:25.746757" elapsed="0.777229"/>
 </kw>
-<status status="PASS" start="2024-12-06T03:53:57.670853" elapsed="13.574664"/>
+<status status="PASS" start="2024-12-06T11:37:09.800693" elapsed="16.723293"/>
 </kw>
 <kw name="Setting-Profile">
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.247713" level="INFO">Typing text 'PEARPLOY' into text field '//*[@id="root"]/div/div[2]/div[1]/div/input'.</msg>
+<msg time="2024-12-06T11:37:26.528300" level="INFO">Typing text 'PEARPLOY' into text field '//*[@id="root"]/div/div[2]/div[1]/div/input'.</msg>
 <arg>//*[@id="root"]/div/div[2]/div[1]/div/input</arg>
 <arg>PEARPLOY</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.246708" elapsed="0.080893"/>
+<status status="PASS" start="2024-12-06T11:37:26.527115" elapsed="0.311527"/>
 </kw>
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.328658" level="INFO">Typing text '21/01/2003' into text field '//*[@id="root"]/div/div[2]/div[2]/div/input'.</msg>
+<msg time="2024-12-06T11:37:26.840855" level="INFO">Typing text '21/01/2003' into text field '//*[@id="root"]/div/div[2]/div[2]/div/input'.</msg>
 <arg>//*[@id="root"]/div/div[2]/div[2]/div/input</arg>
 <arg>21/01/2003</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.327601" elapsed="0.055638"/>
+<status status="PASS" start="2024-12-06T11:37:26.839190" elapsed="0.243207"/>
 </kw>
 <kw name="Capture Page Screenshot" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.427191" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="setting/setting-test.png"&gt;&lt;img src="setting/setting-test.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-12-06T11:37:27.240757" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="setting/setting-test.png"&gt;&lt;img src="setting/setting-test.png" width="800px"&gt;&lt;/a&gt;</msg>
 <arg>setting/setting-test.png</arg>
 <doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.383239" elapsed="0.044966"/>
+<status status="PASS" start="2024-12-06T11:37:27.083535" elapsed="0.158229"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.428205" level="INFO">Clicking element '//*[@id="root"]/div/div[3]/div/div[2]/button'.</msg>
+<msg time="2024-12-06T11:37:27.244536" level="INFO">Clicking element '//*[@id="root"]/div/div[3]/div/div[2]/button'.</msg>
 <arg>//*[@id="root"]/div/div[3]/div/div[2]/button</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.428205" elapsed="0.045939"/>
+<status status="PASS" start="2024-12-06T11:37:27.243046" elapsed="0.204355"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.475148" level="INFO">Clicking element '//*[@id="root"]/div/div[4]/div/div[3]/button'.</msg>
+<msg time="2024-12-06T11:37:27.449585" level="INFO">Clicking element '//*[@id="root"]/div/div[4]/div/div[3]/button'.</msg>
 <arg>//*[@id="root"]/div/div[4]/div/div[3]/button</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.475148" elapsed="0.046443"/>
+<status status="PASS" start="2024-12-06T11:37:27.447941" elapsed="0.194617"/>
 </kw>
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.521591" level="INFO">Typing text 'KMUTT' into text field '//*[@id="root"]/div/div[5]/div/input'.</msg>
+<msg time="2024-12-06T11:37:27.646335" level="INFO">Typing text 'KMUTT' into text field '//*[@id="root"]/div/div[5]/div/input'.</msg>
 <arg>//*[@id="root"]/div/div[5]/div/input</arg>
 <arg>KMUTT</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.521591" elapsed="0.054637"/>
+<status status="PASS" start="2024-12-06T11:37:27.643973" elapsed="0.259789"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.577237" level="INFO">Clicking element '//*[@id="root"]/div/div[6]/div/div[1]/button[1]'.</msg>
+<msg time="2024-12-06T11:37:27.905806" level="INFO">Clicking element '//*[@id="root"]/div/div[6]/div/div[1]/button[1]'.</msg>
 <arg>//*[@id="root"]/div/div[6]/div/div[1]/button[1]</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.576228" elapsed="0.044367"/>
+<status status="PASS" start="2024-12-06T11:37:27.904790" elapsed="0.223838"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.621595" level="INFO">Clicking element '//*[@id="root"]/div/div[6]/div/div[1]/button[2]'.</msg>
+<msg time="2024-12-06T11:37:28.130941" level="INFO">Clicking element '//*[@id="root"]/div/div[6]/div/div[1]/button[2]'.</msg>
 <arg>//*[@id="root"]/div/div[6]/div/div[1]/button[2]</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.620595" elapsed="0.044650"/>
+<status status="PASS" start="2024-12-06T11:37:28.129882" elapsed="0.193132"/>
 </kw>
 <kw name="Click Button" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:11.666303" level="INFO">Clicking button '//*[@id="root"]/div/button'.</msg>
+<msg time="2024-12-06T11:37:28.325051" level="INFO">Clicking button '//*[@id="root"]/div/button'.</msg>
 <arg>//*[@id="root"]/div/button</arg>
 <doc>Clicks the button identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.666303" elapsed="0.055110"/>
+<status status="PASS" start="2024-12-06T11:37:28.324023" elapsed="0.225852"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
-<msg time="2024-12-06T03:54:13.721519" level="INFO">Slept 2 seconds.</msg>
+<msg time="2024-12-06T11:37:30.552949" level="INFO">Slept 2 seconds.</msg>
 <arg>2s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2024-12-06T03:54:11.721413" elapsed="2.000106"/>
+<status status="PASS" start="2024-12-06T11:37:28.549875" elapsed="2.004085"/>
 </kw>
 <kw name="Capture Page Screenshot" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:13.755700" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="setting/setting-test-success.png"&gt;&lt;img src="setting/setting-test-success.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-12-06T11:37:30.662525" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="setting/setting-test-success.png"&gt;&lt;img src="setting/setting-test-success.png" width="800px"&gt;&lt;/a&gt;</msg>
 <arg>setting/setting-test-success.png</arg>
 <doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
-<status status="PASS" start="2024-12-06T03:54:13.722106" elapsed="0.033594"/>
+<status status="PASS" start="2024-12-06T11:37:30.553960" elapsed="0.109566"/>
 </kw>
-<status status="PASS" start="2024-12-06T03:54:11.245517" elapsed="2.510183"/>
+<status status="PASS" start="2024-12-06T11:37:26.526060" elapsed="4.138613"/>
 </kw>
 <kw name="Upload Photo">
 <kw name="Sleep" owner="BuiltIn">
-<msg time="2024-12-06T03:54:15.758038" level="INFO">Slept 2 seconds.</msg>
+<msg time="2024-12-06T11:37:32.669670" level="INFO">Slept 2 seconds.</msg>
 <arg>2s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2024-12-06T03:54:13.757518" elapsed="2.000520"/>
+<status status="PASS" start="2024-12-06T11:37:30.668186" elapsed="2.002006"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:15.759049" level="INFO">Clicking element '//*[@id="root"]/div/div/div[2]/div[1]/label'.</msg>
+<msg time="2024-12-06T11:37:32.672229" level="INFO">Clicking element '//*[@id="root"]/div/div/div[2]/div[1]/label'.</msg>
 <arg>//*[@id="root"]/div/div/div[2]/div[1]/label</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="PASS" start="2024-12-06T03:54:15.758038" elapsed="0.056338"/>
+<status status="PASS" start="2024-12-06T11:37:32.671215" elapsed="0.212744"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
-<msg time="2024-12-06T03:54:25.814725" level="INFO">Slept 10 seconds.</msg>
+<msg time="2024-12-06T11:37:42.887361" level="INFO">Slept 10 seconds.</msg>
 <arg>10s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2024-12-06T03:54:15.814376" elapsed="10.000349"/>
+<status status="PASS" start="2024-12-06T11:37:32.884525" elapsed="10.003926"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
-<msg time="2024-12-06T03:54:25.815890" level="INFO">Clicking element '//*[@id="root"]/div/div/div[2]/div[2]/label'.</msg>
-<msg time="2024-12-06T03:54:26.018354" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
-<msg time="2024-12-06T03:54:26.018868" level="FAIL">Element with locator '//*[@id="root"]/div/div/div[2]/div[2]/label' not found.</msg>
+<msg time="2024-12-06T11:37:42.890863" level="INFO">Clicking element '//*[@id="root"]/div/div/div[2]/div[2]/label'.</msg>
 <arg>//*[@id="root"]/div/div/div[2]/div[2]/label</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="FAIL" start="2024-12-06T03:54:25.815354" elapsed="0.275502">Element with locator '//*[@id="root"]/div/div/div[2]/div[2]/label' not found.</status>
+<status status="PASS" start="2024-12-06T11:37:42.889521" elapsed="0.228073"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:37:53.121265" level="INFO">Slept 10 seconds.</msg>
 <arg>10s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2024-12-06T03:54:26.090856" elapsed="0.000000"/>
+<status status="PASS" start="2024-12-06T11:37:43.118669" elapsed="10.003620"/>
 </kw>
 <kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:53.319236" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="upload/upload-test.png"&gt;&lt;img src="upload/upload-test.png" width="800px"&gt;&lt;/a&gt;</msg>
 <arg>upload/upload-test.png</arg>
 <doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
-<status status="NOT RUN" start="2024-12-06T03:54:26.090856" elapsed="0.001355"/>
+<status status="PASS" start="2024-12-06T11:37:53.123812" elapsed="0.196868"/>
 </kw>
 <kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:53.323349" level="INFO">Clicking element '//*[@id="root"]/div/div/div[3]/button'.</msg>
 <arg>//*[@id="root"]/div/div/div[3]/button</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2024-12-06T03:54:26.092211" elapsed="0.000000"/>
+<status status="PASS" start="2024-12-06T11:37:53.320680" elapsed="0.258610"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:37:55.581450" level="INFO">Slept 2 seconds.</msg>
 <arg>2s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2024-12-06T03:54:26.092211" elapsed="0.000000"/>
+<status status="PASS" start="2024-12-06T11:37:53.580290" elapsed="2.002267"/>
 </kw>
 <kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Press Keys" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:37:55.586233" level="INFO">Sending key(s) ('Enter',) to page.</msg>
+<msg time="2024-12-06T11:37:55.587463" level="INFO">Sending keys Enter</msg>
+<msg time="2024-12-06T11:37:56.313958" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-15.png"&gt;&lt;img src="selenium-screenshot-15.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-12-06T11:37:56.316186" level="FAIL">UnexpectedAlertPresentException: Alert Text: Photos uploaded successfully!
+Message: unexpected alert open: {Alert text : Photos uploaded successfully!}
+  (Session info: MicrosoftEdge=131.0.2903.70)
+Stacktrace:
+	(No symbol) [0x00007FF7FBB46B15]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE6F4A4+1437348]
+	sqlite3_dbdata_init [0x00007FF7FBF12DE6+643190]
+	(No symbol) [0x00007FF7FBAA72CD]
+	(No symbol) [0x00007FF7FBA8BE03]
+	(No symbol) [0x00007FF7FBA62984]
+	(No symbol) [0x00007FF7FBA61E30]
+	(No symbol) [0x00007FF7FBA62571]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE1BB34+1094964]
+	(No symbol) [0x00007FF7FBB832C8]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE1AF73+1091955]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE1AAD9+1090777]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC20CE1+461569]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC1CA04+444452]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC1CB49+444777]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC121C6+401382]
+	BaseThreadInitThunk [0x00007FFEE63FE8D7+23]
+	RtlUserThreadStart [0x00007FFEE805FBCC+44]
+</msg>
+<arg>None</arg>
+<arg>Enter</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<status status="FAIL" start="2024-12-06T11:37:55.583621" elapsed="1.054899">UnexpectedAlertPresentException: Alert Text: Photos uploaded successfully!
+Message: unexpected alert open: {Alert text : Photos uploaded successfully!}
+  (Session info: MicrosoftEdge=131.0.2903.70)
+Stacktrace:
+	(No symbol) [0x00007FF7FBB46B15]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE6F4A4+1437348]
+	sqlite3_dbdata_init [0x00007FF7FBF12DE6+643190]
+	(No symbol) [0x00007FF7FBAA72CD]
+	(No symbol) [0x00007FF7FBA8BE03]
+	(No symbol) [0x00007FF7FBA62984]
+	(No symbol) [0x00007FF7FBA61E30]
+	(No symbol) [0x00007FF7FBA62571]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE1BB34+1094964]
+	(No symbol) [0x00007FF7FBB832C8]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE1AF73+1091955]
+	Microsoft::Applications::Events::EventProperty::empty [0x00007FF7FBE1AAD9+1090777]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC20CE1+461569]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC1CA04+444452]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC1CB49+444777]
+	Microsoft::Applications::Events::ILogConfiguration::operator* [0x00007FF7FBC121C6+401382]
+	BaseThreadInitThunk [0x00007FFEE63FE8D7+23]
+	RtlUserThreadStart [0x00007FFEE805FBCC+44]
+</status>
+</kw>
 <arg>Press Keys</arg>
 <arg>None</arg>
 <arg>Enter</arg>
 <doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
-<status status="NOT RUN" start="2024-12-06T03:54:26.092211" elapsed="0.000000"/>
+<status status="PASS" start="2024-12-06T11:37:55.582557" elapsed="1.055963"/>
 </kw>
-<status status="FAIL" start="2024-12-06T03:54:13.755700" elapsed="12.336511">Element with locator '//*[@id="root"]/div/div/div[2]/div[2]/label' not found.</status>
+<status status="PASS" start="2024-12-06T11:37:30.665690" elapsed="25.973999"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:37:58.641018" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:37:56.640714" elapsed="2.002311"/>
 </kw>
 <kw name="Logout">
-<status status="NOT RUN" start="2024-12-06T03:54:26.093211" elapsed="0.000000"/>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:00.647120" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:37:58.645194" elapsed="2.002956"/>
 </kw>
-<status status="FAIL" start="2024-12-06T03:53:57.669843" elapsed="28.423368">Element with locator '//*[@id="root"]/div/div/div[2]/div[2]/label' not found.</status>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:00.650276" level="INFO">Clicking element '//*[@id="root"]/div/div[1]/div[2]/div[3]/button[2]'.</msg>
+<arg>//*[@id="root"]/div/div[1]/div[2]/div[3]/button[2]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:00.649130" elapsed="0.255700"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:01.017337" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="logout/logout-test.png"&gt;&lt;img src="logout/logout-test.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>logout/logout-test.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:38:00.905874" elapsed="0.111463"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:03.020121" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:01.018423" elapsed="2.002715"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:03.022135" level="INFO">Clicking element '//*[@id="root"]/div/div[2]/div[7]/button'.</msg>
+<arg>//*[@id="root"]/div/div[2]/div[7]/button</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:03.021138" elapsed="0.237390"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:03.530608" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="logout/logout-test-success.png"&gt;&lt;img src="logout/logout-test-success.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>logout/logout-test-success.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:38:03.259820" elapsed="0.272792"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2024-12-06T11:38:03.533612" elapsed="2.460538"/>
+</kw>
+<status status="PASS" start="2024-12-06T11:37:58.644026" elapsed="7.350124"/>
+</kw>
+<status status="PASS" start="2024-12-06T11:37:09.797250" elapsed="56.197916"/>
 </test>
-<status status="FAIL" start="2024-12-06T03:53:56.627705" elapsed="29.468112"/>
+<test id="s1-s1-s1-s1-t3" name="PassLogin" line="21">
+<kw name="Valid Login">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:06.003971" level="INFO">Opening browser 'edge' to base url 'http://localhost:3000/home-login-register'.</msg>
+<arg>${BASE_URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2024-12-06T11:38:06.002779" elapsed="4.073431"/>
+</kw>
+<kw name="Set Window Size" owner="SeleniumLibrary">
+<arg>width=300</arg>
+<arg>height=1000</arg>
+<doc>Sets current windows size to given ``width`` and ``height``.</doc>
+<status status="PASS" start="2024-12-06T11:38:10.076210" elapsed="0.407885"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:10.485294" level="INFO">Clicking element '//*[@id="root"]/div/div[2]/button[1]'.</msg>
+<arg>//*[@id="root"]/div/div[2]/button[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:10.484095" elapsed="0.289769"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:10.776230" level="INFO">Typing text '6vLpK@example.com' into text field '//*[@id="root"]/div/div[1]/form/div[2]/input[1]'.</msg>
+<arg>//*[@id="root"]/div/div[1]/form/div[2]/input[1]</arg>
+<arg>${VALID_USERNAME}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:10.774952" elapsed="0.399563"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:11.178608" level="INFO">Typing text '123' into text field '//*[@id="root"]/div/div[1]/form/div[2]/input[2]'.</msg>
+<arg>//*[@id="root"]/div/div[1]/form/div[2]/input[2]</arg>
+<arg>${VALID_PASSWORD}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:11.175912" elapsed="0.228008"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:11.545473" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="login/login-test-1.png"&gt;&lt;img src="login/login-test-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>login/login-test-1.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:38:11.404995" elapsed="0.141877"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:11.549037" level="INFO">Clicking button '//*[@id="root"]/div/div[1]/form/button'.</msg>
+<arg>//*[@id="root"]/div/div[1]/form/button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:11.547946" elapsed="0.282663"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:14.831966" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:11.830609" elapsed="3.002364"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:15.011236" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="login/login-sucess-test.png"&gt;&lt;img src="login/login-sucess-test.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>login/login-sucess-test.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:38:14.835099" elapsed="0.177527"/>
+</kw>
+<kw name="Reload Page" owner="SeleniumLibrary">
+<doc>Simulates user reloading page.</doc>
+<status status="PASS" start="2024-12-06T11:38:15.012626" elapsed="0.931511"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:17.946529" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:15.945356" elapsed="2.002198"/>
+</kw>
+<tag>Login</tag>
+<tag>Positive</tag>
+<status status="PASS" start="2024-12-06T11:38:06.000780" elapsed="11.946774"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:19.950981" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:17.949844" elapsed="2.002528"/>
+</kw>
+<kw name="Delete Account">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:21.963671" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:19.961177" elapsed="2.004011"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:21.967811" level="INFO">Clicking element '//*[@id="root"]/div/div[1]/div[2]/div[3]/button[2]'.</msg>
+<arg>//*[@id="root"]/div/div[1]/div[2]/div[3]/button[2]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:21.966633" elapsed="0.281677"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:24.251106" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:22.248310" elapsed="2.003827"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:24.254582" level="INFO">Clicking element '//*[@id="root"]/div/div[3]/div[3]/button'.</msg>
+<arg>//*[@id="root"]/div/div[3]/div[3]/button</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:24.253566" elapsed="0.259850"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:24.678356" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="delete/delete-test.png"&gt;&lt;img src="delete/delete-test.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>delete/delete-test.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:38:24.513416" elapsed="0.166045"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:26.682417" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:24.679461" elapsed="2.003987"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:26.684597" level="INFO">Clicking element 'xpath=//button[@type='button' and contains(@class, 'swal2-confirm') and contains(text(), 'Delete My Account')]'.</msg>
+<arg>xpath=//button[@type='button' and contains(@class, 'swal2-confirm') and contains(text(), 'Delete My Account')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-12-06T11:38:26.683448" elapsed="0.223581"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-12-06T11:38:28.909025" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-12-06T11:38:26.908022" elapsed="2.002053"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2024-12-06T11:38:29.025035" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="delete/delete-test-success.png"&gt;&lt;img src="delete/delete-test-success.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>delete/delete-test-success.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2024-12-06T11:38:28.911087" elapsed="0.114979"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2024-12-06T11:38:29.027437" elapsed="2.523170"/>
+</kw>
+<status status="PASS" start="2024-12-06T11:38:19.956380" elapsed="11.594227"/>
+</kw>
+<status status="PASS" start="2024-12-06T11:38:05.998427" elapsed="25.553394"/>
+</test>
+<status status="PASS" start="2024-12-06T11:36:53.739950" elapsed="97.815171"/>
 </suite>
-<status status="FAIL" start="2024-12-06T03:53:56.625436" elapsed="29.472894"/>
+<status status="PASS" start="2024-12-06T11:36:53.730416" elapsed="97.831320"/>
 </suite>
-<status status="FAIL" start="2024-12-06T03:53:56.623306" elapsed="29.476140"/>
+<status status="PASS" start="2024-12-06T11:36:53.719374" elapsed="97.847229"/>
 </suite>
-<status status="FAIL" start="2024-12-06T03:53:56.549389" elapsed="29.551056"/>
+<status status="PASS" start="2024-12-06T11:36:53.519346" elapsed="98.051492"/>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="1" skip="0">All Tests</stat>
+<stat pass="3" fail="0" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="0" fail="1" skip="0" id="s1" name="Project-SE">Project-SE</stat>
-<stat pass="0" fail="1" skip="0" id="s1-s1" name="Src">Project-SE.Src</stat>
-<stat pass="0" fail="1" skip="0" id="s1-s1-s1" name="Test">Project-SE.Src.Test</stat>
-<stat pass="0" fail="1" skip="0" id="s1-s1-s1-s1" name="Logintest">Project-SE.Src.Test.Logintest</stat>
+<stat pass="3" fail="0" skip="0" id="s1" name="Project-SE">Project-SE</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s1" name="Src">Project-SE.Src</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s1-s1" name="Test">Project-SE.Src.Test</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s1-s1-s1" name="Logintest">Project-SE.Src.Test.Logintest</stat>
 </suite>
 </statistics>
 <errors>
