@@ -26,6 +26,7 @@ import matchRoutes from "./routes/matchRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import restaurantRoutes from "./routes/restaurantRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -95,7 +96,15 @@ app.use('/api/match/', matchRoutes);
 app.use('/api/message/', messageRoutes);
 app.use('/api/restaurant/', restaurantRoutes);
 app.use('/api/admin/', adminRoutes);
+app.use('/api/user/', userRoutes);
 
+// API endpoint to upload photos
+app.post("/api/upload", upload.single("photo"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "Photo upload failed" });
+  }
+  res.status(200).json({ filePath: `/uploads/${req.file.filename}` });
+});
 
 // Serve static files for uploaded images
 app.use("/uploads", express.static(uploadDir));

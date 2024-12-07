@@ -1,6 +1,6 @@
-import User from '../models/userModel.js';
-import Profile from '../models/profileModel.js';
-import CardPayment from '../models/cardPaymentModel.js';
+import User from '../models/user.js';
+import Profile from '../models/profile.js';
+import CardPayment from '../models/cardPayment.js';
 
 // Register
 export const register = async (req, res) => {

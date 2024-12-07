@@ -50,7 +50,7 @@ export default function Password() {
         setIsSubmitting(true); // Disable the button during submission
     
         try {
-            const response = await axios.put("http://localhost:3000/api/setting/reset-password", {
+            const response = await axios.put("http://localhost:3000/api/user/setting/reset-password", {
                 email,
                 password,
                 newpassword: newPassword,

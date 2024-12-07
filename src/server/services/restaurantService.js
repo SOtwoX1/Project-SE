@@ -113,7 +113,6 @@ export const postChillingWithYou = async (req, res) => {
     try {
         const { userID } = req.params;
         const { otherUserID, restaurantID } = req.query;
-        console.log(userID, otherUserID, restaurantID);
 
         if (!userID || !otherUserID) {
             return res.status(400).json({ message: 'Missing userID or otherUserID' });

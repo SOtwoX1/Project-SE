@@ -39,7 +39,7 @@ export default function Register() {
   
     // Send data to the server  
     try {
-      const response = await axios.post("http://localhost:3000/api/register", {
+      const response = await axios.post("http://localhost:3000/api/user/register", {
         username, // Ensure this matches the schema
         email,    // Ensure this matches the schema
         password, // Ensure this matches the schema

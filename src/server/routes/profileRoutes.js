@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { changeStatus, getUserProfile, updateSwipe, setGenderInterest, registerProfile, uploadPhoto, setPhoto, getDataProfile, updateDataProfile, setUserPremiumStatus } from '../services/profileService.js';
+import { changeStatus, getUserProfile, updateSwipe, setGenderInterest, registerProfile, setPhoto, getDataProfile, updateDataProfile, setUserPremiumStatus } from '../services/profileService.js';
 
 const router = Router();
 // router = /api/profile
@@ -17,9 +17,6 @@ router.put('/set-gender/:username', setGenderInterest);
 
 // Register profile endpotin
 router.post('/register/profile', registerProfile);
-
-// Upload photo
-router.post('/upload-photo', uploadPhoto);
 
 // Update user photos
 router.put('/set-photo', setPhoto);

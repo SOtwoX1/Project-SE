@@ -45,7 +45,7 @@ export default function Manage_Payment_Account() {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('http://localhost:3000/api/create-cardpayment', {
+            const response = await axios.post('http://localhost:3000/api/user/create-cardpayment', {
                 username,
                 cardNumber,
                 cardHolderName,

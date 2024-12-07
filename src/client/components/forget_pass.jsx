@@ -19,7 +19,7 @@ export default function Forgetpass() {
     console.log("email:", email);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/forgot-password", {
+      const response = await axios.post("http://localhost:3000/api/user/forgot-password", {
         email,
       });
 

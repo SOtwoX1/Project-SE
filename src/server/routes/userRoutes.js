@@ -1,5 +1,5 @@
 import { Router } from 'express';
-
+import { register, login, forgotPassword, setPassword, resetPassword, createCardPayment, deleteAccount } from '../services/userService.js';
 
 const router = Router();
 
@@ -13,15 +13,15 @@ router.post('/login', login);
 router.post('/forgot-password', forgotPassword);
 
 // Set password
-router.put('/api/reset-password', setPassword);
+router.put('/reset-password', setPassword);
 
 // Reset password
-router.put('/api/setting/reset-password', resetPassword);
+router.put('/setting/reset-password', resetPassword);
 
 // Create cardpayment
-router.post('/api/create-cardpayment', createCardPayment);
+router.post('/create-cardpayment', createCardPayment);
 
 // Delete account
-router.delete('/api/delete-account', deleteAccount);
+router.delete('/delete-account', deleteAccount);
 
 export default router;

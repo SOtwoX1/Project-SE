@@ -141,14 +141,6 @@ export const registerProfile = async (req, res) => {
   }
 };
 
-// Upload photo
-export const uploadPhoto = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "Photo upload failed" });
-  }
-  res.status(200).json({ filePath: `/uploads/${req.file.filename}` });
-};
-
 // Update user photos
 export const setPhoto = async (req, res) => {
   const { username, photo } = req.body;

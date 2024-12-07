@@ -99,7 +99,7 @@ const UsersProfilesList = () => {
         setSuccessMessage(null);
 
         try {
-            const response = await axios.delete('/api/delete-account', {
+            const response = await axios.delete('/api/user/delete-account', {
                 data: { username: usernameToDelete },
             });
             setSuccessMessage(response.data.message);
