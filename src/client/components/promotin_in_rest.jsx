@@ -27,7 +27,7 @@ export default function Nopromotion_restaurant(){
             setRestaurantID(restaurantID);
             try {
                 // Fetch restaurant and promotion
-                const response = await axios.get(`/api/get-restaurant/${restaurantID}`);
+                const response = await axios.get(`/api/restaurant/get-restaurant/${restaurantID}`);
                 const fetchRestaurant = response.data;
                 console.log(fetchRestaurant)
                 setRestaurant(fetchRestaurant.restaurant);
@@ -60,7 +60,7 @@ export default function Nopromotion_restaurant(){
     // Chilling at restaurant
     const pin_rest = async () => {
         try {
-            const response = await axios.post(`/api/chilling-at/${restaurantID}?userID=${username}`);
+            const response = await axios.post(`/api/restaurant/chilling-at/${restaurantID}?userID=${username}`);
             console.log(response.data);
             Swal.fire({ 
                 title: "Now!!", 

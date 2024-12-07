@@ -29,7 +29,7 @@ export default function Show_me() {
         setUsername(username);
 
         // Construct API URL with username
-        const url = `/api/set-gender/${username}`;
+        const url = `/api/profile/set-gender/${username}`;
 
         try {
             // Send PUT request to backend

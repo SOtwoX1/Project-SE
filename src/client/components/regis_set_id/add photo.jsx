@@ -56,7 +56,7 @@ export default function AddPhoto() {
       };
       console.log(payload);
       try {
-        const response = await axios.put("http://localhost:3000/api/set-photo", payload, {
+        const response = await axios.put("http://localhost:3000/api/profile/set-photo", payload, {
           headers: {
             "Content-Type": "application/json",
           },

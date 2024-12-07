@@ -35,7 +35,7 @@ export default function Cnr() {
     }
     // console.log(email, password);
     try {
-      const response = await axios.put("http://localhost:3000/api/reset-password", {
+      const response = await axios.put("http://localhost:3000/api/user/reset-password", {
         email,
         password,
       });

@@ -22,7 +22,7 @@ const DetailMatch = () => {
       const params = new URLSearchParams(location.search);
       const userID = params.get('userID');
       try {
-        const response = await axios.get(`/api/get-profile/${userID}`);
+        const response = await axios.get(`/api/profile/get-profile/${userID}`);
         setUserProfile(response.data);
         setLoading(false);
       } catch (error) {

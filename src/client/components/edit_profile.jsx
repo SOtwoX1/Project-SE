@@ -88,7 +88,7 @@ export default function Edit_pro() {
         // Fetch profile data from backend API
         const fetchProfile = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/get-data", {
+                const response = await axios.get("http://localhost:3000/api/profile/get-data", {
                     params: { username: userData.username },
                 });
                 setProfile(response.data);
@@ -123,7 +123,7 @@ export default function Edit_pro() {
         const fromdata = { name, username, bio, address, dob, education, job, hobby, tags: selectedCategories, gender: selectedGender };
         console.log(fromdata);
         try {
-            const response = await axios.put("http://localhost:3000/api/update-dataprofile", fromdata);
+            const response = await axios.put("http://localhost:3000/api/profile/update-dataprofile", fromdata);
             console.log(response.data);
             alert("บันทึกข้อมูลเรียบร้อยแล้ว");
         } catch (error) {
