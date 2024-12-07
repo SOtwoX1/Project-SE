@@ -60,8 +60,8 @@ const UsersProfilesList = () => {
         const fetchData = async () => {
             try {
                 const [usersResponse, profilesResponse] = await Promise.all([
-                    axios.get('/api/get-data-user'),
-                    axios.get('/api/get-data-profile'),
+                    axios.get('/api/admin/get-data-user'),
+                    axios.get('/api/admin/get-data-profile'),
                 ]);
                 setUsers(usersResponse.data);
                 setProfiles(profilesResponse.data);
@@ -73,7 +73,7 @@ const UsersProfilesList = () => {
 
         const fetchRestaurants = async () => {
             try {
-                const response = await axios.get('/api/get-data-restaurant');
+                const response = await axios.get('/api/admin/get-data-restaurant');
                 setRestaurants(response.data);
             } catch (error) {
                 console.error('Error fetching restaurants:', error);
@@ -86,7 +86,7 @@ const UsersProfilesList = () => {
 
     const fetchRestaurants = async () => {
         try {
-            const response = await axios.get('/api/get-data-restaurant');
+            const response = await axios.get('/api/admin/get-data-restaurant');
             setRestaurants(response.data);
         } catch (error) {
             console.error('Error fetching restaurants:', error);
@@ -106,8 +106,8 @@ const UsersProfilesList = () => {
 
             // Re-fetch the data after deleting the account
             const [usersResponse, profilesResponse] = await Promise.all([
-                axios.get('/api/get-data-user'),
-                axios.get('/api/get-data-profile'),
+                axios.get('/api/admin/get-data-user'),
+                axios.get('/api/admin/get-data-profile'),
             ]);
             setUsers(usersResponse.data);
             setProfiles(profilesResponse.data);
@@ -132,7 +132,7 @@ const UsersProfilesList = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await axios.post('/api/post-data-restaurant', {
+            const response = await axios.post('/api/admin/post-data-restaurant', {
                 restaurantID: restaurantData.restaurantID,
                 name: restaurantData.name,
                 tags: restaurantData.tags.split(','),
@@ -168,7 +168,7 @@ const UsersProfilesList = () => {
     // Delete restaurant by ID
     const handleDelete = async (restaurantID) => {
         try {
-            await axios.delete('/api/delete-restaurant', { data: { restaurantID } });
+            await axios.delete('/api/admin/delete-restaurant', { data: { restaurantID } });
             fetchRestaurants(); // Refresh the restaurant list after deletion
             alert('Restaurant deleted successfully');
         } catch (error) {

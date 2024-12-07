@@ -22,7 +22,7 @@ const Match = () => {
   async function pullProfile(username) {
     try {
       console.log('pull profiles');
-      const response = await axios.get(`/api/match-profile/${username}`);
+      const response = await axios.get(`/api/match/match-profile/${username}`);
       const fetchProfiles = response.data;
       console.log(response.data);
       setProfiles(fetchProfiles);
@@ -48,7 +48,7 @@ const Match = () => {
   // Fetch match profile
   const fetchProfiles = async (userID) => {
     try {
-      const response = await axios.get(`/api/match-profile/${userID}`);
+      const response = await axios.get(`/api/match/match-profile/${userID}`);
       const fetchProfiles = response.data;
       setProfiles(fetchProfiles);
       setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
@@ -61,7 +61,7 @@ const Match = () => {
   const fetchData = async (userID) => {
     try {
       console.log('get status, SwipeDailyCount');
-      const response = await axios.get(`/api/get-profile/${userID}`);
+      const response = await axios.get(`/api/profile/get-profile/${userID}`);
       console.log(response.data.isFree);
       setStatus(response.data.isFree);
       setSwipeDailyCount(response.data.swipeDailyCount);
@@ -86,14 +86,14 @@ const Match = () => {
       try {
         console.log('Like profile clicked');
         if (currentProfile !== undefined) {
-          const response = await axios.post(`/api/like-profile/${userID}?otherUserID=${currentProfile.userID}`);
+          const response = await axios.post(`/api/match/like-profile/${userID}?otherUserID=${currentProfile.userID}`);
           setMatchText(<span style={{ color: '#F4A261' }}>{`${response.data.message}! 🎉`}</span>);
           console.log('matchText:', 'Matched! 🎉');
           setTimeout(() => {
             setMatchText('');
             showNextProfile();
           }, 2000);
-          await axios.put(`/api/update-swipe-profile/${userID}?otherUserID=${currentProfile.userID}`);
+          await axios.put(`/api/profile/update-swipe-profile/${userID}?otherUserID=${currentProfile.userID}`);
           setSwipeDailyCount(swipeDailyCount + 1);
         }
       } catch (error) {
@@ -122,7 +122,7 @@ const Match = () => {
   // Change status function
   async function changeStatus(status) {
     try {
-      await axios.put(`/api/change-status/${userID}?isFree=${!status}`);
+      await axios.put(`/api/profile/change-status/${userID}?isFree=${!status}`);
       setStatus(!status);
       console.log(!status ? 'ว่าง' : 'ไม่ว่าง');
     } catch (error) {

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { acceptMatchRequest, declineMatchRequest, getAllMatchRequest, getMatchProfile, sendMatchRequest } from '../services/matchService.js';
 
 const router = Router();
-
+// router = /api/match
 // Get profile that matches the user's preferences
 router.get('/match-profile/:userID', getMatchProfile);
 

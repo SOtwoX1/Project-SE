@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getAllChillingAt, getAllRestaurant, getRestaurantByID, postChillingAt, postChillingWithYou } from '../services/restaurantService.js';
 
 const router = Router();
-
+// router = /api/restaurant
 // Get all restaurants
 router.get('/get-all-restaurants', getAllRestaurant);
 
@@ -10,7 +10,7 @@ router.get('/get-all-restaurants', getAllRestaurant);
 router.get('/get-restaurant/:restaurantID', getRestaurantByID);
 
 // Get all who that chilling at restaurant
-router.get('/get-chilling/:restaurantID', getAllChillingAt);
+router.get('/get-all-chilling/:restaurantID', getAllChillingAt);
 
 // Post new chilling at restaurant
 router.post('/chilling-at/:restaurantID', postChillingAt);

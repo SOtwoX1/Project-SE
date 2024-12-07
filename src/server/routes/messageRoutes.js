@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getAllChatRoom, getChatHistory, sendMessage } from '../services/messageService.js';
 
 const router = Router();
-
+// router = /api/message
 // Get all chat rooms
 router.get('/get-all-chat/:userID', getAllChatRoom);
 

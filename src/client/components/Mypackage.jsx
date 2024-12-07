@@ -44,7 +44,7 @@ const Mypackage = () => {
             const data = {
                 username
             };
-            axios.put('http://localhost:3000/api/set-ispremium', data)
+            axios.put('http://localhost:3000/api/profile/set-ispremium', data)
                 .then(response => {
                     console.log(response.data);
                     Swal.fire({

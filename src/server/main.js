@@ -90,11 +90,11 @@ mongoose
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Use routes
-app.use('/api/', profileRoutes);
-app.use('/api/', matchRoutes);
-app.use('/api/', messageRoutes);
-app.use('/api/', restaurantRoutes);
-app.use('/api/', adminRoutes);
+app.use('/api/profile/', profileRoutes);
+app.use('/api/match/', matchRoutes);
+app.use('/api/message/', messageRoutes);
+app.use('/api/restaurant/', restaurantRoutes);
+app.use('/api/admin/', adminRoutes);
 
 
 // Serve static files for uploaded images

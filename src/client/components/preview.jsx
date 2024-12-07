@@ -41,7 +41,7 @@ const Preview = () => {
     // Fetch profile data from the backend
     const fetchProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/get-data", {
+        const response = await axios.get("http://localhost:3000/api/profile/get-data", {
           params: { username: userData.username }, // Send username as query parameter
         });
         setProfile(response.data); // Set profile data in state

@@ -49,7 +49,7 @@ export default function Restaurant() {
       setUserID(userData.username);
       try {
         // Fetch all restaurant
-        const response = await axios.get('/api/get-all-restaurants');
+        const response = await axios.get('/api/restaurant/get-all-restaurants');
         const fetchPromotions = response.data;
         console.log(fetchPromotions);
         setPromotions(fetchPromotions);

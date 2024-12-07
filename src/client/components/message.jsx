@@ -15,7 +15,7 @@ function Message() {
   // Pull all chat room that user have
   async function pullAllChat(username) {
     try {
-      const response = await axios.get(`/api/get-all-chat/${username}`);
+      const response = await axios.get(`/api/message/get-all-chat/${username}`);
       console.log("username: ", username);
       console.log("response.data: ", response.data);
       setChats(response.data);

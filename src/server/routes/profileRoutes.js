@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { changeStatus, getUserProfile, updateSwipe, setGenderInterest, registerProfile, uploadPhoto, setPhoto, getDataProfile, updateDataProfile, setUserPremiumStatus } from '../services/profileService.js';
-const router = Router();
 
+const router = Router();
+// router = /api/profile
 // Get user profile
 router.get('/get-profile/:userID', getUserProfile);
 
@@ -27,7 +28,7 @@ router.put('/set-photo', setPhoto);
 router.get('/get-data', getDataProfile);
 
 // Update data profile
-router.put('/update-data', updateDataProfile);
+router.put('/update-dataprofile', updateDataProfile);
 
 // Update user premium status
 router.put('/set-ispremium', setUserPremiumStatus);

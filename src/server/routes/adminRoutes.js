@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getDataProfile, getDataUser, getDataRestaurant, postDataRestaurant, deleteRestaurant } from '../services/adminService.js';
 
 const router = Router();
-
+// router = /api/admin
 // Get data `Profile` all user
 router.get('/get-data-profile', getDataProfile);
 
