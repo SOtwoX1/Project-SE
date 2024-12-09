@@ -26,7 +26,7 @@ export default function Personal_info() {
 
             console.log(data);
 
-            const response = await axios.post('http://localhost:3000/api/register/profile', data);
+            const response = await axios.post('http://localhost:3000/api/profile/register/profile', data);
             console.log(response.data);
 
             if (response.status === 201) {

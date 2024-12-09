@@ -55,7 +55,7 @@ export default function Setting_pro() {
                 let response;
                 if (result.isConfirmed) {
                     try {
-                        const response = await axios.delete(`http://localhost:3000/api/delete-account`, {
+                        const response = await axios.delete(`http://localhost:3000/api/user/delete-account`, {
                             data: {
                                 username: username,
                             },
