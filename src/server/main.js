@@ -21,12 +21,12 @@ import Profile from "./models/profile.js";
 import Promotion from "./models/Promotion.js";
 import Restaurant from "./models/Restaurant.js";
 import User from "./models/user.js";
-import adminRoutes from "./routes/adminRoutes.js";
-import matchRoutes from "./routes/matchRoutes.js";
-import messageRoutes from "./routes/messageRoutes.js";
-import profileRoutes from "./routes/profileRoutes.js";
-import restaurantRoutes from "./routes/restaurantRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import adminRoutes, { baseAdminRouteURL } from "./routes/adminRoutes.js";
+import matchRoutes, { baseMatchRouteURL } from "./routes/matchRoutes.js";
+import messageRoutes, { baseMessageRouteURL } from "./routes/messageRoutes.js";
+import profileRoutes, { baseProfileRouteURL } from "./routes/profileRoutes.js";
+import restaurantRoutes, { baseRestaurantRouteURL } from "./routes/restaurantRoutes.js";
+import userRoutes, { baseUserRouteURL } from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -91,12 +91,12 @@ mongoose
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Use routes
-app.use('/api/profile/', profileRoutes);
-app.use('/api/match/', matchRoutes);
-app.use('/api/message/', messageRoutes);
-app.use('/api/restaurant/', restaurantRoutes);
-app.use('/api/admin/', adminRoutes);
-app.use('/api/user/', userRoutes);
+app.use(baseAdminRouteURL, adminRoutes);
+app.use(baseMatchRouteURL, matchRoutes);
+app.use(baseMessageRouteURL, messageRoutes);
+app.use(baseProfileRouteURL, profileRoutes);
+app.use(baseRestaurantRouteURL, restaurantRoutes);
+app.use(baseUserRouteURL, userRoutes);
 
 // API endpoint to upload photos
 app.post("/api/upload", upload.single("photo"), (req, res) => {

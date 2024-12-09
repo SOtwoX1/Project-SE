@@ -1,21 +1,29 @@
 import { Router } from 'express';
 import { acceptMatchRequest, declineMatchRequest, getAllMatchRequest, getMatchProfile, sendMatchRequest } from '../services/matchService.js';
+import { get } from 'mongoose';
 
 const router = Router();
-// router = /api/match
+
+export const baseMatchRouteURL = '/api/match';
+
 // Get profile that matches the user's preferences
-router.get('/match-profile/:userID', getMatchProfile);
+export const getMatchProfileAPI = '/match-profile';
+router.get(getMatchProfileAPI + '/:userID', getMatchProfile);
 
 // Send a match request to another user
-router.post('/like-profile/:userID', sendMatchRequest);
+export const sendMatchRequestAPI = '/like-profile';
+router.post(sendMatchRequestAPI + '/:userID', sendMatchRequest);
 
 // Get all matches requested
-router.get('/matches-request/:userID', getAllMatchRequest);
+export const getAllMatchRequestAPI = '/matches-request';
+router.get(getAllMatchRequestAPI + '/:userID', getAllMatchRequest);
 
 // Accept a match request
-router.post('/accept-match/:userID', acceptMatchRequest);
+export const acceptMatchRequestAPI = '/accept-match';
+router.post(acceptMatchRequestAPI + '/:userID', acceptMatchRequest);
 
 // Reject a match request
-router.post('/denied-match/:matchID', declineMatchRequest);
+export const declineMatchRequestAPI = '/denied-match';
+router.post(declineMatchRequestAPI + '/:matchID', declineMatchRequest);
 
 export default router;

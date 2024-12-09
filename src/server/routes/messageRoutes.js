@@ -1,15 +1,21 @@
 import { Router } from 'express';
 import { getAllChatRoom, getChatHistory, sendMessage } from '../services/messageService.js';
+import { send } from 'vite';
 
 const router = Router();
-// router = /api/message
+
+export const baseMessageRouteURL = '/api/message';
+
 // Get all chat rooms
-router.get('/get-all-chat/:userID', getAllChatRoom);
+export const getAllChatRoomAPI = '/get-all-chat';
+router.get(getAllChatRoomAPI + '/:userID', getAllChatRoom);
 
 // Get chat history
-router.get('/get-chat/:userID', getChatHistory);
+export const getChatHistoryAPI = '/get-chat';
+router.get(getChatHistoryAPI + '/:userID', getChatHistory);
 
 // Send a message
-router.post('/send-message/:userID', sendMessage);
+export const endMessageRequestAPI = '/send-message';
+router.post(endMessageRequestAPI + '/:userID', sendMessage);
 
 export default router;

@@ -3,25 +3,34 @@ import { register, login, forgotPassword, setPassword, resetPassword, createCard
 
 const router = Router();
 
+export const baseUserRouteURL = '/api/user/';
+
 // Register
-router.post('/register', register);
+export const registerAPI = '/register';
+router.post(registerAPI, register);
 
 // Login
-router.post('/login', login);
+export const loginAPI = '/login';
+router.post(loginAPI, login);
 
 // Fotget Password
-router.post('/forgot-password', forgotPassword);
+export const forgotPasswordAPI = '/forgot-password';
+router.post(forgotPasswordAPI, forgotPassword);
 
 // Set password
-router.put('/reset-password', setPassword);
+export const setPasswordAPI = '/reset-password';
+router.put(setPasswordAPI, setPassword);
 
 // Reset password
-router.put('/setting/reset-password', resetPassword);
+export const resetPasswordAPI = '/setting/reset-password';
+router.put(resetPasswordAPI, resetPassword);
 
 // Create cardpayment
-router.post('/create-cardpayment', createCardPayment);
+export const createCardPaymentAPI = '/create-cardpayment';
+router.post(createCardPaymentAPI, createCardPayment);
 
 // Delete account
-router.delete('/delete-account', deleteAccount);
+export const deleteAccountAPI = '/delete-account';
+router.delete(deleteAccountAPI, deleteAccount);
 
 export default router;
