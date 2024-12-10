@@ -3,8 +3,6 @@ import { Card, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
 import Swal from "sweetalert2";
-import { BASE_URL } from '../../server/main';
-import { baseProfileRouteURL, setUserPremiumStatusAPI } from '../../server/routes/profileRoutes';
 
 
 const Mypackage = () => {
@@ -46,7 +44,7 @@ const Mypackage = () => {
             const data = {
                 username
             };
-            axios.put(`${BASE_URL}${baseProfileRouteURL}${setUserPremiumStatusAPI}`, data)
+            axios.put('http://localhost:3000/api/profile/set-ispremium', data)
                 .then(response => {
                     console.log(response.data);
                     Swal.fire({

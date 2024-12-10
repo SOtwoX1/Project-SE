@@ -3,8 +3,6 @@ import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../server/main";
-import { baseUserRouteURL, forgotPasswordAPI } from "../../server/routes/userRoutes";
 
 export default function Forgetpass() {
   const navigate = useNavigate();
@@ -21,7 +19,7 @@ export default function Forgetpass() {
     console.log("email:", email);
 
     try {
-      const response = await axios.post(`${BASE_URL}${baseUserRouteURL}${forgotPasswordAPI}`, {
+      const response = await axios.post("http://localhost:3000/api/user/forgot-password", {
         email,
       });
 

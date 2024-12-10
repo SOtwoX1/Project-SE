@@ -2,7 +2,6 @@ import Swal from 'sweetalert2';
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { baseRestaurantRouteURL, getRestaurantByIDAPI, postChillingAtAPI } from '../../server/routes/restaurantRoutes';
 
 export default function Nopromotion_restaurant(){
     const navigate = useNavigate();
@@ -28,7 +27,7 @@ export default function Nopromotion_restaurant(){
             setRestaurantID(restaurantID);
             try {
                 // Fetch restaurant and promotion
-                const response = await axios.get(`${baseRestaurantRouteURL}${getRestaurantByIDAPI}/${restaurantID}`);
+                const response = await axios.get(`/api/restaurant/get-restaurant/${restaurantID}`);
                 const fetchRestaurant = response.data;
                 console.log(fetchRestaurant)
                 setRestaurant(fetchRestaurant.restaurant);
@@ -61,7 +60,7 @@ export default function Nopromotion_restaurant(){
     // Chilling at restaurant
     const pin_rest = async () => {
         try {
-            const response = await axios.post(`${baseRestaurantRouteURL}${postChillingAtAPI}/${restaurantID}?userID=${username}`);
+            const response = await axios.post(`/api/restaurant/chilling-at/${restaurantID}?userID=${username}`);
             console.log(response.data);
             Swal.fire({ 
                 title: "Now!!", 

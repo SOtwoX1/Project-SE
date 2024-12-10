@@ -37,7 +37,6 @@ app.use(bodyParser.json());
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-export const BASE_URL = "http://localhost:3000";
 
 // jwt-----------------------------------------------------------------------------------------
 function authenticateToken(req, res, next) {

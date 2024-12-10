@@ -5,8 +5,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../../server/main';
-import { baseProfileRouteURL, getDataProfileAPI } from '../../server/routes/profileRoutes';
 
 const Preview = () => {
   const navigate = useNavigate();
@@ -43,7 +41,7 @@ const Preview = () => {
     // Fetch profile data from the backend
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}${baseProfileRouteURL}${getDataProfileAPI}`, {
+        const response = await axios.get("http://localhost:3000/api/profile/get-data", {
           params: { username: userData.username }, // Send username as query parameter
         });
         setProfile(response.data); // Set profile data in state
