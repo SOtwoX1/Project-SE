@@ -3,7 +3,7 @@ import { register, login, forgotPassword, setPassword, resetPassword, createCard
 
 const router = Router();
 
-export const baseUserRouteURL = '/api/user';
+export const baseUserRouteURL = '/api/user/';
 
 // Register
 export const registerAPI = '/register';
