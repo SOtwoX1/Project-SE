@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { baseRestaurantRouteURL, getAllRestaurantAPI } from "../../server/routes/restaurantRoutes";
 export default function Restaurant() {
   const navigate = useNavigate();
   const [userID, setUserID] = useState("");
@@ -49,7 +50,7 @@ export default function Restaurant() {
       setUserID(userData.username);
       try {
         // Fetch all restaurant
-        const response = await axios.get('/api/restaurant/get-all-restaurants');
+        const response = await axios.get(`${baseRestaurantRouteURL}${getAllRestaurantAPI}`);
         const fetchPromotions = response.data;
         console.log(fetchPromotions);
         setPromotions(fetchPromotions);

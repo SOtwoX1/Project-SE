@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../server/main";
+import { baseUserRouteURL, resetPasswordAPI } from "../../server/routes/userRoutes";
 
 export default function Password() {
     const navigate = useNavigate();
@@ -50,7 +52,7 @@ export default function Password() {
         setIsSubmitting(true); // Disable the button during submission
     
         try {
-            const response = await axios.put("http://localhost:3000/api/user/setting/reset-password", {
+            const response = await axios.put(`${BASE_URL}${baseUserRouteURL}${resetPasswordAPI}`, {
                 email,
                 password,
                 newpassword: newPassword,

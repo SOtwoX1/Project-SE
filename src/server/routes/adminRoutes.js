@@ -6,8 +6,8 @@ const router = Router();
 export const baseAdminRouteURL = '/api/admin';
 
 // Get data `Profile` all user
-export const getDataProfileAPI = '/get-data-profile';
-router.get(getDataProfileAPI, getDataProfile);
+export const getDataProfileAdminAPI = '/get-data-profile';
+router.get(getDataProfileAdminAPI, getDataProfile);
 
 // Get data `User` all user
 export const getDataUserAPI = '/get-data-user';
