@@ -3,8 +3,7 @@ import Swal from "sweetalert2";
 import { Button } from "react-scroll";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../server/main";
-import { baseUserRouteURL, registerAPI } from "../../server/routes/userRoutes";
+import { BASE_URL, userRoutesURL } from "../../apiConfig";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -41,7 +40,7 @@ export default function Register() {
   
     // Send data to the server  
     try {
-      const response = await axios.post(`${BASE_URL}${baseUserRouteURL}${registerAPI}`, {
+      const response = await axios.post(`${BASE_URL}${userRoutesURL.base}${userRoutesURL.registerAPI}`, {
         username, // Ensure this matches the schema
         email,    // Ensure this matches the schema
         password, // Ensure this matches the schema

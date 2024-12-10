@@ -1,36 +1,28 @@
 import { Router } from 'express';
 import { register, login, forgotPassword, setPassword, resetPassword, createCardPayment, deleteAccount } from '../services/userService.js';
+import { userRoutesURL } from '../../apiConfig.js';
 
 const router = Router();
 
-export const baseUserRouteURL = '/api/user';
-
 // Register
-export const registerAPI = '/register';
-router.post(registerAPI, register);
+router.post(userRoutesURL.registerAPI, register);
 
 // Login
-export const loginAPI = '/login';
-router.post(loginAPI, login);
+router.post(userRoutesURL.loginAPI, login);
 
 // Fotget Password
-export const forgotPasswordAPI = '/forgot-password';
-router.post(forgotPasswordAPI, forgotPassword);
+router.post(userRoutesURL.forgotPasswordAPI, forgotPassword);
 
 // Set password
-export const setPasswordAPI = '/reset-password';
-router.put(setPasswordAPI, setPassword);
+router.put(userRoutesURL.setPasswordAPI, setPassword);
 
 // Reset password
-export const resetPasswordAPI = '/setting/reset-password';
-router.put(resetPasswordAPI, resetPassword);
+router.put(userRoutesURL.resetPasswordAPI, resetPassword);
 
 // Create cardpayment
-export const createCardPaymentAPI = '/create-cardpayment';
-router.post(createCardPaymentAPI, createCardPayment);
+router.post(userRoutesURL.createCardPaymentAPI, createCardPayment);
 
 // Delete account
-export const deleteAccountAPI = '/delete-account';
-router.delete(deleteAccountAPI, deleteAccount);
+router.delete(userRoutesURL.deleteAccountAPI, deleteAccount);
 
 export default router;

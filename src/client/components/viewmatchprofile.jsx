@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { baseProfileRouteURL, getUserProfileAPI } from '../../server/routes/profileRoutes';
+import { profileRoutesURL } from '../../apiConfig';
 
 const Viewmatchprofile = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Viewmatchprofile = () => {
       const params = new URLSearchParams(location.search);
       const userID = params.get('userID');
       try {
-        const response = await axios.get(`${baseProfileRouteURL}${getUserProfileAPI}/${userID}`);
+        const response = await axios.get(`${profileRoutesURL.base}${profileRoutesURL.getUserProfileAPI}/${userID}`);
         setUserProfile(response.data);
       } catch (error) {
         console.error('Error fetching user profile:', error);

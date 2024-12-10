@@ -12,21 +12,13 @@ import { Card } from '@mui/material';
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import CardPayment from "./models/cardPayment.js";
-import Chat from "./models/Chat.js";
-import Chilling from "./models/Chilling.js";
-import Match from "./models/Match.js";
-import Message from "./models/Message.js";
-import Profile from "./models/profile.js";
-import Promotion from "./models/Promotion.js";
-import Restaurant from "./models/Restaurant.js";
-import User from "./models/user.js";
-import adminRoutes, { baseAdminRouteURL } from "./routes/adminRoutes.js";
-import matchRoutes, { baseMatchRouteURL } from "./routes/matchRoutes.js";
-import messageRoutes, { baseMessageRouteURL } from "./routes/messageRoutes.js";
-import profileRoutes, { baseProfileRouteURL } from "./routes/profileRoutes.js";
-import restaurantRoutes, { baseRestaurantRouteURL } from "./routes/restaurantRoutes.js";
-import userRoutes, { baseUserRouteURL } from "./routes/userRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import matchRoutes from "./routes/matchRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
+import restaurantRoutes from "./routes/restaurantRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import { adminRoutesURL, matchRoutesURL, messageRoutesURL, profileRoutesURL, restaurantRoutesURL, userRoutesURL } from "../apiConfig.js";
 
 const app = express();
 
@@ -36,8 +28,6 @@ app.use(bodyParser.json());
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-
-export const BASE_URL = "http://localhost:3000";
 
 // jwt-----------------------------------------------------------------------------------------
 function authenticateToken(req, res, next) {
@@ -92,12 +82,12 @@ mongoose
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Use routes
-app.use(baseAdminRouteURL, adminRoutes);
-app.use(baseMatchRouteURL, matchRoutes);
-app.use(baseMessageRouteURL, messageRoutes);
-app.use(baseProfileRouteURL, profileRoutes);
-app.use(baseRestaurantRouteURL, restaurantRoutes);
-app.use(baseUserRouteURL, userRoutes);
+app.use(adminRoutesURL.base, adminRoutes);
+app.use(matchRoutesURL.base, matchRoutes);
+app.use(messageRoutesURL.base, messageRoutes);
+app.use(profileRoutesURL.base, profileRoutes);
+app.use(restaurantRoutesURL.base, restaurantRoutes);
+app.use(userRoutesURL.base, userRoutes);
 
 // API endpoint to upload photos
 app.post("/api/upload", upload.single("photo"), (req, res) => {

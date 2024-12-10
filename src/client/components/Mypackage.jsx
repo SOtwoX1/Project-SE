@@ -3,9 +3,7 @@ import { Card, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
 import Swal from "sweetalert2";
-import { BASE_URL } from '../../server/main';
-import { baseProfileRouteURL, setUserPremiumStatusAPI } from '../../server/routes/profileRoutes';
-
+import { BASE_URL, profileRoutesURL } from '../../apiConfig';
 
 const Mypackage = () => {
   const [username, setUsername] = useState('');
@@ -46,7 +44,7 @@ const Mypackage = () => {
             const data = {
                 username
             };
-            axios.put(`${BASE_URL}${baseProfileRouteURL}${setUserPremiumStatusAPI}`, data)
+            axios.put(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.setUserPremiumStatusAPI}`, data)
                 .then(response => {
                     console.log(response.data);
                     Swal.fire({

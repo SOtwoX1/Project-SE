@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { BASE_URL } from "../../../server/main";
-import { baseProfileRouteURL, setPhotoAPI } from "../../../server/routes/profileRoutes";
+import { BASE_URL, profileRoutesURL } from "../../../apiConfig.js";
 
 export default function AddPhoto() {
   const [photos, setPhotos] = useState(Array(4).fill(null)); // Store paths for up to 4 photos
@@ -58,7 +57,7 @@ export default function AddPhoto() {
       };
       console.log(payload);
       try {
-        const response = await axios.put(`${BASE_URL}${baseProfileRouteURL}${setPhotoAPI}`, payload, {
+        const response = await axios.put(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.setPhotoAPI}`, payload, {
           headers: {
             "Content-Type": "application/json",
           },

@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Typography, Button, Box } from '@mui/material';
 import Menu from './Menu';
 import axios from 'axios';
-import { baseMatchRouteURL, getMatchProfileAPI, sendMatchRequestAPI } from '../../server/routes/matchRoutes';
-import { baseProfileRouteURL, changeStatusAPI, getUserProfileAPI, updateSwipeAPI } from '../../server/routes/profileRoutes';
+import { matchRoutesURL, profileRoutesURL } from '../../apiConfig';
 
 const Match = () => {
   const navigate = useNavigate(); // สร้างตัวแปร navigate
@@ -24,7 +23,7 @@ const Match = () => {
   async function pullProfile(username) {
     try {
       console.log('pull profiles');
-      const response = await axios.get(`${baseMatchRouteURL}${getMatchProfileAPI}/${username}`);
+      const response = await axios.get(`${matchRoutesURL.base}${matchRoutesURL.getMatchProfileAPI}/${username}`);
       const fetchProfiles = response.data;
       console.log(response.data);
       setProfiles(fetchProfiles);
@@ -50,7 +49,7 @@ const Match = () => {
   // Fetch match profile
   const fetchProfiles = async (userID) => {
     try {
-      const response = await axios.get(`${baseMatchRouteURL}${getMatchProfileAPI}/${userID}`);
+      const response = await axios.get(`${matchRoutesURL.base}${matchRoutesURL.getMatchProfileAPI}/${userID}`);
       const fetchProfiles = response.data;
       setProfiles(fetchProfiles);
       setCurrentProfile(fetchProfiles[0]); // Set the first profile as the current profile
@@ -63,7 +62,7 @@ const Match = () => {
   const fetchData = async (userID) => {
     try {
       console.log('get status, SwipeDailyCount');
-      const response = await axios.get(`${baseProfileRouteURL}${getUserProfileAPI}/${userID}`);
+      const response = await axios.get(`${profileRoutesURL.base}${profileRoutesURL.getUserProfileAPI}/${userID}`);
       console.log(response.data.isFree);
       setStatus(response.data.isFree);
       setSwipeDailyCount(response.data.swipeDailyCount);
@@ -88,14 +87,14 @@ const Match = () => {
       try {
         console.log('Like profile clicked');
         if (currentProfile !== undefined) {
-          const response = await axios.post(`${baseMatchRouteURL}${sendMatchRequestAPI}/${userID}?otherUserID=${currentProfile.userID}`);
+          const response = await axios.post(`${matchRoutesURL.base}${matchRoutesURL.sendMatchRequestAPI}/${userID}?otherUserID=${currentProfile.userID}`);
           setMatchText(<span style={{ color: '#F4A261' }}>{`${response.data.message}! 🎉`}</span>);
           console.log('matchText:', 'Matched! 🎉');
           setTimeout(() => {
             setMatchText('');
             showNextProfile();
           }, 2000);
-          await axios.put(`${baseProfileRouteURL}${updateSwipeAPI}/${userID}?otherUserID=${currentProfile.userID}`);
+          await axios.put(`${profileRoutesURL.base}${profileRoutesURL.updateSwipeAPI}/${userID}?otherUserID=${currentProfile.userID}`);
           setSwipeDailyCount(swipeDailyCount + 1);
         }
       } catch (error) {
@@ -124,7 +123,7 @@ const Match = () => {
   // Change status function
   async function changeStatus(status) {
     try {
-      await axios.put(`${baseProfileRouteURL}${changeStatusAPI}/${userID}?isFree=${!status}`);
+      await axios.put(`${profileRoutesURL.base}${profileRoutesURL.changeStatusAPI}/${userID}?isFree=${!status}`);
       setStatus(!status);
       console.log(!status ? 'ว่าง' : 'ไม่ว่าง');
     } catch (error) {

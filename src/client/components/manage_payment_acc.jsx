@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../../server/main';
-import { baseUserRouteURL, createCardPaymentAPI } from '../../server/routes/userRoutes';
+import { BASE_URL, userRoutesURL } from '../../apiConfig';
 
 export default function Manage_Payment_Account() {
     const navigate = useNavigate();
@@ -47,7 +46,7 @@ export default function Manage_Payment_Account() {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post(`${BASE_URL}${baseUserRouteURL}${createCardPaymentAPI}`, {
+            const response = await axios.post(`${BASE_URL}${userRoutesURL.base}${userRoutesURL.createCardPaymentAPI}`, {
                 username,
                 cardNumber,
                 cardHolderName,

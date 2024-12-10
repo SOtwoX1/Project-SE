@@ -1,28 +1,22 @@
 import { Router } from 'express';
 import { getDataProfile, getDataUser, getDataRestaurant, postDataRestaurant, deleteRestaurant } from '../services/adminService.js';
+import { adminRoutesURL } from '../../apiConfig.js';
 
 const router = Router();
 
-export const baseAdminRouteURL = '/api/admin';
-
 // Get data `Profile` all user
-export const getDataProfileAdminAPI = '/get-data-profile';
-router.get(getDataProfileAdminAPI, getDataProfile);
+router.get(adminRoutesURL.getDataProfileAdminAPI, getDataProfile);
 
 // Get data `User` all user
-export const getDataUserAPI = '/get-data-user';
-router.get(getDataUserAPI, getDataUser);
+router.get(adminRoutesURL.getDataUserAPI, getDataUser);
 
 // Get data `Restaurant` all user
-export const getDataRestaurantAPI = '/get-data-restaurant';
-router.get(getDataRestaurantAPI, getDataRestaurant);
+router.get(adminRoutesURL.getDataRestaurantAPI, getDataRestaurant);
 
 // Post data restaurant
-export const postDataRestaurantAPI = '/post-data-restaurant'
-router.post(postDataRestaurantAPI, postDataRestaurant);
+router.post(adminRoutesURL.postDataRestaurantAPI, postDataRestaurant);
 
 // Delete restaurant
-export const deleteRestaurantAPI = '/delete-restaurant';
-router.delete(deleteRestaurantAPI, deleteRestaurant);
+router.delete(adminRoutesURL.deleteRestaurantAPI, deleteRestaurant);
 
 export default router;

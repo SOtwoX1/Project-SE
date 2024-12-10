@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import 'flowbite';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { baseMessageRouteURL, getAllChatRoomAPI } from "../../server/routes/messageRoutes";
+import { messageRoutesURL } from "../../apiConfig";
 
 function Message() {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ function Message() {
   // Pull all chat room that user have
   async function pullAllChat(username) {
     try {
-      const response = await axios.get(`${baseMessageRouteURL}${getAllChatRoomAPI}/${username}`);
+      const response = await axios.get(`${messageRoutesURL.base}${messageRoutesURL.getAllChatRoomAPI}/${username}`);
       console.log("username: ", username);
       console.log("response.data: ", response.data);
       setChats(response.data);
