@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../server/main";
+import { baseUserRouteURL, loginAPI } from "../../server/routes/userRoutes";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -28,7 +30,7 @@ export default function Login() {
         console.log(email, password);
       
         try {
-          const response = await axios.post('http://localhost:3000/api/user/login', {
+          const response = await axios.post(`${BASE_URL}${baseUserRouteURL}${loginAPI}`, {
             email,
             password,
           });

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from '../../server/main';
+import { baseUserRouteURL, deleteAccountAPI } from '../../server/routes/userRoutes';
 
 export default function Setting_pro() {
     const navigate = useNavigate();
@@ -55,7 +57,7 @@ export default function Setting_pro() {
                 let response;
                 if (result.isConfirmed) {
                     try {
-                        const response = await axios.delete(`http://localhost:3000/api/user/delete-account`, {
+                        const response = await axios.delete(`${BASE_URL}${baseUserRouteURL}${deleteAccountAPI}`, {
                             data: {
                                 username: username,
                             },
