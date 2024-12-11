@@ -21,6 +21,7 @@ import userRoutes from "./routes/userRoutes.js";
 import { adminRoutesURL, matchRoutesURL, messageRoutesURL, profileRoutesURL, restaurantRoutesURL, userRoutesURL } from "../apiConfig.js";
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -100,6 +101,9 @@ app.post("/api/upload", upload.single("photo"), (req, res) => {
 // Serve static files for uploaded images
 app.use("/uploads", express.static(uploadDir));
 
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
 
 ViteExpress.listen(app, 3000, () =>
   console.log("Server is listening on port 3000..."),
