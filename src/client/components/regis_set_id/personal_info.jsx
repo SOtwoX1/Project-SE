@@ -9,6 +9,8 @@ export default function Personal_info() {
     const [address, setAddress] = useState('');
     const [genderinterest, setGenderinterest] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]); // Initialize selectedCategories state
+    const [listGender, setListGender] = useState(['Man', 'Woman', 'Gay', 'Lesbian', 'Bisexual', 'Asexual', 'Demisexual', 'Pansexual', 'Queer', 'Questioning']);
+    const [listGenderInterest, setListGenderInterest] = useState(['Man', 'Woman', 'Everyone']);
 
     const go_to_add_photo = async () => {
         try {
@@ -43,11 +45,11 @@ export default function Personal_info() {
 
     const [selectedgender, setSelectedGender] = useState('');
     //เลือกเพศ
-    const handleClick2 = (genderinterest) => {
+    const handleClickGenderinterest = (genderinterest) => {
         setGenderinterest(genderinterest);
         console.log(`Show me selected: ${genderinterest}`);
     };
-    const handleClick1 = (gender) => {
+    const handleClickdGender = (gender) => {
         setSelectedGender(gender);
         console.log(`Gender selected: ${gender}`);
     };
@@ -117,67 +119,15 @@ export default function Personal_info() {
             <div>
                 <p className="text-xl">I am a</p>
                 <div className="flex flex-col justify-start divide-y divide-gray-300 p-3 ">
-                    <div>
+                    {listGender.map((gender, index) => (
+                        <div className={selectedgender == gender ? 'text-[#E9C46A]' : 'text-black'}>
                         <button
-                            onClick={() => handleClick1('Man')}
-                            className={" h-[40px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Man
+                            key={index}
+                            onClick={() => handleClickdGender(gender)}
+                            className={"h-[40px] my-auto hover:text-[#E9C46A] text-[20px] "}>{gender}
                         </button>
                     </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Woman')}
-                            className={" h-[40px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Woman
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Gay')}
-                            className={" h-[45px]   my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Gay
-                        </button>
-                    </div>
-
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Lesbian')}
-                            className={" h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Lesbian
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Bisexual')}
-                            className={" h-[45px] my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Bisexual
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Asexual')}
-                            className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Asexual
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Demisexual')}
-                            className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Demisexual
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Pansexual')}
-                            className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Pansexual
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Queer')}
-                            className={" h-[45px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Queer
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick1('Questioning')}
-                            className={" h-[45px]   my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Questioning
-                        </button>
-                    </div>
+                ))}
                     <div></div>
                 </div>
             </div>
@@ -185,24 +135,14 @@ export default function Personal_info() {
             <div>
                 <p className="text-xl">Show Me</p>
                 <div className="flex flex-col justify-start divide-y divide-gray-300 p-3 ">
-                    <div>
+                    {listGenderInterest.map((genderinterest, index) => (
+                        <div className={selectedgender == genderinterest ? 'text-[#E9C46A]' : 'text-black'}>
                         <button
-                            onClick={() => handleClick2('Man')}
-                            className={" h-[40px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Man
+                        key={index}
+                            onClick={() => handleClickGenderinterest(genderinterest)}
+                            className={" h-[40px]  my-auto hover:text-[#E9C46A] text-[20px]"}>{genderinterest}
                         </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick2('Woman')}
-                            className={" h-[40px]  my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Woman
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleClick2('Everyone')}
-                            className={" h-[45px]   my-auto text-black hover:text-[#E9C46A] text-[20px]"}>Everyone
-                        </button>
-                    </div>
+                    </div>))}
                     <div></div>
                 </div>
             </div>
