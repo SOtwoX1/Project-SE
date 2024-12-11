@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL, profileRoutesURL } from "../../apiConfig";
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -20,7 +21,7 @@ export default function Profile() {
     // Fetch profile data from the backend
     const fetchProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/get-data", {
+        const response = await axios.get(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.getDataProfileAPI}`, {
           params: { username: userData.username }, // Send username as query parameter
         });
         setProfile(response.data); // Set profile data in state

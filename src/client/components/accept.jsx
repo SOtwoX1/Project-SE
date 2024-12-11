@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 import 'flowbite';
 import axios from "axios";
+import { BASE_URL, matchRoutesURL } from "../../apiConfig";
 
 export default function Accept() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function Accept() {
   }, []);
   // Fetch match request
   const fetchData = async (userID) => {
-    const response = await axios.get(`/api/matches-request/${userID}`);
+    const response = await axios.get(`${matchRoutesURL.base}${matchRoutesURL.getAllMatchRequestAPI}/${userID}`);
     console.log("username: ", userID);
     console.log("response.data: ", response.data);
     setAcceptRequests(response.data);
@@ -49,7 +50,7 @@ export default function Accept() {
   // Accept and Denied match request
   const accept = async (userID, matchID) => {
     try {
-      const response = await axios.put(`/api/accept-match/${userID}?matchID=${matchID}`);
+      const response = await axios.put(`${matchRoutesURL.base}${matchRoutesURL.acceptMatchRequestAPI}/${userID}?matchID=${matchID}`);
       console.log(response.data);
       Swal.fire({
         icon: 'success',
@@ -68,7 +69,7 @@ export default function Accept() {
   };
   const denied = async (matchID) => {
     try {
-      const response = await axios.delete(`/api/denied-match/${matchID}`);
+      const response = await axios.delete(`${matchRoutesURL.base}${matchRoutesURL.declineMatchRequestAPI}/${matchID}`);
       console.log(response.data);
       Swal.fire({
         icon: 'success',

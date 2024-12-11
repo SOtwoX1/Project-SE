@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios'; // Ensure axios is installed: npm install axios
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
+import { profileRoutesURL } from '../../apiConfig';
 
 export default function Show_me() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function Show_me() {
         setUsername(username);
 
         // Construct API URL with username
-        const url = `/api/set-gender/${username}`;
+        const url = `${profileRoutesURL.base}${profileRoutesURL.setGenderInterestAPI}/${username}`;
 
         try {
             // Send PUT request to backend

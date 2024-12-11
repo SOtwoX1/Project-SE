@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import 'flowbite';
 import axios from "axios";
+import { messageRoutesURL } from "../../apiConfig";
 
 function Chat() {
     const navigate = useNavigate();
@@ -48,7 +49,7 @@ if (!LoginToken) {
     async function pullChats(matchID, userID) {
         try {
             console.log('pull chats ', matchID, userID);
-            const response = await axios.get(`/api/get-chat/${userID}?matchID=${matchID}`);
+            const response = await axios.get(`${messageRoutesURL.base}${messageRoutesURL.getChatHistoryAPI}/${userID}?matchID=${matchID}`);
             const fetchChats = response.data;
             console.log(response.data);
             setChats(fetchChats);
@@ -66,7 +67,7 @@ if (!LoginToken) {
             const formData = new FormData(form);
             const formJson = Object.fromEntries(formData.entries()); // Convert formData to JSON
             console.log(`sending ${formJson.message} to ${matchID}`);
-            const response = await axios.post(`/api/send-message/${userID}?matchID=${matchID}&text=${formJson.message}`);
+            const response = await axios.post(`${messageRoutesURL.base}${messageRoutesURL.endMessageRequestAPI}/${userID}?matchID=${matchID}&text=${formJson.message}`);
             console.log(response.data);
             form.reset(); // Clear the input field after sending the message
             pullChats(matchID, userID); // Pull chats after sending the message

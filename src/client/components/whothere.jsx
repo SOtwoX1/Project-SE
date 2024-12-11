@@ -2,6 +2,7 @@ import Swal from 'sweetalert2';
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { restaurantRoutesURL } from '../../apiConfig.js';
 
 export default function Whothere() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function Whothere() {
           setRestaurantID(restaurantID);
           try {
             // Fetch chilling
-              const response = await axios.get(`/api/get-chilling/${restaurantID}`);
+              const response = await axios.get(`${restaurantRoutesURL.base}${restaurantRoutesURL.getAllChillingAtAPI}/${restaurantID}`);
               const fetchChilling = response.data;
               setWhoThere(fetchChilling);
           } catch (error) {
@@ -51,7 +52,7 @@ export default function Whothere() {
   const requestMatch = async (userID, otherUserID, restaurantID) => {
     try {
       // Post chilling
-      const response = await axios.post(`/api/chilling-with-you/${userID}?otherUserID=${otherUserID}&restaurantID=${restaurantID}`);
+      const response = await axios.post(`${restaurantRoutesURL.base}${restaurantRoutesURL.postChillingWithYouAPI}/${userID}?otherUserID=${otherUserID}&restaurantID=${restaurantID}`);
       console.log(response.data);
       Swal.fire({ 
         title: "Note!!", 

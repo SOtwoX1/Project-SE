@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { BASE_URL, profileRoutesURL } from "../../../apiConfig.js";
 
 export default function AddPhoto() {
   const [photos, setPhotos] = useState(Array(4).fill(null)); // Store paths for up to 4 photos
@@ -56,7 +57,7 @@ export default function AddPhoto() {
       };
       console.log(payload);
       try {
-        const response = await axios.put("http://localhost:3000/api/set-photo", payload, {
+        const response = await axios.put(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.setPhotoAPI}`, payload, {
           headers: {
             "Content-Type": "application/json",
           },

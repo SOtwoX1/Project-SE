@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { Button } from "react-scroll";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL, userRoutesURL } from "../../apiConfig";
 
 export default function Cnr() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function Cnr() {
     }
     // console.log(email, password);
     try {
-      const response = await axios.put("http://localhost:3000/api/reset-password", {
+      const response = await axios.put(`${BASE_URL}${userRoutesURL.base}${userRoutesURL.setPasswordAPI}`, {
         email,
         password,
       });

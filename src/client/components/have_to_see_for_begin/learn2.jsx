@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { adminRoutesURL, userRoutesURL } from '../../../apiConfig.js';
 
 // Component to show confirmation modal
 
@@ -60,8 +61,8 @@ const UsersProfilesList = () => {
         const fetchData = async () => {
             try {
                 const [usersResponse, profilesResponse] = await Promise.all([
-                    axios.get('/api/get-data-user'),
-                    axios.get('/api/get-data-profile'),
+                    axios.get(`${adminRoutesURL.base}${adminRoutesURL.getDataUserAPI}`),
+                    axios.get(`${adminRoutesURL.base}${adminRoutesURL.getDataProfileAdminAPI}`),
                 ]);
                 setUsers(usersResponse.data);
                 setProfiles(profilesResponse.data);
@@ -73,7 +74,7 @@ const UsersProfilesList = () => {
 
         const fetchRestaurants = async () => {
             try {
-                const response = await axios.get('/api/get-data-restaurant');
+                const response = await axios.get(`${adminRoutesURL.base}${adminRoutesURL.getDataRestaurantAPI}`);
                 setRestaurants(response.data);
             } catch (error) {
                 console.error('Error fetching restaurants:', error);
@@ -86,7 +87,7 @@ const UsersProfilesList = () => {
 
     const fetchRestaurants = async () => {
         try {
-            const response = await axios.get('/api/get-data-restaurant');
+            const response = await axios.get(`${adminRoutesURL.base}${adminRoutesURL.getDataRestaurantAPI}`);
             setRestaurants(response.data);
         } catch (error) {
             console.error('Error fetching restaurants:', error);
@@ -99,15 +100,15 @@ const UsersProfilesList = () => {
         setSuccessMessage(null);
 
         try {
-            const response = await axios.delete('/api/delete-account', {
+            const response = await axios.delete(`${userRoutesURL.base}${userRoutesURL.deleteAccountAPI}`, {
                 data: { username: usernameToDelete },
             });
             setSuccessMessage(response.data.message);
 
             // Re-fetch the data after deleting the account
             const [usersResponse, profilesResponse] = await Promise.all([
-                axios.get('/api/get-data-user'),
-                axios.get('/api/get-data-profile'),
+                axios.get(`${adminRoutesURL.base}${adminRoutesURL.getDataUserAPI}`),
+                axios.get(`${adminRoutesURL.base}${adminRoutesURL.getDataProfileAdminAPI}`),
             ]);
             setUsers(usersResponse.data);
             setProfiles(profilesResponse.data);
@@ -132,7 +133,7 @@ const UsersProfilesList = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await axios.post('/api/post-data-restaurant', {
+            const response = await axios.post(`${adminRoutesURL.base}${adminRoutesURL.postDataRestaurantAPI}`, {
                 restaurantID: restaurantData.restaurantID,
                 name: restaurantData.name,
                 tags: restaurantData.tags.split(','),
@@ -168,7 +169,7 @@ const UsersProfilesList = () => {
     // Delete restaurant by ID
     const handleDelete = async (restaurantID) => {
         try {
-            await axios.delete('/api/delete-restaurant', { data: { restaurantID } });
+            await axios.delete(`${adminRoutesURL.base}${adminRoutesURL.deleteRestaurantAPI}`, { data: { restaurantID } });
             fetchRestaurants(); // Refresh the restaurant list after deletion
             alert('Restaurant deleted successfully');
         } catch (error) {

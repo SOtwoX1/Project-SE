@@ -3,16 +3,16 @@ import { Card, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
 import Swal from "sweetalert2";
-
+import { BASE_URL, profileRoutesURL } from '../../apiConfig';
 
 const Mypackage = () => {
   const [username, setUsername] = useState('');
-  
+
   const go_to_package = async () => {
     // Retrieve username from localStorage
     const LoginToken = localStorage.getItem("LoginToken");
     if (!LoginToken) {
-        console.error("Login token not found.");        return;
+      console.error("Login token not found."); return;
     }
 
     const userData = JSON.parse(LoginToken);
@@ -21,50 +21,12 @@ const Mypackage = () => {
 
     // must input text cvv in alret this code must run 10 seconds before do other
     Swal.fire({
-        title: 'Enter your CVV',  // only integer 3 digit
-        input: 'text',
-         //must check integer 3 digit
-        inputValidator: (value) => {
-            if (!/^\d{3}$/.test(value)) {
-                return 'Please enter a 3-digit number.';
-            }
-        },
-        inputAttributes: {
-            autocapitalize: 'off'
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Submit',
-        showLoaderOnConfirm: true,
-        timer: 10000,
-        timerProgressBar: true
+      icon: 'success',
+      title: 'Success',
+      text: 'You are now a premium user!',
+      timer: 5000,
     }).then((result) => {
-        if (result.isConfirmed) {
-            const cvv = result.value;
-            console.log('CVV:', cvv);
-            const data = {
-                username
-            };
-            axios.put('http://localhost:3000/api/set-ispremium', data)
-                .then(response => {
-                    console.log(response.data);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'You are now a premium user!',
-                        timer: 5000
-                    })
-                })
-                .catch(error => {
-                    console.error(error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred while processing your request.',
-                        timer: 2000
-                    })
-                    // handle the error here
-                });
-        }
+      axios.put(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.setUserPremiumStatusAPI}`, data)
     });
   };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";  // Ensure axios is imported
+import { BASE_URL, profileRoutesURL } from "../../apiConfig.js";
 
 export default function Edit() {
   const [photos, setPhotos] = useState(Array(4).fill(null)); // Store paths for up to 4 photos
@@ -68,7 +69,7 @@ export default function Edit() {
       };
       console.log(payload);
       try {
-        const response = await axios.put("http://localhost:3000/api/set-photo", payload, {
+        const response = await axios.put(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.setPhotoAPI}`, payload, {
           headers: {
             "Content-Type": "application/json",
           },

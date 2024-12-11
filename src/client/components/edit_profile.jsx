@@ -3,7 +3,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { BASE_URL, profileRoutesURL } from '../../apiConfig';
 
 export default function Edit_pro() {
     const [profile, setProfile] = useState(null);
@@ -88,7 +88,7 @@ export default function Edit_pro() {
         // Fetch profile data from backend API
         const fetchProfile = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/get-data", {
+                const response = await axios.get(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.getDataProfileAPI}`, {
                     params: { username: userData.username },
                 });
                 setProfile(response.data);
@@ -123,7 +123,7 @@ export default function Edit_pro() {
         const fromdata = { name, username, bio, address, dob, education, job, hobby, tags: selectedCategories, gender: selectedGender };
         console.log(fromdata);
         try {
-            const response = await axios.put("http://localhost:3000/api/update-dataprofile", fromdata);
+            const response = await axios.put(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.updateDataProfileAPI}`, fromdata);
             console.log(response.data);
             alert("บันทึกข้อมูลเรียบร้อยแล้ว");
         } catch (error) {

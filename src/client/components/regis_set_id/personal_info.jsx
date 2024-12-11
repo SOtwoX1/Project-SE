@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { BASE_URL, profileRoutesURL } from '../../../apiConfig.js';
 
 export default function Personal_info() {
     const [username, setUsername] = useState('');
@@ -26,7 +27,7 @@ export default function Personal_info() {
 
             console.log(data);
 
-            const response = await axios.post('http://localhost:3000/api/register/profile', data);
+            const response = await axios.post(`${BASE_URL}${profileRoutesURL.base}${profileRoutesURL.registerProfileAPI}`, data);
             console.log(response.data);
 
             if (response.status === 201) {
