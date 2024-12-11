@@ -14,9 +14,9 @@ router.post(matchRoutesURL.sendMatchRequestAPI + '/:userID', sendMatchRequest);
 router.get(matchRoutesURL.getAllMatchRequestAPI + '/:userID', getAllMatchRequest);
 
 // Accept a match request
-router.post(matchRoutesURL.acceptMatchRequestAPI + '/:userID', acceptMatchRequest);
+router.put(matchRoutesURL.acceptMatchRequestAPI + '/:userID', acceptMatchRequest);
 
 // Reject a match request
-router.post(matchRoutesURL.declineMatchRequestAPI + '/:matchID', declineMatchRequest);
+router.delete(matchRoutesURL.declineMatchRequestAPI + '/:matchID', declineMatchRequest);
 
 export default router;

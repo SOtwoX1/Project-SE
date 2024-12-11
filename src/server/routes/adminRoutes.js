@@ -3,7 +3,6 @@ import { getDataProfile, getDataUser, getDataRestaurant, postDataRestaurant, del
 import { adminRoutesURL } from '../../apiConfig.js';
 
 const router = Router();
-
 // Get data `Profile` all user
 router.get(adminRoutesURL.getDataProfileAdminAPI, getDataProfile);
 

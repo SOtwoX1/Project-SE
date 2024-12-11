@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 import 'flowbite';
 import axios from "axios";
-import { matchRoutesURL } from "../../apiConfig";
+import { BASE_URL, matchRoutesURL } from "../../apiConfig";
 
 export default function Accept() {
   const navigate = useNavigate();
