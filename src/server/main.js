@@ -74,7 +74,7 @@ const upload = multer({ storage });
 // Connect to MongoDB
 
 // MongoDB Connection
-const mongoURI = 'mongodb+srv://get:1234@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
+const mongoURI = 'mongodb+srv://pair:0000@se-project.qqqt0.mongodb.net/DatingApp?retryWrites=true&w=majority';
 
 mongoose
   .connect(mongoURI)
